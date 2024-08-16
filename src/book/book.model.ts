@@ -1,40 +1,40 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class BookModel {
-   @Field(() => Number)
-   id: number;   
-   
-   @Field()
-   name: string;
+  @Field(() => Number)
+  id: number;
 
-   @Field()
-   description: string;
+  @Field()
+  name: string;
 
-   @Field()
-   image: string;
+  @Field()
+  description: string;
 
-   @Field(() => Date)
-   createdYear: string
+  @Field()
+  image: string;
 
-   @Field(() => Number)
-   pages: number;
+  @Field(() => Date)
+  createdYear: string;
 
-   @Field()
-   authorName: string;
+  @Field(() => Number)
+  pages: number;
 
-   @Field(() => Boolean)
-   isAvaiable: boolean;
+  @Field()
+  authorName: string;
 
-   @Field(() => Boolean)
-   isBorrowed: boolean;
+  @Field(() => Boolean)
+  isAvaiable: boolean;
 
-   @Field(() =>Boolean)
-   isReturned: boolean;
+  @Field(() => Boolean)
+  isBorrowed: boolean;
 
-   @Field(() => Number)
-   stockNumber: number;
+  @Field(() => Boolean)
+  isReturned: boolean;
 
-   @Field()
-   serialNumber: string;
+  @Field(() => Number)
+  stockNumber: number;
+
+  @Field()
+  serialNumber: string;
 }

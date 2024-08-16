@@ -25,4 +25,40 @@ scalar DateTime
 type Query {
   getAllBooks: [BookModel!]!
   getOneBook(id: Float!): BookModel!
+  getPaginationBooks(skip: Float!, take: Float!): [BookModel!]!
+  searchBooks(keyword: String!): [BookModel!]!
+}
+
+type Mutation {
+  createBook(createBookInput: CreateBookInput!): BookModel!
+  updateBook(id: Float!, updateBookInput: UpdateBookInput!): BookModel!
+  deleteBook(id: Float!): BookModel!
+}
+
+input CreateBookInput {
+  name: String!
+  description: String!
+  image: String!
+  createdYear: DateTime!
+  pages: Float!
+  authorName: String!
+  isAvaiable: Boolean!
+  isBorrowed: Boolean!
+  isReturned: Boolean!
+  stockNumber: Float!
+  serialNumber: String!
+}
+
+input UpdateBookInput {
+  name: String
+  description: String
+  image: String
+  createdYear: DateTime
+  pages: Float
+  authorName: String
+  isAvaiable: Boolean
+  isBorrowed: Boolean
+  isReturned: Boolean
+  stockNumber: Float
+  serialNumber: String
 }
