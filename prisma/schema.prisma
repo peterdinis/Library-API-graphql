@@ -14,6 +14,18 @@ datasource db {
 }
 
 model Book {
-  id        Int      @default(autoincrement()) @id
-  name      String
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  image        String
+  createdYear  DateTime @default(now())
+  pages        Int
+  authorName   String
+  isAvaible    Boolean  @default(true)
+  isBorrowed   Boolean  @default(false)
+  isReturned   Boolean  @default(false)
+  stockNumber  Int      @default(1)
+  serialNumber String   @default("11-22-333")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
 }
