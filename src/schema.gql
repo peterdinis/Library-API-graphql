@@ -40,12 +40,12 @@ input CreateBookInput {
   description: String!
   image: String!
   createdYear: DateTime!
-  pages: Float!
+  pages: Int!
   authorName: String!
   isAvaiable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
-  stockNumber: Float!
+  stockNumber: Int!
   serialNumber: String!
 }
 
@@ -54,11 +54,11 @@ input UpdateBookInput {
   description: String
   image: String
   createdYear: DateTime
-  pages: Float
+  pages: Int
   authorName: String
   isAvaiable: Boolean
   isBorrowed: Boolean
   isReturned: Boolean
-  stockNumber: Float
+  stockNumber: Int
   serialNumber: String
 }

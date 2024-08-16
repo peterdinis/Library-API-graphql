@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreateBookInput {
@@ -14,7 +14,7 @@ export class CreateBookInput {
   @Field(() => Date)
   createdYear: string;
 
-  @Field(() => Number)
+  @Field(() => Int)
   pages: number;
 
   @Field()
@@ -29,7 +29,7 @@ export class CreateBookInput {
   @Field(() => Boolean)
   isReturned: boolean;
 
-  @Field(() => Number)
+  @Field(() => Int)
   stockNumber: number;
 
   @Field()

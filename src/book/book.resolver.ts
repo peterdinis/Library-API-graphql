@@ -3,6 +3,7 @@ import { BookService } from './book.service';
 import { BookModel } from './book.model';
 import { CreateBookInput } from './dto/create-book-type';
 import { UpdateBookInput } from './dto/update-book-type';
+import { PaginationBookType } from './dto/pagination-book-type';
 
 @Resolver(() => BookModel)
 export class BookResolver {
@@ -38,10 +39,9 @@ export class BookResolver {
 
   @Query(() => [BookModel])
   async getPaginationBooks(
-    @Args('skip') skip: number,
-    @Args('take') take: number,
+    @Args('paginationDto') paginationDto: PaginationBookType,
   ) {
-    return this.bookService.paginationBooks(skip, take);
+    return this.bookService.paginationBooks(paginationDto);
   }
 
   @Query(() => [BookModel])
