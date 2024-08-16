@@ -6,7 +6,7 @@ import { BookModel } from './book.model';
 export class BookResolver {
     constructor(private readonly bookService: BookService) {}
 
-    @Query(() => BookModel)
+    @Query(() => [BookModel])
     async getAllBooks() {
         return this.bookService.allBooks();
     }
