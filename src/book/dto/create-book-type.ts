@@ -34,4 +34,7 @@ export class CreateBookInput {
 
   @Field()
   serialNumber: string;
+  
+  @Field()
+  categoryId: number;
 }

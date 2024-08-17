@@ -63,6 +63,7 @@ input CreateBookInput {
   isReturned: Boolean!
   stockNumber: Int!
   serialNumber: String!
+  categoryId: Float!
 }
 
 input UpdateBookInput {
@@ -77,6 +78,7 @@ input UpdateBookInput {
   isReturned: Boolean
   stockNumber: Int
   serialNumber: String
+  categoryId: Float
 }
 
 input CreateCategoryInput {
