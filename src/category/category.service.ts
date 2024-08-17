@@ -45,6 +45,9 @@ export class CategoryService {
       where: {
         id,
       },
+      include: {
+        books: true
+      }
     });
 
     if (!findOneCategory) {
