@@ -22,17 +22,33 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type CategoryModel {
+  id: Float!
+  name: String!
+  description: String!
+}
+
 type Query {
   getAllBooks: [BookModel!]!
   getOneBook(id: Float!): BookModel!
-  getPaginationBooks(skip: Float!, take: Float!): [BookModel!]!
+  getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
   searchBooks(keyword: String!): [BookModel!]!
+  categories: [CategoryModel!]!
+  category(id: Int!): CategoryModel!
+}
+
+input PaginationBookType {
+  skip: Int!
+  take: Int!
 }
 
 type Mutation {
   createBook(createBookInput: CreateBookInput!): BookModel!
   updateBook(id: Float!, updateBookInput: UpdateBookInput!): BookModel!
   deleteBook(id: Float!): BookModel!
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
+  updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): CategoryModel!
+  removeCategory(id: Int!): CategoryModel!
 }
 
 input CreateBookInput {
@@ -61,4 +77,14 @@ input UpdateBookInput {
   isReturned: Boolean
   stockNumber: Int
   serialNumber: String
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String!
+}
+
+input UpdateCategoryInput {
+  name: String
+  description: String
 }

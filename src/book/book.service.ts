@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateBookInput } from './dto/create-book-type';
 import { UpdateBookInput } from './dto/update-book-type';
+import { PaginationBookType } from './dto/pagination-book-type';
 
 @Injectable()
 export class BookService {
@@ -98,10 +99,10 @@ export class BookService {
     return foundBooks;
   }
 
-  async paginationBooks(skip = 0, take = 10) {
+  async paginationBooks(paginationDto: PaginationBookType) {
     const allBooksInApp = await this.prismaService.book.findMany({
-      skip,
-      take,
+      skip: paginationDto.skip,
+      take: paginationDto.take,
     });
 
     if (!allBooksInApp || allBooksInApp.length === 0) {
