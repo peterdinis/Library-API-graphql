@@ -45,6 +45,9 @@ export class AuthorsService {
       where: {
         id,
       },
+      include: {
+        books: true
+      }
     });
 
     if (!findOneAuthor) {
