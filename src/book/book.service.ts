@@ -44,24 +44,26 @@ export class BookService {
         id: newBookDto.categoryId,
       },
     });
-  
+
     // If the category doesn't exist, throw an error
     if (!findCategoryForBook) {
-      throw new NotFoundException(`Category with ID ${newBookDto.categoryId} not found`);
+      throw new NotFoundException(
+        `Category with ID ${newBookDto.categoryId} not found`,
+      );
     }
-  
+
     // Create the book
     const newBook = await this.prismaService.book.create({
       data: {
         ...newBookDto,
       },
     });
-  
+
     // If the book creation fails for some reason, throw an error
     if (!newBook) {
       throw new BadRequestException('Could not create book');
     }
-  
+
     return newBook;
   }
 

@@ -7,5 +7,4 @@ export class CreateCategoryInput {
 
   @Field()
   description: string;
-
 }

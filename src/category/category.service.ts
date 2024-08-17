@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryInput } from './dto/create-category-type';
 import { UpdateCategoryInput } from './dto/update-category-type';
+import { PaginationCategoryType } from './dto/pagination-category-types';
 
 @Injectable()
 export class CategoryService {
@@ -76,5 +77,34 @@ export class CategoryService {
     return this.prismaService.category.delete({
       where: { id: oneCategory.id },
     });
+  }
+
+  async searchCategories(keyword: string) {
+    const foundCategories = await this.prismaService.category.findMany({
+      where: {
+        OR: [{ name: { contains: keyword, mode: 'insensitive' } }],
+      },
+    });
+
+    if (!foundCategories || foundCategories.length === 0) {
+      throw new NotFoundException(
+        `No categories found for keyword "${keyword}"`,
+      );
+    }
+
+    return foundCategories;
+  }
+
+  async paginationCategories(paginationDto: PaginationCategoryType) {
+    const allCategoriesInApp = await this.prismaService.category.findMany({
+      skip: paginationDto.skip,
+      take: paginationDto.take,
+    });
+
+    if (!allCategoriesInApp || allCategoriesInApp.length === 0) {
+      throw new NotFoundException('No categories found');
+    }
+
+    return allCategoriesInApp;
   }
 }
