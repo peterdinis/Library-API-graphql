@@ -6,6 +6,7 @@ import { BookModule } from 'src/book/book.module';
 import { CategoryModule } from 'src/category/category.module';
 import { AppGraphqlModule } from 'src/graphql/graphql.module';
 import { AuthorsModule } from '../authors/authors.module';
+import { PublisherModule } from 'src/publisher/publisher.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { AuthorsModule } from '../authors/authors.module';
     BookModule,
     CategoryModule,
     AppGraphqlModule,
-    AuthorsModule
+    AuthorsModule,
+    PublisherModule
   ],
   controllers: [AppController],
   providers: [AppService],
