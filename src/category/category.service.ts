@@ -46,8 +46,8 @@ export class CategoryService {
         id,
       },
       include: {
-        books: true
-      }
+        books: true,
+      },
     });
 
     if (!findOneCategory) {

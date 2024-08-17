@@ -12,15 +12,15 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ".env",
-      isGlobal: true
+      envFilePath: '.env',
+      isGlobal: true,
     }),
     PrismaModule,
     BookModule,
     CategoryModule,
     AppGraphqlModule,
     AuthorsModule,
-    PublisherModule
+    PublisherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
