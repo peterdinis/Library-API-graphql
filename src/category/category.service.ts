@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryInput } from './dto/create-category-type';
 import { UpdateCategoryInput } from './dto/update-category-type';
@@ -31,21 +31,41 @@ export class CategoryService {
   }
 
   async findOne(id: number) {
-    return this.prismaService.category.findUnique({
-      where: { id },
+    const findOneCategory = await this.prismaService.category.findFirst({
+        where: {
+            id
+        }
     });
+
+    if(!findOneCategory) {
+        throw new NotFoundException("No category found");
+    }
+
+    return findOneCategory;
   }
 
   async update(id: number, updateCategoryInput: UpdateCategoryInput) {
-    return this.prismaService.category.update({
-      where: { id },
-      data: updateCategoryInput,
+    const oneCategory = await this.findOne(id);
+
+    const updateCategory = await this.prismaService.category.update({
+        where: {
+            id: oneCategory.id
+        },
+
+        data: updateCategoryInput
     });
+
+    if(!updateCategory) {
+        throw new ForbiddenException("Failed to update category");
+    }
+
+    return updateCategory;
   }
 
   async remove(id: number) {
+    const oneCategory = await this.findOne(id);
     return this.prismaService.category.delete({
-      where: { id },
+      where: { id: oneCategory.id },
     });
   }
 }
