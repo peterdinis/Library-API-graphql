@@ -5,94 +5,97 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateAuthorInput } from './dto/create-author-type';
+import { UpdateAuthorType } from './dto/update-author-type';
+import { PaginationAuthorType } from './dto/pagination-author-type';
 
 @Injectable()
 export class AuthorsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createCategoryInput: CreateCategoryInput) {
-    const newCategory = await this.prismaService.category.create({
+  async create(createAuhtorInput: CreateAuthorInput) {
+    const newAuthor = await this.prismaService.author.create({
       data: {
-        ...createCategoryInput,
+        ...createAuhtorInput,
       },
     });
 
-    if (!newCategory) {
-      throw new BadRequestException('Failed to create category');
+    if (!newAuthor) {
+      throw new BadRequestException('Failed to create author');
     }
 
-    return newCategory;
+    return newAuthor;
   }
 
-  async findAllCategories() {
-    const allCategories = await this.prismaService.category.findMany({
+  async findAllAuthors() {
+    const allAuthors = await this.prismaService.author.findMany({
       include: {
         books: true,
       },
     });
-    if (!allCategories) {
-      throw new NotFoundException('No categories found');
+    if (!allAuthors) {
+      throw new NotFoundException('No authors found');
     }
 
-    return allCategories;
+    return allAuthors;
   }
 
   async findOne(id: number) {
-    const findOneCategory = await this.prismaService.category.findFirst({
+    const findOneAuthor = await this.prismaService.author.findFirst({
       where: {
         id,
       },
     });
 
-    if (!findOneCategory) {
-      throw new NotFoundException('No category found');
+    if (!findOneAuthor) {
+      throw new NotFoundException('No author found');
     }
 
-    return findOneCategory;
+    return findOneAuthor;
   }
 
-  async update(id: number, updateCategoryInput: UpdateCategoryInput) {
-    const oneCategory = await this.findOne(id);
+  async update(id: number, updateAuthorInput: UpdateAuthorType) {
+    const oneAuthor = await this.findOne(id);
 
-    const updateCategory = await this.prismaService.category.update({
+    const updateAuthor = await this.prismaService.category.update({
       where: {
-        id: oneCategory.id,
+        id: oneAuthor.id,
       },
 
-      data: updateCategoryInput,
+      data: updateAuthorInput,
     });
 
-    if (!updateCategory) {
-      throw new ForbiddenException('Failed to update category');
+    if (!updateAuthor) {
+      throw new ForbiddenException('Failed to update author');
     }
 
-    return updateCategory;
+    return updateAuthor;
   }
 
   async remove(id: number) {
-    const oneCategory = await this.findOne(id);
-    return this.prismaService.category.delete({
-      where: { id: oneCategory.id },
+    const oneAuthor = await this.findOne(id);
+    return this.prismaService.author.delete({
+      where: { id: oneAuthor.id },
     });
   }
 
-  async searchCategories(keyword: string) {
-    const foundCategories = await this.prismaService.category.findMany({
+  async searchAuthors(keyword: string) {
+    const foundAuthors = await this.prismaService.author.findMany({
       where: {
         OR: [{ name: { contains: keyword, mode: 'insensitive' } }],
       },
     });
 
-    if (!foundCategories || foundCategories.length === 0) {
+    if (!foundAuthors || foundAuthors.length === 0) {
       throw new NotFoundException(
         `No categories found for keyword "${keyword}"`,
       );
     }
 
-    return foundCategories;
+    return foundAuthors;
   }
 
-  async paginationCategories(paginationDto: PaginationCategoryType) {
+  async paginationCategories(paginationDto: PaginationAuthorType) {
     const allCategoriesInApp = await this.prismaService.category.findMany({
       skip: paginationDto.skip,
       take: paginationDto.take,
