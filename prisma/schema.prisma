@@ -55,10 +55,12 @@ model Author {
 }
 
 model Publisher {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   description String
-  createdYear DateTime @default(now())
+  image       String
+  createdYear DateTime  @default(now())
+  deletedYear DateTime? @default(now())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt
 }
