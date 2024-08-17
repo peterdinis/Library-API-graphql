@@ -25,8 +25,13 @@ scalar DateTime
 type Query {
   getAllBooks: [BookModel!]!
   getOneBook(id: Float!): BookModel!
-  getPaginationBooks(skip: Float!, take: Float!): [BookModel!]!
+  getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
   searchBooks(keyword: String!): [BookModel!]!
+}
+
+input PaginationBookType {
+  skip: Int!
+  take: Int!
 }
 
 type Mutation {
