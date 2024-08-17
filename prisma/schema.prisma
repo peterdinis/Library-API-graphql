@@ -28,6 +28,8 @@ model Book {
   serialNumber String   @default("11-22-333")
   category     Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   categoryId   Int
+  author       Author   @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  authorId     Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
 }
@@ -36,6 +38,18 @@ model Category {
   id        Int      @id @default(autoincrement())
   name      String
   books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Author {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  litPeriod   DateTime  @default(now())
+  birthYear   DateTime  @default(now())
+  deathYear   DateTime? @default(now())
+  books       Book[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
