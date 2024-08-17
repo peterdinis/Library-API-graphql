@@ -1,7 +1,13 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryInput } from './dto/create-category-type';
 import { UpdateCategoryInput } from './dto/update-category-type';
+import { PaginationCategoryType } from './dto/pagination-category-types';
 
 @Injectable()
 export class CategoryService {
@@ -9,22 +15,26 @@ export class CategoryService {
 
   async create(createCategoryInput: CreateCategoryInput) {
     const newCategory = await this.prismaService.category.create({
-        data: {
-            ...createCategoryInput
-        }
+      data: {
+        ...createCategoryInput,
+      },
     });
 
-    if(!newCategory) {
-        throw new BadRequestException("Failed to create category");
+    if (!newCategory) {
+      throw new BadRequestException('Failed to create category');
     }
 
     return newCategory;
   }
 
   async findAllCategories() {
-    const allCategories = await this.prismaService.category.findMany({});
-    if(!allCategories) {
-        throw new NotFoundException("No categories found");
+    const allCategories = await this.prismaService.category.findMany({
+      include: {
+        books: true,
+      },
+    });
+    if (!allCategories) {
+      throw new NotFoundException('No categories found');
     }
 
     return allCategories;
@@ -32,13 +42,13 @@ export class CategoryService {
 
   async findOne(id: number) {
     const findOneCategory = await this.prismaService.category.findFirst({
-        where: {
-            id
-        }
+      where: {
+        id,
+      },
     });
 
-    if(!findOneCategory) {
-        throw new NotFoundException("No category found");
+    if (!findOneCategory) {
+      throw new NotFoundException('No category found');
     }
 
     return findOneCategory;
@@ -48,15 +58,15 @@ export class CategoryService {
     const oneCategory = await this.findOne(id);
 
     const updateCategory = await this.prismaService.category.update({
-        where: {
-            id: oneCategory.id
-        },
+      where: {
+        id: oneCategory.id,
+      },
 
-        data: updateCategoryInput
+      data: updateCategoryInput,
     });
 
-    if(!updateCategory) {
-        throw new ForbiddenException("Failed to update category");
+    if (!updateCategory) {
+      throw new ForbiddenException('Failed to update category');
     }
 
     return updateCategory;
@@ -67,5 +77,34 @@ export class CategoryService {
     return this.prismaService.category.delete({
       where: { id: oneCategory.id },
     });
+  }
+
+  async searchCategories(keyword: string) {
+    const foundCategories = await this.prismaService.category.findMany({
+      where: {
+        OR: [{ name: { contains: keyword, mode: 'insensitive' } }],
+      },
+    });
+
+    if (!foundCategories || foundCategories.length === 0) {
+      throw new NotFoundException(
+        `No categories found for keyword "${keyword}"`,
+      );
+    }
+
+    return foundCategories;
+  }
+
+  async paginationCategories(paginationDto: PaginationCategoryType) {
+    const allCategoriesInApp = await this.prismaService.category.findMany({
+      skip: paginationDto.skip,
+      take: paginationDto.take,
+    });
+
+    if (!allCategoriesInApp || allCategoriesInApp.length === 0) {
+      throw new NotFoundException('No categories found');
+    }
+
+    return allCategoriesInApp;
   }
 }

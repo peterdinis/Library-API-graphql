@@ -38,12 +38,28 @@ export class BookService {
   }
 
   async createBook(newBookDto: CreateBookInput) {
+    // Check if the category exists
+    const findCategoryForBook = await this.prismaService.category.findUnique({
+      where: {
+        id: newBookDto.categoryId,
+      },
+    });
+
+    // If the category doesn't exist, throw an error
+    if (!findCategoryForBook) {
+      throw new NotFoundException(
+        `Category with ID ${newBookDto.categoryId} not found`,
+      );
+    }
+
+    // Create the book
     const newBook = await this.prismaService.book.create({
       data: {
         ...newBookDto,
       },
     });
 
+    // If the book creation fails for some reason, throw an error
     if (!newBook) {
       throw new BadRequestException('Could not create book');
     }

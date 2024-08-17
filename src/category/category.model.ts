@@ -10,5 +10,4 @@ export class CategoryModel {
 
   @Field()
   description: string;
-
 }
