@@ -1,4 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @InputType()
 export class CreateBookInput {
@@ -37,4 +38,10 @@ export class CreateBookInput {
 
   @Field()
   categoryId: number;
+
+  @Field(() => DateTimeScalar)
+  createdAt: Date;
+
+  @Field(() => DateTimeScalar)
+  updatedAt: Date;
 }

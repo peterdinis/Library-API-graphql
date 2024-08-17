@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @InputType()
 export class CreateCategoryInput {
@@ -7,4 +8,10 @@ export class CreateCategoryInput {
 
   @Field()
   description: string;
+
+  @Field(() => DateTimeScalar)
+  createdAt: Date;
+
+  @Field(() => DateTimeScalar)
+  updatedAt: Date;
 }
