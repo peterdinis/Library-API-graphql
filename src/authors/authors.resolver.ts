@@ -20,7 +20,9 @@ export class AuthorsResolver {
   }
 
   @Mutation(() => AuthorModel)
-  async createAuthor(@Args('createAuthorInput') createAuthorInput: CreateAuthorInput) {
+  async createAuthor(
+    @Args('createAuthorInput') createAuthorInput: CreateAuthorInput,
+  ) {
     return this.authorsService.create(createAuthorInput);
   }
 
@@ -39,12 +41,16 @@ export class AuthorsResolver {
   }
 
   @Query(() => [AuthorModel], { name: 'searchAuthors' })
-  async searchAuthors(@Args('keyword', { type: () => String }) keyword: string) {
+  async searchAuthors(
+    @Args('keyword', { type: () => String }) keyword: string,
+  ) {
     return this.authorsService.searchAuthors(keyword);
   }
 
   @Query(() => [AuthorModel], { name: 'paginationAuthors' })
-  async paginationAuthors(@Args('paginationDto') paginationDto: PaginationAuthorType) {
+  async paginationAuthors(
+    @Args('paginationDto') paginationDto: PaginationAuthorType,
+  ) {
     return this.authorsService.paginationCategories(paginationDto);
   }
 }

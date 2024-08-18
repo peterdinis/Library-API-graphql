@@ -38,7 +38,7 @@ export class CategoryResolver {
   async removeCategory(@Args('id', { type: () => Int }) id: number) {
     return this.categoryService.remove(id);
   }
-  
+
   @Query(() => [CategoryModel], { name: 'searchCategories' })
   async searchCategories(
     @Args('keyword', { type: () => String }) keyword: string,

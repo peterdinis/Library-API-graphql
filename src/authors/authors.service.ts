@@ -46,8 +46,8 @@ export class AuthorsService {
         id,
       },
       include: {
-        books: true
-      }
+        books: true,
+      },
     });
 
     if (!findOneAuthor) {
