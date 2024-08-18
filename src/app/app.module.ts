@@ -9,6 +9,7 @@ import { AuthorsModule } from '../authors/authors.module';
 import { PublisherModule } from 'src/publisher/publisher.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/auth/auth.module';
+import { BookingModule } from 'src/booking/booking.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { AuthModule } from 'src/auth/auth.module';
     AppGraphqlModule,
     AuthorsModule,
     PublisherModule,
-    AuthModule
+    AuthModule,
+    BookingModule
   ],
   controllers: [AppController],
   providers: [AppService],
