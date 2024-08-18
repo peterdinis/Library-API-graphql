@@ -24,12 +24,16 @@ export class PublisherResolver {
   }
 
   @Query('publisher')
-  async getPublisher(@Args('id', { type: () => Number }) id: number): Promise<Publisher> {
+  async getPublisher(
+    @Args('id', { type: () => Number }) id: number,
+  ): Promise<Publisher> {
     return this.publisherService.getPublisher(id);
   }
 
   @Mutation('createPublisher')
-  async createPublisher(@Args('data') data: CreatePublisherInput): Promise<Publisher> {
+  async createPublisher(
+    @Args('data') data: CreatePublisherInput,
+  ): Promise<Publisher> {
     return this.publisherService.createPublisher(data);
   }
 
@@ -42,7 +46,9 @@ export class PublisherResolver {
   }
 
   @Mutation('deletePublisher')
-  async deletePublisher(@Args('id', { type: () => Number }) id: number): Promise<Publisher> {
+  async deletePublisher(
+    @Args('id', { type: () => Number }) id: number,
+  ): Promise<Publisher> {
     return this.publisherService.deletePublisher(id);
   }
 }
