@@ -1,11 +1,10 @@
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { UnauthorizedException, UseGuards} from '@nestjs/common';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { GqlAuthGuard } from './guards/gql-auth-guard';
-import { User } from '@prisma/client';
+import { UserModel } from './auth.model';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
-import { UserModel } from './auth.model';
 
 @Resolver(() => UserModel)
 export class UserResolver {
@@ -13,13 +12,21 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => UserModel)
-  async me(@Args('email') email: string) {
-    return this.authService.validateUser({ email });
+  async me(@Context('req') { headers }: { headers: { authorization: string } }) {
+    const token = headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+    const user = await this.authService.getCurrentUser(token);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user;
   }
 
   @Mutation(() => String)
-  async login(@Args('email') email: string, @Args('password') password: string) {
-    const user = await this.authService.validateUser({ email, password });
+  async login(@Args('loginUserDto') loginUserDto: LoginUserType): Promise<string> {
+    const user = await this.authService.validateUser(loginUserDto);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -28,11 +35,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserModel)
-  async register(
-    @Args('email') email: string,
-    @Args('password') password: string,
-    @Args('name', { nullable: true }) name?: string,
-  ) {
-    return this.authService.register({ email, password, name });
+  async register(@Args('registerUserDto') registerUserDto: RegisterUserType): Promise<UserModel> {
+    return this.authService.register(registerUserDto);
   }
 }
