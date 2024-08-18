@@ -13,27 +13,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  STUDENT
+  ADMIN
+  TEACHER
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  lastName String
+  email    String @unique
+  password String
+  role     Role   @default(STUDENT)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+}
+
 model Book {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
   description  String
   image        String
-  createdYear  DateTime @default(now())
+  createdYear  DateTime  @default(now())
   pages        Int
   authorName   String
-  isAvaible    Boolean  @default(true)
-  isBorrowed   Boolean  @default(false)
-  isReturned   Boolean  @default(false)
-  stockNumber  Int      @default(1)
-  serialNumber String   @default("11-22-333")
-  category     Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  isAvaible    Boolean   @default(true)
+  isBorrowed   Boolean   @default(false)
+  isReturned   Boolean   @default(false)
+  stockNumber  Int       @default(1)
+  serialNumber String    @default("11-22-333")
+  category     Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   categoryId   Int
-  author       Author   @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  author       Author    @relation(fields: [authorId], references: [id], onDelete: Restrict)
   authorId     Int
   publisherId  Int
-  publisher    Publisher   @relation(fields: [publisherId], references: [id], onDelete: Restrict)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
+  publisher    Publisher @relation(fields: [publisherId], references: [id], onDelete: Restrict)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
 }
 
 model Category {

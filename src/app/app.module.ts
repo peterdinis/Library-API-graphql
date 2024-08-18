@@ -8,6 +8,7 @@ import { AppGraphqlModule } from 'src/graphql/graphql.module';
 import { AuthorsModule } from '../authors/authors.module';
 import { PublisherModule } from 'src/publisher/publisher.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     AppGraphqlModule,
     AuthorsModule,
     PublisherModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
