@@ -7,7 +7,7 @@ import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
 
 @Resolver(() => UserModel)
-export class UserResolver {
+export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(GqlAuthGuard)
