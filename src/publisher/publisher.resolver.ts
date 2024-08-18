@@ -12,9 +12,15 @@ export class PublisherResolver {
   async getPublishers(
     @Args('skip', { type: () => Number, nullable: true }) skip?: number,
     @Args('take', { type: () => Number, nullable: true }) take?: number,
+  ): Promise<Publisher[]> {
+    return this.publisherService.paginatePublishers(skip, take);
+  }
+
+  @Query('searchPublishers')
+  async searchPublishers(
     @Args('search', { type: () => String, nullable: true }) search?: string,
   ): Promise<Publisher[]> {
-    return this.publisherService.getPublishers(skip, take, search);
+    return this.publisherService.searchPublishers(search);
   }
 
   @Query('publisher')

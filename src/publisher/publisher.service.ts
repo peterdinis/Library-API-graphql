@@ -12,10 +12,7 @@ export class PublisherService {
     });
   }
 
-  async updatePublisher(
-    id: number,
-    data: Prisma.PublisherUpdateInput,
-  ): Promise<Publisher> {
+  async updatePublisher(id: number, data: Prisma.PublisherUpdateInput): Promise<Publisher> {
     return this.prisma.publisher.update({
       where: { id },
       data,
@@ -34,11 +31,16 @@ export class PublisherService {
     });
   }
 
-  async getPublishers(
-    skip: number = 0,
-    take: number = 10,
-    search: string = '',
-  ): Promise<Publisher[]> {
+  // Method for pagination
+  async paginatePublishers(skip: number = 0, take: number = 10): Promise<Publisher[]> {
+    return this.prisma.publisher.findMany({
+      skip,
+      take,
+    });
+  }
+
+  // Method for search
+  async searchPublishers(search: string): Promise<Publisher[]> {
     return this.prisma.publisher.findMany({
       where: {
         OR: [
@@ -56,8 +58,6 @@ export class PublisherService {
           },
         ],
       },
-      skip,
-      take,
     });
   }
 }
