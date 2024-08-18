@@ -36,8 +36,11 @@ export class CreateBookInput {
   @Field()
   serialNumber: string;
 
-  @Field()
+  @Field(() => Int)
   categoryId: number;
+
+  @Field(() => Int)
+  publisherId: number;
 
   @Field(() => DateTimeScalar)
   createdAt: Date;

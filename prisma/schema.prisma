@@ -30,6 +30,8 @@ model Book {
   categoryId   Int
   author       Author   @relation(fields: [authorId], references: [id], onDelete: Restrict)
   authorId     Int
+  publisherId  Int
+  publisher    Publisher   @relation(fields: [publisherId], references: [id], onDelete: Restrict)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
 }
@@ -59,6 +61,7 @@ model Publisher {
   name        String
   description String
   image       String
+  books       Book[]
   createdYear DateTime  @default(now())
   deletedYear DateTime? @default(now())
   createdAt   DateTime  @default(now())
