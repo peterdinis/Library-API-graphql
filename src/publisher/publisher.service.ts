@@ -12,7 +12,10 @@ export class PublisherService {
     });
   }
 
-  async updatePublisher(id: number, data: Prisma.PublisherUpdateInput): Promise<Publisher> {
+  async updatePublisher(
+    id: number,
+    data: Prisma.PublisherUpdateInput,
+  ): Promise<Publisher> {
     return this.prisma.publisher.update({
       where: { id },
       data,
@@ -32,7 +35,10 @@ export class PublisherService {
   }
 
   // Method for pagination
-  async paginatePublishers(skip: number = 0, take: number = 10): Promise<Publisher[]> {
+  async paginatePublishers(
+    skip: number = 0,
+    take: number = 10,
+  ): Promise<Publisher[]> {
     return this.prisma.publisher.findMany({
       skip,
       take,
