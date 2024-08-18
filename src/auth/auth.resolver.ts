@@ -5,13 +5,14 @@ import { GqlAuthGuard } from './guards/gql-auth-guard';
 import { User } from '@prisma/client';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
+import { UserModel } from './auth.model';
 
-@Resolver(() => User)
+@Resolver(() => UserModel)
 export class UserResolver {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => User)
+  @Query(() => UserModel)
   async me(@Args('email') email: string) {
     return this.authService.validateUser({ email });
   }
@@ -26,7 +27,7 @@ export class UserResolver {
     return access_token;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserModel)
   async register(
     @Args('email') email: string,
     @Args('password') password: string,
