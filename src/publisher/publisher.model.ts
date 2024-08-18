@@ -1,6 +1,4 @@
 import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class PublisherModel {
-    
-}
+export class PublisherModel {}
