@@ -1,54 +1,54 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PublisherService } from './publisher.service';
-import { Publisher } from '@prisma/client';
 import { CreatePublisherInput } from './dto/create-publisher-type';
 import { UpdatePublisherInput } from './dto/update-publisher-type';
+import { PublisherModel } from './publisher.model';
 
-@Resolver('Publisher')
+@Resolver(() => PublisherModel)
 export class PublisherResolver {
   constructor(private readonly publisherService: PublisherService) {}
 
-  @Query('publishers')
+  @Query(() => [PublisherModel])
   async getPublishers(
     @Args('skip', { type: () => Number, nullable: true }) skip?: number,
     @Args('take', { type: () => Number, nullable: true }) take?: number,
-  ): Promise<Publisher[]> {
+  ) {
     return this.publisherService.paginatePublishers(skip, take);
   }
 
-  @Query('searchPublishers')
+  @Query(() => [PublisherModel])
   async searchPublishers(
     @Args('search', { type: () => String, nullable: true }) search?: string,
-  ): Promise<Publisher[]> {
+  ) {
     return this.publisherService.searchPublishers(search);
   }
 
-  @Query('publisher')
+  @Query(() => PublisherModel)
   async getPublisher(
     @Args('id', { type: () => Number }) id: number,
-  ): Promise<Publisher> {
+  ) {
     return this.publisherService.getPublisher(id);
   }
 
-  @Mutation('createPublisher')
+  @Mutation(() => PublisherModel)
   async createPublisher(
     @Args('data') data: CreatePublisherInput,
-  ): Promise<Publisher> {
+  ) {
     return this.publisherService.createPublisher(data);
   }
 
-  @Mutation('updatePublisher')
+  @Mutation(() => PublisherModel)
   async updatePublisher(
     @Args('id', { type: () => Number }) id: number,
     @Args('data') data: UpdatePublisherInput,
-  ): Promise<Publisher> {
+  ) {
     return this.publisherService.updatePublisher(id, data);
   }
 
-  @Mutation('deletePublisher')
+  @Mutation(() => PublisherModel)
   async deletePublisher(
     @Args('id', { type: () => Number }) id: number,
-  ): Promise<Publisher> {
+  ) {
     return this.publisherService.deletePublisher(id);
   }
 }
