@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Role } from '@prisma/client';
 
 @ObjectType()
 export class UserModel {
@@ -18,6 +17,6 @@ export class UserModel {
     @Field()
     password: string;
 
-    @Field(() => Role)
-    role: Role;
+    @Field()
+    role: string;
 }
