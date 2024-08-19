@@ -69,6 +69,12 @@ export class CreateBookInput {
 
   @Field(() => Int)
   @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  authorId: number; 
+
+  @Field(() => Int)
+  @IsNumber()
   @IsNotEmpty()
   @IsPositive()
   categoryId: number;

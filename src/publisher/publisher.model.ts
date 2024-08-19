@@ -22,4 +22,7 @@ export class PublisherModel {
 
   @Field(() => DateTimeScalar)
   createdYear: Date;
+
+  @Field(() => DateTimeScalar, { nullable: true })
+  deletedYear?: Date;
 }
