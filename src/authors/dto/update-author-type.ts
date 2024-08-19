@@ -1,5 +1,5 @@
-import { ObjectType } from '@nestjs/graphql';
+import { InputType} from '@nestjs/graphql';
 import { CreateAuthorInput } from './create-author-type';
 
-@ObjectType()
+@InputType()
 export class UpdateAuthorType extends CreateAuthorInput {}
