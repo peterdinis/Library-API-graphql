@@ -3,8 +3,6 @@ import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { GqlAuthGuard } from './guards/gql-auth-guard';
 import { UserModel } from './auth.model';
-import { LoginUserType } from './dto/login-user.dto';
-import { RegisterUserType } from './dto/register-user.dto';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
@@ -28,8 +26,8 @@ export class AuthResolver {
 
     @Mutation(() => String)
     async login(
-        @Args('loginUserDto') loginUserDto: LoginUserType,
-    ): Promise<string> {
+        @Args('loginUserDto') loginUserDto: any,
+    ){
         const user = await this.authService.validateUser(loginUserDto);
         if (!user) {
             throw new UnauthorizedException('Invalid credentials');
@@ -40,8 +38,8 @@ export class AuthResolver {
 
     @Mutation(() => UserModel)
     async register(
-        @Args('registerUserDto') registerUserDto: RegisterUserType,
-    ): Promise<UserModel> {
+        @Args('registerUserDto') registerUserDto: any,
+    ) {
         return this.authService.register(registerUserDto);
     }
 }
