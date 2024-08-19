@@ -14,7 +14,7 @@ export class BookModel {
   @Field()
   image: string;
 
-  @Field(() => Date)
+  @Field()
   createdYear: string;
 
   @Field(() => Number)

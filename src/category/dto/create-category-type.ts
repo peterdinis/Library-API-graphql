@@ -14,15 +14,15 @@ export class CreateCategoryInput {
   @IsNotEmpty()
   description: string;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
-  createdAt: Date;
+  createdAt: string;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
-  updatedAt: Date;
+  updatedAt: string;createdYear
 }

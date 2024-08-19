@@ -14,19 +14,19 @@ export class CreateAuthorInput {
   @IsNotEmpty()
   description: string;
 
-  @Field(() => DateTimeScalar, { nullable: true })
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
   litPeriod: Date;
 
-  @Field(() => DateTimeScalar, { nullable: true })
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
   birthYear: Date;
 
-  @Field(() => DateTimeScalar, { nullable: true })
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()

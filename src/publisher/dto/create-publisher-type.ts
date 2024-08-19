@@ -19,9 +19,9 @@ export class CreatePublisherInput {
   @IsNotEmpty()
   image: string;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
-  createdYear: Date;
+  createdYear: string;
 }

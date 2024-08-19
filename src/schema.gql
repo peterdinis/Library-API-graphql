@@ -7,7 +7,7 @@ type BookModel {
   name: String!
   description: String!
   image: String!
-  createdYear: DateTime!
+  createdYear: String!
   pages: Float!
   authorName: String!
   isAvaiable: Boolean!
@@ -17,15 +17,37 @@ type BookModel {
   serialNumber: String!
 }
 
+type CategoryModel {
+  id: Int!
+  name: String!
+  description: String!
+}
+
+type AuthorModel {
+  id: Int!
+  name: String!
+  description: String
+  litPeriod: String!
+  birthYear: String!
+  deathYear: String!
+  books: [BookModel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
-type CategoryModel {
-  id: Float!
+type PublisherModel {
+  id: Int!
   name: String!
   description: String!
+  image: String!
+  books: BookModel!
+  createdYear: String!
+  deletedYear: String!
 }
 
 type Query {
@@ -35,9 +57,28 @@ type Query {
   searchBooks(keyword: String!): [BookModel!]!
   categories: [CategoryModel!]!
   category(id: Int!): CategoryModel!
+  searchCategories(keyword: String!): [CategoryModel!]!
+  paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!
+  authors: [AuthorModel!]!
+  author(id: Int!): AuthorModel!
+  searchAuthors(keyword: String!): [AuthorModel!]!
+  paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
+  getPublishers(skip: Float, take: Float): [PublisherModel!]!
+  searchPublishers(search: String): [PublisherModel!]!
+  getPublisher(id: Float!): PublisherModel!
 }
 
 input PaginationBookType {
+  skip: Int!
+  take: Int!
+}
+
+input PaginationCategoryType {
+  skip: Int!
+  take: Int!
+}
+
+input PaginationAuthorType {
   skip: Int!
   take: Int!
 }
@@ -49,13 +90,19 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
   updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): CategoryModel!
   removeCategory(id: Int!): CategoryModel!
+  createAuthor(createAuthorInput: CreateAuthorInput!): AuthorModel!
+  updateAuthor(id: Int!, updateAuthorInput: UpdateAuthorType!): AuthorModel!
+  removeAuthor(id: Int!): Boolean!
+  createPublisher(data: CreatePublisherInput!): PublisherModel!
+  updatePublisher(id: Float!, data: UpdatePublisherInput!): PublisherModel!
+  deletePublisher(id: Float!): PublisherModel!
 }
 
 input CreateBookInput {
   name: String!
   description: String!
   image: String!
-  createdYear: DateTime!
+  createdYear: String!
   pages: Int!
   authorName: String!
   isAvaiable: Boolean!
@@ -63,14 +110,18 @@ input CreateBookInput {
   isReturned: Boolean!
   stockNumber: Int!
   serialNumber: String!
-  categoryId: Float!
+  authorId: Int!
+  categoryId: Int!
+  publisherId: Int!
+  createdAt: String!
+  updatedAt: String!
 }
 
 input UpdateBookInput {
   name: String
   description: String
   image: String
-  createdYear: DateTime
+  createdYear: String
   pages: Int
   authorName: String
   isAvaiable: Boolean
@@ -78,15 +129,53 @@ input UpdateBookInput {
   isReturned: Boolean
   stockNumber: Int
   serialNumber: String
-  categoryId: Float
+  authorId: Int
+  categoryId: Int
+  publisherId: Int
+  createdAt: String
+  updatedAt: String
 }
 
 input CreateCategoryInput {
   name: String!
   description: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 input UpdateCategoryInput {
   name: String
   description: String
+  createdAt: String
+  updatedAt: String
+}
+
+input CreateAuthorInput {
+  name: String!
+  description: String
+  litPeriod: DateTime!
+  birthYear: DateTime!
+  deathYear: DateTime!
+}
+
+input UpdateAuthorType {
+  name: String!
+  description: String
+  litPeriod: DateTime!
+  birthYear: DateTime!
+  deathYear: DateTime!
+}
+
+input CreatePublisherInput {
+  name: String!
+  description: String!
+  image: String!
+  createdYear: String!
+}
+
+input UpdatePublisherInput {
+  name: String
+  description: String
+  image: String
+  deletedYear: DateTime
 }
