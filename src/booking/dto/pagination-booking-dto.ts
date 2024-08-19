@@ -1,4 +1,4 @@
-import { InputType} from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
 import { PaginationBookType } from 'src/book/dto/pagination-book-type';
 
 @InputType()

@@ -1,7 +1,5 @@
-import { Resolver } from "@nestjs/graphql";
-import { BookingModel } from "./booking.model";
+import { Resolver } from '@nestjs/graphql';
+import { BookingModel } from './booking.model';
 
 @Resolver(() => BookingModel)
-export class BookingResolver {
-    
-}
+export class BookingResolver {}

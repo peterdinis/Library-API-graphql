@@ -5,24 +5,24 @@ import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class PublisherModel {
-  @Field(() => Int)
-  id: number;
+    @Field(() => Int)
+    id: number;
 
-  @Field()
-  name: string;
+    @Field()
+    name: string;
 
-  @Field()
-  description: string;
+    @Field()
+    description: string;
 
-  @Field()
-  image: string;
+    @Field()
+    image: string;
 
-  @Field(() => BookModel)
-  books: Book[];
+    @Field(() => BookModel)
+    books: Book[];
 
-  @Field()
-  createdYear: string;
+    @Field()
+    createdYear: string;
 
-  @Field()
-  deletedYear?: string;
+    @Field()
+    deletedYear?: string;
 }

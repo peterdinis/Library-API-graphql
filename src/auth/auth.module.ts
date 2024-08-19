@@ -9,18 +9,18 @@ import { AuthResolver } from './auth.resolver';
 
 @Module({
     imports: [
-      PrismaModule,
-      PassportModule,
-      JwtModule.registerAsync({
-        imports: [ConfigModule],
-        useFactory: async (configService: ConfigService) => ({
-          secret: configService.get<string>('JWT_SECRET'),
-          signOptions: { expiresIn: '60m' },
+        PrismaModule,
+        PassportModule,
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                secret: configService.get<string>('JWT_SECRET'),
+                signOptions: { expiresIn: '60m' },
+            }),
+            inject: [ConfigService],
         }),
-        inject: [ConfigService],
-      }),
     ],
     providers: [AuthService, AuthResolver, JwtStrategy],
     exports: [AuthService],
-  })
+})
 export class AuthModule {}

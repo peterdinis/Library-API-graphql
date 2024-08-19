@@ -1,4 +1,4 @@
-import { InputType} from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
 import { CreateAuthorInput } from './create-author-type';
 
 @InputType()

@@ -12,21 +12,21 @@ import { AuthModule } from 'src/auth/auth.module';
 import { BookingModule } from 'src/booking/booking.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-      isGlobal: true,
-    }),
-    PrismaModule,
-    BookModule,
-    CategoryModule,
-    AppGraphqlModule,
-    AuthorsModule,
-    PublisherModule,
-    AuthModule,
-    BookingModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            envFilePath: '.env',
+            isGlobal: true,
+        }),
+        PrismaModule,
+        BookModule,
+        CategoryModule,
+        AppGraphqlModule,
+        AuthorsModule,
+        PublisherModule,
+        AuthModule,
+        BookingModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
