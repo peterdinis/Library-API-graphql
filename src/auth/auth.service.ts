@@ -29,7 +29,7 @@ export class AuthService {
 
     async validateUser(
         loginDto: LoginUserType,
-    ): Promise<Omit<User, 'password'> | null> {
+    ) {
         const user = await this.prisma.user.findUnique({
             where: { email: loginDto.email },
         });
@@ -42,14 +42,14 @@ export class AuthService {
 
     async login(
         user: Omit<User, 'password'>,
-    ): Promise<{ access_token: string }> {
+    ) {
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
             access_token: this.jwtService.sign(payload),
         };
     }
 
-    async register(registerDto: RegisterUserType): Promise<User> {
+    async register(registerDto: RegisterUserType) {
         const hashedPassword = bcrypt.hashSync(registerDto.password, 10);
         return this.prisma.user.create({
             data: {
