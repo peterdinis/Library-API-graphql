@@ -13,21 +13,21 @@ export class AuthorModel {
   @Field({ nullable: true })
   description?: string;
 
-  @Field(() => DateTimeScalar)
-  litPeriod: Date;
+  @Field()
+  litPeriod: string;
 
-  @Field(() => DateTimeScalar)
-  birthYear: Date;
+  @Field()
+  birthYear: string;
 
-  @Field(() => DateTimeScalar, { nullable: true })
-  deathYear?: Date;
+  @Field()
+  deathYear?: string;
 
   @Field(() => [BookModel])
   books: BookModel[];
 
-  @Field(() => DateTimeScalar)
+  @Field()
   createdAt: Date;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   updatedAt: Date;
 }

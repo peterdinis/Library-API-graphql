@@ -20,9 +20,9 @@ export class PublisherModel {
   @Field(() => BookModel)
   books: Book[];
 
-  @Field(() => DateTimeScalar)
-  createdYear: Date;
+  @Field()
+  createdYear: string;
 
-  @Field(() => DateTimeScalar, { nullable: true })
-  deletedYear?: Date;
+  @Field()
+  deletedYear?: string;
 }
