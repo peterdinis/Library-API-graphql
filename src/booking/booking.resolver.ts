@@ -3,6 +3,7 @@ import { BookingService } from './booking.service';
 import { CreateBookingType } from './dto/create-booking-dto';
 import { ReturnBookingType } from './dto/return-booking-dto';
 import { ExtendedBookingType } from './dto/extended-booking-dto';
+import { PaginationBookingType } from './dto/pagination-booking-dto';
 import { BookingModel } from './booking.model';
 
 @Resolver(() => BookingModel)
@@ -32,5 +33,15 @@ export class BookingResolver {
     @Mutation(() => BookingModel)
     async extendedBooking(@Args('extendDto') extendDto: ExtendedBookingType) {
         return this.bookingService.extendedBooking(extendDto);
+    }
+
+    @Query(() => [BookingModel])
+    async paginationBooking(@Args('paginationDto') paginationDto: PaginationBookingType) {
+        return this.bookingService.paginationBooking(paginationDto);
+    }
+
+    @Query(() => [BookingModel])
+    async searchForBookings(@Args('keyword', { type: () => String }) keyword: string) {
+        return this.bookingService.searchForBookings(keyword);
     }
 }

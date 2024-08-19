@@ -9,10 +9,10 @@ export class BookingModel {
     @Field()
     bookName: string;
 
-    @Field(() => DateTimeScalar)
+    @Field()
     from: Date;
 
-    @Field(() => DateTimeScalar)
+    @Field()
     to: Date;
 
     @Field(() => Boolean)
@@ -24,9 +24,9 @@ export class BookingModel {
     @Field(() => Int)
     userId: number;
 
-    @Field(() => DateTimeScalar)
+    @Field()
     returnedDate: Date;
 
-    @Field(() => DateTimeScalar)
+    @Field()
     extendedDate: Date;
 }
