@@ -2,37 +2,101 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type BookModel {
-  id: Float!
+type AuthorModel {
+  birthYear: String!
+  books: [BookModel!]!
+  createdAt: DateTime!
+  deathYear: String!
+  description: String
+  id: Int!
+  litPeriod: String!
   name: String!
-  description: String!
-  image: String!
-  createdYear: String!
-  pages: Float!
+  updatedAt: DateTime!
+}
+
+type BookModel {
   authorName: String!
+  createdYear: String!
+  description: String!
+  id: Float!
+  image: String!
   isAvaiable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
-  stockNumber: Float!
+  name: String!
+  pages: Float!
   serialNumber: String!
+  stockNumber: Float!
+}
+
+type BookingModel {
+  bookName: String!
+  extendedDate: DateTime!
+  from: DateTime!
+  id: Int!
+  isExtended: Boolean!
+  isReturned: Boolean!
+  returnedDate: DateTime!
+  to: DateTime!
+  userId: Int!
 }
 
 type CategoryModel {
+  description: String!
   id: Int!
   name: String!
-  description: String!
 }
 
-type AuthorModel {
-  id: Int!
-  name: String!
+input CreateAuthorInput {
+  birthYear: DateTime!
+  deathYear: DateTime!
   description: String
-  litPeriod: String!
-  birthYear: String!
-  deathYear: String!
-  books: [BookModel!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  litPeriod: DateTime!
+  name: String!
+}
+
+input CreateBookInput {
+  authorId: Int!
+  authorName: String!
+  categoryId: Int!
+  createdAt: String!
+  createdYear: String!
+  description: String!
+  image: String!
+  isAvaiable: Boolean!
+  isBorrowed: Boolean!
+  isReturned: Boolean!
+  name: String!
+  pages: Int!
+  publisherId: Int!
+  serialNumber: String!
+  stockNumber: Int!
+  updatedAt: String!
+}
+
+input CreateBookingType {
+  bookName: String!
+  extendedDate: String!
+  from: String!
+  isExtended: Boolean!
+  isReturned: Boolean!
+  returnedDate: String!
+  to: String!
+  userId: Float!
+}
+
+input CreateCategoryInput {
+  createdAt: String!
+  description: String!
+  name: String!
+  updatedAt: String!
+}
+
+input CreatePublisherInput {
+  createdYear: String!
+  description: String!
+  image: String!
+  name: String!
 }
 
 """
@@ -40,35 +104,49 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type PublisherModel {
+input ExtendedBookingType {
+  extendedDate: String!
   id: Int!
-  name: String!
-  description: String!
-  image: String!
-  books: BookModel!
-  createdYear: String!
-  deletedYear: String!
+  isExtended: Boolean!
 }
 
-type Query {
-  getAllBooks: [BookModel!]!
-  getOneBook(id: Float!): BookModel!
-  getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
-  searchBooks(keyword: String!): [BookModel!]!
-  categories: [CategoryModel!]!
-  category(id: Int!): CategoryModel!
-  searchCategories(keyword: String!): [CategoryModel!]!
-  paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!
-  authors: [AuthorModel!]!
-  author(id: Int!): AuthorModel!
-  searchAuthors(keyword: String!): [AuthorModel!]!
-  paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
-  getPublishers(skip: Float, take: Float): [PublisherModel!]!
-  searchPublishers(search: String): [PublisherModel!]!
-  getPublisher(id: Float!): PublisherModel!
+input LoginUserType {
+  email: String!
+  password: String!
+  role: String!
+}
+
+type Mutation {
+  createAuthor(createAuthorInput: CreateAuthorInput!): AuthorModel!
+  createBook(createBookInput: CreateBookInput!): BookModel!
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
+  createNewBooking(bookingDto: CreateBookingType!): BookingModel!
+  createPublisher(data: CreatePublisherInput!): PublisherModel!
+  deleteBook(id: Float!): BookModel!
+  deletePublisher(id: Float!): PublisherModel!
+  extendedBooking(extendDto: ExtendedBookingType!): BookingModel!
+  login(loginUserDto: LoginUserType!): UserModel!
+  register(registerUserDto: RegisterUserType!): UserModel!
+  removeAuthor(id: Int!): Boolean!
+  removeCategory(id: Int!): CategoryModel!
+  returnBooking(returnDto: ReturnBookingType!): BookingModel!
+  updateAuthor(id: Int!, updateAuthorInput: UpdateAuthorType!): AuthorModel!
+  updateBook(id: Float!, updateBookInput: UpdateBookInput!): BookModel!
+  updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): CategoryModel!
+  updatePublisher(data: UpdatePublisherInput!, id: Float!): PublisherModel!
+}
+
+input PaginationAuthorType {
+  skip: Int!
+  take: Int!
 }
 
 input PaginationBookType {
+  skip: Int!
+  take: Int!
+}
+
+input PaginationBookingType {
   skip: Int!
   take: Int!
 }
@@ -78,104 +156,99 @@ input PaginationCategoryType {
   take: Int!
 }
 
-input PaginationAuthorType {
-  skip: Int!
-  take: Int!
-}
-
-type Mutation {
-  createBook(createBookInput: CreateBookInput!): BookModel!
-  updateBook(id: Float!, updateBookInput: UpdateBookInput!): BookModel!
-  deleteBook(id: Float!): BookModel!
-  createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
-  updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): CategoryModel!
-  removeCategory(id: Int!): CategoryModel!
-  createAuthor(createAuthorInput: CreateAuthorInput!): AuthorModel!
-  updateAuthor(id: Int!, updateAuthorInput: UpdateAuthorType!): AuthorModel!
-  removeAuthor(id: Int!): Boolean!
-  createPublisher(data: CreatePublisherInput!): PublisherModel!
-  updatePublisher(id: Float!, data: UpdatePublisherInput!): PublisherModel!
-  deletePublisher(id: Float!): PublisherModel!
-}
-
-input CreateBookInput {
-  name: String!
-  description: String!
-  image: String!
+type PublisherModel {
+  books: BookModel!
   createdYear: String!
-  pages: Int!
-  authorName: String!
-  isAvaiable: Boolean!
-  isBorrowed: Boolean!
-  isReturned: Boolean!
-  stockNumber: Int!
-  serialNumber: String!
-  authorId: Int!
-  categoryId: Int!
-  publisherId: Int!
-  createdAt: String!
-  updatedAt: String!
-}
-
-input UpdateBookInput {
-  name: String
-  description: String
-  image: String
-  createdYear: String
-  pages: Int
-  authorName: String
-  isAvaiable: Boolean
-  isBorrowed: Boolean
-  isReturned: Boolean
-  stockNumber: Int
-  serialNumber: String
-  authorId: Int
-  categoryId: Int
-  publisherId: Int
-  createdAt: String
-  updatedAt: String
-}
-
-input CreateCategoryInput {
-  name: String!
+  deletedYear: String!
   description: String!
-  createdAt: String!
-  updatedAt: String!
-}
-
-input UpdateCategoryInput {
-  name: String
-  description: String
-  createdAt: String
-  updatedAt: String
-}
-
-input CreateAuthorInput {
+  id: Int!
+  image: String!
   name: String!
-  description: String
-  litPeriod: DateTime!
-  birthYear: DateTime!
-  deathYear: DateTime!
+}
+
+type Query {
+  author(id: Int!): AuthorModel!
+  authors: [AuthorModel!]!
+  categories: [CategoryModel!]!
+  category(id: Int!): CategoryModel!
+  getAllBookings: [BookingModel!]!
+  getAllBooks: [BookModel!]!
+  getOneBook(id: Float!): BookModel!
+  getOneBooking(id: Int!): BookingModel!
+  getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
+  getPublisher(id: Float!): PublisherModel!
+  getPublishers(skip: Float, take: Float): [PublisherModel!]!
+  me: UserModel!
+  paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
+  paginationBooking(paginationDto: PaginationBookingType!): [BookingModel!]!
+  paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!
+  searchAuthors(keyword: String!): [AuthorModel!]!
+  searchBooks(keyword: String!): [BookModel!]!
+  searchCategories(keyword: String!): [CategoryModel!]!
+  searchForBookings(keyword: String!): [BookingModel!]!
+  searchPublishers(search: String): [PublisherModel!]!
+}
+
+input RegisterUserType {
+  email: String!
+  lastName: String!
+  name: String!
+  password: String!
+  role: String!
+}
+
+input ReturnBookingType {
+  id: Int!
+  isReturned: Boolean!
+  returnedDAte: String!
 }
 
 input UpdateAuthorType {
-  name: String!
-  description: String
-  litPeriod: DateTime!
   birthYear: DateTime!
   deathYear: DateTime!
+  description: String
+  litPeriod: DateTime!
+  name: String!
 }
 
-input CreatePublisherInput {
-  name: String!
-  description: String!
-  image: String!
-  createdYear: String!
+input UpdateBookInput {
+  authorId: Int
+  authorName: String
+  categoryId: Int
+  createdAt: String
+  createdYear: String
+  description: String
+  image: String
+  isAvaiable: Boolean
+  isBorrowed: Boolean
+  isReturned: Boolean
+  name: String
+  pages: Int
+  publisherId: Int
+  serialNumber: String
+  stockNumber: Int
+  updatedAt: String
+}
+
+input UpdateCategoryInput {
+  createdAt: String
+  description: String
+  name: String
+  updatedAt: String
 }
 
 input UpdatePublisherInput {
-  name: String
+  deletedYear: DateTime
   description: String
   image: String
-  deletedYear: DateTime
+  name: String
+}
+
+type UserModel {
+  email: String!
+  id: Int!
+  lastName: String!
+  name: String!
+  password: String!
+  role: String!
 }
