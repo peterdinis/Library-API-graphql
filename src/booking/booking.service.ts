@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { BookService } from 'src/book/book.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,7 +17,7 @@ export class BookingService {
     constructor(
         private readonly prismaService: PrismaService,
         private readonly authService: AuthService,
-        private readonly bookService: BookService
+        private readonly bookService: BookService,
     ) {}
 
     async paginationBooking(paginationDto: PaginationBookingType) {
@@ -31,8 +35,8 @@ export class BookingService {
 
     async getAllBookings() {
         const allBookings = await this.prismaService.booking.findMany();
-        if(!allBookings) {
-            throw new NotFoundException("No bookings found");
+        if (!allBookings) {
+            throw new NotFoundException('No bookings found');
         }
 
         return allBookings;
@@ -57,31 +61,37 @@ export class BookingService {
     async getOneBooking(id: number) {
         const oneBooking = await this.prismaService.booking.findUnique({
             where: {
-                id
-            }
+                id,
+            },
         });
 
-        if(!oneBooking) {
-            throw new NotFoundException("No booking with this id" + id + "exists");
+        if (!oneBooking) {
+            throw new NotFoundException(
+                'No booking with this id' + id + 'exists',
+            );
         }
 
         return oneBooking;
     }
 
     async createNewBooking(bookingDto: CreateBookingType) {
-        const findOneUser = await this.authService.findOneUserById(bookingDto.userId);
-        const findOneBook = await this.bookService.findOneBookByName(bookingDto.bookName);
+        const findOneUser = await this.authService.findOneUserById(
+            bookingDto.userId,
+        );
+        const findOneBook = await this.bookService.findOneBookByName(
+            bookingDto.bookName,
+        );
 
         const createBooking = await this.prismaService.booking.create({
             data: {
                 ...bookingDto,
                 bookName: findOneBook.name,
                 userId: findOneUser.id,
-            }
+            },
         });
 
-        if(!createBooking) {
-            throw new BadRequestException("Create booking failed");
+        if (!createBooking) {
+            throw new BadRequestException('Create booking failed');
         }
 
         return createBooking;
@@ -91,15 +101,19 @@ export class BookingService {
         const booking = await this.prismaService.booking.findUnique({
             where: { id: returnDto.id },
         });
-    
+
         if (!booking) {
-            throw new NotFoundException(`Booking with id ${returnDto.id} not found`);
+            throw new NotFoundException(
+                `Booking with id ${returnDto.id} not found`,
+            );
         }
-    
+
         if (booking.isReturned) {
-            throw new BadRequestException(`Booking with id ${returnDto.id} has already been returned`);
+            throw new BadRequestException(
+                `Booking with id ${returnDto.id} has already been returned`,
+            );
         }
-    
+
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: returnDto.id },
             data: {
@@ -108,7 +122,7 @@ export class BookingService {
                 updatedAt: formatISO(new Date()),
             },
         });
-    
+
         return updatedBooking;
     }
 
@@ -116,15 +130,19 @@ export class BookingService {
         const booking = await this.prismaService.booking.findUnique({
             where: { id: extendDto.id },
         });
-    
+
         if (!booking) {
-            throw new NotFoundException(`Booking with id ${extendDto.id} not found`);
+            throw new NotFoundException(
+                `Booking with id ${extendDto.id} not found`,
+            );
         }
-    
+
         if (booking.isExtended) {
-            throw new BadRequestException(`Booking with id ${extendDto.id} has already been extended`);
+            throw new BadRequestException(
+                `Booking with id ${extendDto.id} has already been extended`,
+            );
         }
-    
+
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: extendDto.id },
             data: {
@@ -133,7 +151,7 @@ export class BookingService {
                 updatedAt: formatISO(new Date()),
             },
         });
-    
+
         return updatedBooking;
     }
 }

@@ -3,7 +3,7 @@ import { Role } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType({
-    isAbstract: true
+    isAbstract: true,
 })
 export class LoginUserType {
     @Field()

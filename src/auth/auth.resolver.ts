@@ -27,9 +27,7 @@ export class AuthResolver {
     }
 
     @Mutation(() => UserModel)
-    async login(
-        @Args('loginUserDto') loginUserDto: LoginUserType,
-    ){
+    async login(@Args('loginUserDto') loginUserDto: LoginUserType) {
         const user = await this.authService.validateUser(loginUserDto);
         if (!user) {
             throw new UnauthorizedException('Invalid credentials');
@@ -39,9 +37,7 @@ export class AuthResolver {
     }
 
     @Mutation(() => UserModel)
-    async register(
-        @Args('registerUserDto') registerUserDto: RegisterUserType,
-    ) {
+    async register(@Args('registerUserDto') registerUserDto: RegisterUserType) {
         return this.authService.register(registerUserDto);
     }
 }

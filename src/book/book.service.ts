@@ -24,7 +24,7 @@ export class BookService {
     async findOneBookByName(name: string) {
         const oneBook = await this.prismaService.book.findFirst({
             where: {
-                name
+                name,
             },
         });
 

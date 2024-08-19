@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
@@ -13,23 +17,21 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async findOneUserById (userId: number) {
+    async findOneUserById(userId: number) {
         const findOneUser = await this.prisma.user.findFirst({
             where: {
-                id: userId
-            }
+                id: userId,
+            },
         });
 
-        if(!findOneUser) {
-            throw new NotFoundException("User not found");
+        if (!findOneUser) {
+            throw new NotFoundException('User not found');
         }
 
         return findOneUser;
     }
 
-    async validateUser(
-        loginDto: LoginUserType,
-    ) {
+    async validateUser(loginDto: LoginUserType) {
         const user = await this.prisma.user.findUnique({
             where: { email: loginDto.email },
         });
@@ -40,9 +42,7 @@ export class AuthService {
         return null;
     }
 
-    async login(
-        user: any,
-    ) {
+    async login(user: any) {
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
             access_token: this.jwtService.sign(payload),
@@ -59,9 +59,7 @@ export class AuthService {
         });
     }
 
-    async getCurrentUser(
-        token: string,
-    ){
+    async getCurrentUser(token: string) {
         try {
             const decoded = this.jwtService.verify(token);
             const user = await this.prisma.user.findUnique({
