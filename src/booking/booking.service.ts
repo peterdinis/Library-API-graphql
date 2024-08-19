@@ -6,6 +6,7 @@ import { CreateBookingType } from './dto/create-booking-dto';
 import { ReturnBookingType } from './dto/return-booking-dto';
 import { ExtendedBookingType } from './dto/extended-booking-dto';
 import { formatISO, parseISO } from 'date-fns';
+import { PaginationBookingType } from './dto/pagination-booking-dto';
 
 @Injectable()
 export class BookingService {
@@ -15,6 +16,19 @@ export class BookingService {
         private readonly bookService: BookService
     ) {}
 
+    async paginationBooking(paginationDto: PaginationBookingType) {
+        const allBookingsInApp = await this.prismaService.booking.findMany({
+            skip: paginationDto.skip,
+            take: paginationDto.take,
+        });
+
+        if (!allBookingsInApp || allBookingsInApp.length === 0) {
+            throw new NotFoundException('No books found');
+        }
+
+        return allBookingsInApp;
+    }
+
     async getAllBookings() {
         const allBookings = await this.prismaService.booking.findMany();
         if(!allBookings) {
@@ -22,6 +36,22 @@ export class BookingService {
         }
 
         return allBookings;
+    }
+
+    async searchForBookings(keyword: string) {
+        const foundBookings = await this.prismaService.booking.findMany({
+            where: {
+                OR: [{ bookName: { contains: keyword, mode: 'insensitive' } }],
+            },
+        });
+
+        if (!foundBookings || foundBookings.length === 0) {
+            throw new NotFoundException(
+                `No books found for keyword "${keyword}"`,
+            );
+        }
+
+        return foundBookings;
     }
 
     async getOneBooking(id: number) {
