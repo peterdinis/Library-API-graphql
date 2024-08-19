@@ -1,6 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsString, IsNotEmpty, IsDate, IsDateString } from 'class-validator';
-import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @InputType()
 export class CreateAuthorInput {
