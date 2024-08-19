@@ -1,3 +1,4 @@
+import { HealthModule } from './../health/health.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,6 +24,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
         PrismaModule,
         BookModule,
         CategoryModule,
+        HealthModule,
         AppGraphqlModule,
         AuthorsModule,
         PublisherModule,
