@@ -6,6 +6,6 @@ import { BookResolver } from './book.resolver';
 @Module({
     imports: [PrismaModule],
     providers: [BookService, BookResolver],
-    exports: [BookService]
+    exports: [BookService],
 })
 export class BookModule {}

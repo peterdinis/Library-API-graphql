@@ -1,5 +1,14 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { IsString, IsNotEmpty, IsDate, IsDateString, IsBoolean, IsNumber, IsPositive, IsOptional } from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import {
+    IsString,
+    IsNotEmpty,
+    IsDate,
+    IsDateString,
+    IsBoolean,
+    IsNumber,
+    IsPositive,
+    IsOptional,
+} from 'class-validator';
 
 @InputType()
 export class CreateBookingType {

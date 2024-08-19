@@ -36,12 +36,16 @@ export class BookingResolver {
     }
 
     @Query(() => [BookingModel])
-    async paginationBooking(@Args('paginationDto') paginationDto: PaginationBookingType) {
+    async paginationBooking(
+        @Args('paginationDto') paginationDto: PaginationBookingType,
+    ) {
         return this.bookingService.paginationBooking(paginationDto);
     }
 
     @Query(() => [BookingModel])
-    async searchForBookings(@Args('keyword', { type: () => String }) keyword: string) {
+    async searchForBookings(
+        @Args('keyword', { type: () => String }) keyword: string,
+    ) {
         return this.bookingService.searchForBookings(keyword);
     }
 }
