@@ -3,21 +3,21 @@ import { Role } from '@prisma/client';
 
 @ObjectType()
 export class UserModel {
-  @Field(() => Int)
-  id: number;
+    @Field(() => Int)
+    id: number;
 
-  @Field()
-  name: string;
+    @Field()
+    name: string;
 
-  @Field()
-  lastName: string;
+    @Field()
+    lastName: string;
 
-  @Field()
-  email: string;
+    @Field()
+    email: string;
 
-  @Field()
-  password: string;
+    @Field()
+    password: string;
 
-  @Field(() => Role)
-  role: Role;
+    @Field(() => Role)
+    role: Role;
 }

@@ -3,15 +3,15 @@ import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 @InputType()
 export class PaginationBookType {
-  @Field(() => Int)
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  skip: number;
+    @Field(() => Int)
+    @IsNumber()
+    @IsPositive()
+    @IsNotEmpty()
+    skip: number;
 
-  @Field(() => Int)
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  take: number;
+    @Field(() => Int)
+    @IsNumber()
+    @IsPositive()
+    @IsNotEmpty()
+    take: number;
 }

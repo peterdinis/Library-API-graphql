@@ -4,30 +4,30 @@ import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class AuthorModel {
-  @Field(() => Int)
-  id: number;
+    @Field(() => Int)
+    id: number;
 
-  @Field()
-  name: string;
+    @Field()
+    name: string;
 
-  @Field({ nullable: true })
-  description?: string;
+    @Field({ nullable: true })
+    description?: string;
 
-  @Field()
-  litPeriod: string;
+    @Field()
+    litPeriod: string;
 
-  @Field()
-  birthYear: string;
+    @Field()
+    birthYear: string;
 
-  @Field()
-  deathYear?: string;
+    @Field()
+    deathYear?: string;
 
-  @Field(() => [BookModel])
-  books: BookModel[];
+    @Field(() => [BookModel])
+    books: BookModel[];
 
-  @Field()
-  createdAt: Date;
+    @Field()
+    createdAt: Date;
 
-  @Field()
-  updatedAt: Date;
+    @Field()
+    updatedAt: Date;
 }

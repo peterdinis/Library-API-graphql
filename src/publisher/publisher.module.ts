@@ -5,6 +5,6 @@ import { PublisherResolver } from './publisher.resolver';
 
 @Module({
     imports: [PrismaModule],
-    providers: [PublisherService, PublisherResolver]
+    providers: [PublisherService, PublisherResolver],
 })
 export class PublisherModule {}

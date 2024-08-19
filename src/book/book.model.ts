@@ -2,39 +2,39 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class BookModel {
-  @Field(() => Number)
-  id: number;
+    @Field(() => Number)
+    id: number;
 
-  @Field()
-  name: string;
+    @Field()
+    name: string;
 
-  @Field()
-  description: string;
+    @Field()
+    description: string;
 
-  @Field()
-  image: string;
+    @Field()
+    image: string;
 
-  @Field()
-  createdYear: string;
+    @Field()
+    createdYear: string;
 
-  @Field(() => Number)
-  pages: number;
+    @Field(() => Number)
+    pages: number;
 
-  @Field()
-  authorName: string;
+    @Field()
+    authorName: string;
 
-  @Field(() => Boolean)
-  isAvaiable: boolean;
+    @Field(() => Boolean)
+    isAvaiable: boolean;
 
-  @Field(() => Boolean)
-  isBorrowed: boolean;
+    @Field(() => Boolean)
+    isBorrowed: boolean;
 
-  @Field(() => Boolean)
-  isReturned: boolean;
+    @Field(() => Boolean)
+    isReturned: boolean;
 
-  @Field(() => Number)
-  stockNumber: number;
+    @Field(() => Number)
+    stockNumber: number;
 
-  @Field()
-  serialNumber: string;
+    @Field()
+    serialNumber: string;
 }

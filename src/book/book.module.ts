@@ -4,7 +4,8 @@ import { BookService } from './book.service';
 import { BookResolver } from './book.resolver';
 
 @Module({
-  imports: [PrismaModule],
-  providers: [BookService, BookResolver],
+    imports: [PrismaModule],
+    providers: [BookService, BookResolver],
+    exports: [BookService]
 })
 export class BookModule {}
