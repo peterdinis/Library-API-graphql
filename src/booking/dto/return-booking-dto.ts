@@ -2,7 +2,7 @@ import { Field, InputType, Int } from "@nestjs/graphql";
 import { IsBoolean, IsDate, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive } from "class-validator";
 
 @InputType()
-export class ExtendedBookingType {
+export class ReturnBookingType {
     @Field(() =>Int)
     @IsNumber()
     @IsPositive()

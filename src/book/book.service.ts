@@ -21,6 +21,22 @@ export class BookService {
         return allBooksInApp;
     }
 
+    async findOneBookByName(name: string) {
+        const oneBook = await this.prismaService.book.findFirst({
+            where: {
+                name
+            },
+        });
+
+        if (!oneBook) {
+            throw new NotFoundException(
+                'Book with this name ' + name + 'does not exists',
+            );
+        }
+
+        return oneBook;
+    }
+
     async getOneBook(id: number) {
         const oneBook = await this.prismaService.book.findFirst({
             where: {
