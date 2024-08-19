@@ -14,5 +14,5 @@ export class LoginUserType {
 
     @IsString()
     @IsNotEmpty()
-    role: Role;
+    role: any;
 }
