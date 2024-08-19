@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { DateTimeScalar } from 'src/utils/DateScalar'; // Adjust path as necessary
 import { BookModel } from 'src/book/book.model';
+import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class AuthorModel {
@@ -13,21 +13,21 @@ export class AuthorModel {
   @Field({ nullable: true })
   description?: string;
 
-  @Field(() => DateTimeScalar, { nullable: true })
-  litPeriod?: Date;
+  @Field()
+  litPeriod: string;
 
-  @Field(() => DateTimeScalar)
-  birthYear: Date;
+  @Field()
+  birthYear: string;
 
-  @Field(() => DateTimeScalar, { nullable: true })
-  deathYear?: Date;
+  @Field()
+  deathYear?: string;
 
   @Field(() => [BookModel])
   books: BookModel[];
 
-  @Field(() => DateTimeScalar)
+  @Field()
   createdAt: Date;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   updatedAt: Date;
 }

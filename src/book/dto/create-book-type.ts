@@ -27,7 +27,7 @@ export class CreateBookInput {
   @IsNotEmpty()
   image: string;
 
-  @Field(() => DateTimeScalar)
+  @Field()
   @IsDate()
   @IsNotEmpty()
   @IsDateString()
@@ -85,16 +85,13 @@ export class CreateBookInput {
   @IsPositive()
   publisherId: number;
 
-  @Field(() => DateTimeScalar)
-  @IsDate()
+  @Field()
   @IsDateString()
   @IsNotEmpty()
-  createdAt: Date;
+  createdAt: string;
 
-  @Field(() => DateTimeScalar)
-  @Field(() => DateTimeScalar)
-  @IsDate()
+  @Field()
   @IsDateString()
   @IsNotEmpty()
-  updatedAt: Date;
+  updatedAt: string;
 }
