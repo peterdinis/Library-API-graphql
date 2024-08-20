@@ -8,7 +8,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -64,6 +63,9 @@ export class AuthService {
             const decoded = this.jwtService.verify(token);
             const user = await this.prisma.user.findUnique({
                 where: { email: decoded.email },
+                include: {
+                    borrowedBooks: true
+                }
             });
             if (user) {
                 const { password, ...result } = user;
