@@ -6,7 +6,9 @@ import {
     MemoryHealthIndicator,
 } from '@nestjs/terminus';
 import { PrismaHealthIndicator } from './prisma.health.service';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Health checks")
 @Controller('health')
 export class HealthController {
     constructor(
@@ -16,6 +18,7 @@ export class HealthController {
         private memory: MemoryHealthIndicator,
     ) {}
 
+    @ApiOkResponse()
     @Get()
     @HealthCheck()
     check() {
