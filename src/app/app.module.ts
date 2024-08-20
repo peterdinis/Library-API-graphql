@@ -1,7 +1,5 @@
 import { HealthModule } from './../health/health.module';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { BookModule } from 'src/book/book.module';
 import { CategoryModule } from 'src/category/category.module';
@@ -11,8 +9,8 @@ import { PublisherModule } from 'src/publisher/publisher.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/auth/auth.module';
 import { BookingModule } from 'src/booking/booking.module';
-import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 @Module({
     imports: [
@@ -20,7 +18,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
             envFilePath: '.env',
             isGlobal: true,
         }),
-        CacheModule.register(),
         PrismaModule,
         BookModule,
         CategoryModule,
@@ -31,13 +28,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
         AuthModule,
         BookingModule,
     ],
-    controllers: [AppController],
-    providers: [
-        AppService,
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: CacheInterceptor,
-        },
-    ],
+    providers: [AppService],
+    controllers: [AppController]
 })
 export class AppModule {}
