@@ -64,8 +64,8 @@ export class AuthService {
             const user = await this.prisma.user.findUnique({
                 where: { email: decoded.email },
                 include: {
-                    borrowedBooks: true
-                }
+                    borrowedBooks: true,
+                },
             });
             if (user) {
                 const { password, ...result } = user;
