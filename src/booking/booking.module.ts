@@ -8,5 +8,6 @@ import { BookModule } from 'src/book/book.module';
 @Module({
     imports: [PrismaModule, AuthModule, BookModule],
     providers: [BookingService, BookingResolver],
+    exports: [BookingService]
 })
 export class BookingModule {}
