@@ -15,7 +15,7 @@ export class AdminService {
         private readonly authService: AuthService,
         private readonly bookingService: BookingService,
         private readonly publisherService: PublisherService,
-        private readonly authorsService: AuthorsService
+        private readonly authorsService: AuthorsService,
     ) {}
 
     async deleteAllAuthors() {
@@ -63,7 +63,9 @@ export class AdminService {
             name: student.name,
             lastName: student.lastName,
             email: student.email,
-            borrowedBooks: student.borrowedBooks.map((item) => item.bookName).join(', '), // Joins book names with commas
+            borrowedBooks: student.borrowedBooks
+                .map((item) => item.bookName)
+                .join(', '), // Joins book names with commas
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
@@ -84,7 +86,9 @@ export class AdminService {
             name: teacher.name,
             lastName: teacher.lastName,
             email: teacher.email,
-            borrowedBooks: teacher.borrowedBooks.map((item) => item.bookName).join(', '), // Joins book names with commas
+            borrowedBooks: teacher.borrowedBooks
+                .map((item) => item.bookName)
+                .join(', '), // Joins book names with commas
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);

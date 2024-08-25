@@ -15,8 +15,8 @@ export class CategoryService {
 
     async deleteMany() {
         const allCategories = await this.prismaService.category.deleteMany();
-        if(!allCategories) {
-            throw new NotFoundException("No Categories found");
+        if (!allCategories) {
+            throw new NotFoundException('No Categories found');
         }
         return allCategories;
     }

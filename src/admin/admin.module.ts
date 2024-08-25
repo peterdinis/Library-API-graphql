@@ -17,7 +17,7 @@ import { AuthorsModule } from 'src/authors/authors.module';
         PublisherModule,
         AuthorsModule,
         AuthModule,
-        BookingModule
+        BookingModule,
     ],
     providers: [AdminService, AdminResolver],
 })

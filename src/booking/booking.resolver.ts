@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Int,
+    Subscription,
+} from '@nestjs/graphql';
 import { BookingService } from './booking.service';
 import { CreateBookingType } from './dto/create-booking-dto';
 import { ReturnBookingType } from './dto/return-booking-dto';
@@ -12,7 +19,7 @@ import { PubSub } from 'graphql-subscriptions';
 export class BookingResolver {
     constructor(
         private readonly bookingService: BookingService,
-        @Inject('PUB_SUB') private readonly pubSub: PubSub
+        @Inject('PUB_SUB') private readonly pubSub: PubSub,
     ) {}
 
     @Query(() => [BookingModel])
@@ -27,8 +34,11 @@ export class BookingResolver {
 
     @Mutation(() => BookingModel)
     async createNewBooking(@Args('bookingDto') bookingDto: CreateBookingType) {
-        const newBooking = await this.bookingService.createNewBooking(bookingDto);
-        await this.pubSub.publish('bookingCreated', { bookingCreated: newBooking });
+        const newBooking =
+            await this.bookingService.createNewBooking(bookingDto);
+        await this.pubSub.publish('bookingCreated', {
+            bookingCreated: newBooking,
+        });
         return newBooking;
     }
 
@@ -37,7 +47,7 @@ export class BookingResolver {
             const booking = value.bookingCreated;
             return {
                 ...booking,
-                message: `A new booking for the book "${booking.bookName}" was created by user ID ${booking.userId}.`
+                message: `A new booking for the book "${booking.bookName}" was created by user ID ${booking.userId}.`,
             };
         },
     })
@@ -47,8 +57,11 @@ export class BookingResolver {
 
     @Mutation(() => BookingModel)
     async returnBooking(@Args('returnDto') returnDto: ReturnBookingType) {
-        const returnedBooking = await this.bookingService.returnBooking(returnDto);
-        await this.pubSub.publish('bookingReturned', { bookingReturned: returnedBooking });
+        const returnedBooking =
+            await this.bookingService.returnBooking(returnDto);
+        await this.pubSub.publish('bookingReturned', {
+            bookingReturned: returnedBooking,
+        });
         return returnedBooking;
     }
 
@@ -57,7 +70,7 @@ export class BookingResolver {
             const booking = value.bookingReturned;
             return {
                 ...booking,
-                message: `The booking for the book "${booking.bookName}" by user ID ${booking.userId} has been returned.`
+                message: `The booking for the book "${booking.bookName}" by user ID ${booking.userId} has been returned.`,
             };
         },
     })
@@ -67,8 +80,11 @@ export class BookingResolver {
 
     @Mutation(() => BookingModel)
     async extendedBooking(@Args('extendDto') extendDto: ExtendedBookingType) {
-        const extendedBooking = await this.bookingService.extendedBooking(extendDto);
-        await this.pubSub.publish('bookingExtended', { bookingExtended: extendedBooking });
+        const extendedBooking =
+            await this.bookingService.extendedBooking(extendDto);
+        await this.pubSub.publish('bookingExtended', {
+            bookingExtended: extendedBooking,
+        });
         return extendedBooking;
     }
 
@@ -77,7 +93,7 @@ export class BookingResolver {
             const booking = value.bookingExtended;
             return {
                 ...booking,
-                message: `The booking for the book "${booking.bookName}" by user ID ${booking.userId} has been extended until ${booking.extendedDate}.`
+                message: `The booking for the book "${booking.bookName}" by user ID ${booking.userId} has been extended until ${booking.extendedDate}.`,
             };
         },
     })
@@ -86,12 +102,16 @@ export class BookingResolver {
     }
 
     @Query(() => [BookingModel])
-    async paginationBooking(@Args('paginationDto') paginationDto: PaginationBookingType) {
+    async paginationBooking(
+        @Args('paginationDto') paginationDto: PaginationBookingType,
+    ) {
         return this.bookingService.paginationBooking(paginationDto);
     }
 
     @Query(() => [BookingModel])
-    async searchForBookings(@Args('keyword', { type: () => String }) keyword: string) {
+    async searchForBookings(
+        @Args('keyword', { type: () => String }) keyword: string,
+    ) {
         return this.bookingService.searchForBookings(keyword);
     }
 }
