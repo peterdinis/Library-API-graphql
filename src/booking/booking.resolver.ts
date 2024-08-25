@@ -1,14 +1,19 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
 import { BookingService } from './booking.service';
 import { CreateBookingType } from './dto/create-booking-dto';
 import { ReturnBookingType } from './dto/return-booking-dto';
 import { ExtendedBookingType } from './dto/extended-booking-dto';
 import { PaginationBookingType } from './dto/pagination-booking-dto';
 import { BookingModel } from './booking.model';
+import { Inject } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
 
 @Resolver(() => BookingModel)
 export class BookingResolver {
-    constructor(private readonly bookingService: BookingService) {}
+    constructor(
+        private readonly bookingService: BookingService,
+        @Inject("PUB_SUB") private readonly pubSub: PubSub
+    ) {}
 
     @Query(() => [BookingModel])
     async getAllBookings() {
@@ -23,6 +28,13 @@ export class BookingResolver {
     @Mutation(() => BookingModel)
     async createNewBooking(@Args('bookingDto') bookingDto: CreateBookingType) {
         return this.bookingService.createNewBooking(bookingDto);
+    }
+
+    @Subscription(() => BookingModel, {
+        resolve: (value) => value.bookingCreated,
+    })
+    bookingCreated() {
+        return this.pubSub.asyncIterator('bookingCreated');
     }
 
     @Mutation(() => BookingModel)
