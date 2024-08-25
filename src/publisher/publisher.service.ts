@@ -1,10 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, Publisher } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PublisherService {
     constructor(private prisma: PrismaService) {}
+
+    async allPublishers() {
+        const publishers =await this.prisma.publisher.findMany();
+        if(!publishers) {
+            throw new NotFoundException("No publishers found");
+        }
+
+        return publishers
+    }
 
     async createPublisher(
         data: Prisma.PublisherCreateInput,
