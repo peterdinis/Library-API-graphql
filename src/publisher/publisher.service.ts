@@ -6,6 +6,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PublisherService {
     constructor(private prisma: PrismaService) {}
 
+    async deleteMany() {
+        const allPublishers = await this.prisma.publisher.deleteMany();
+        if(!allPublishers) {
+            throw new NotFoundException("No Publishers found");
+        }
+
+        return allPublishers
+    }
+
     async allPublishers() {
         const publishers =await this.prisma.publisher.findMany();
         if(!publishers) {
