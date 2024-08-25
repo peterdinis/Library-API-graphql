@@ -94,6 +94,20 @@ export class AuthService {
         return students;
     }
 
+    async getOneUser(userId: number) {
+        const findOneUser = await this.prisma.user.findFirst({
+            where: {
+                id: userId
+            }
+        });
+
+        if(!findOneUser) {
+            throw new NotFoundException("User not found");
+        }
+
+        return findOneUser;
+    }
+
     async getCurrentUser(token: string) {
         try {
             const decoded = this.jwtService.verify(token);
