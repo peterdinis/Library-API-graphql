@@ -26,6 +26,11 @@ export class AuthResolver {
         return user;
     }
 
+    @Query(() => UserModel)
+    async getOneUser(@Args('id') id: number) {
+        return this.authService.getOneUser(id);
+    }
+
     @Mutation(() => UserModel)
     async login(@Args('loginUserDto') loginUserDto: LoginUserType) {
         const user = await this.authService.validateUser(loginUserDto);

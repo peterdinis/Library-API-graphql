@@ -175,6 +175,7 @@ type Query {
   getAllBooks: [BookModel!]!
   getOneBook(id: Float!): BookModel!
   getOneBooking(id: Int!): BookingModel!
+  getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
   getPublisher(id: Float!): PublisherModel!
   getPublishers(skip: Float, take: Float): [PublisherModel!]!
@@ -201,6 +202,12 @@ input ReturnBookingType {
   id: Int!
   isReturned: Boolean!
   returnedDAte: String!
+}
+
+type Subscription {
+  bookingCreated: BookingModel!
+  bookingExtended: BookingModel!
+  bookingReturned: BookingModel!
 }
 
 input UpdateAuthorType {

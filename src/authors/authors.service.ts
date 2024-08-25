@@ -13,6 +13,15 @@ import { PaginationAuthorType } from './dto/pagination-author-type';
 export class AuthorsService {
     constructor(private readonly prismaService: PrismaService) {}
 
+    async deleteMany() {
+        const allAuthors = await this.prismaService.author.deleteMany();
+        if (!allAuthors) {
+            throw new NotFoundException('No Authors Found');
+        }
+
+        return allAuthors;
+    }
+
     async create(createAuhtorInput: CreateAuthorInput) {
         const newAuthor = await this.prismaService.author.create({
             data: {

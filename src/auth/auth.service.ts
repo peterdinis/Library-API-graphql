@@ -8,6 +8,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
+import { Roles, STUDENT } from 'src/utils/applicationRoles';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -58,14 +60,62 @@ export class AuthService {
         });
     }
 
+    async findAllTeachers() {
+        const teacher = await this.prisma.user.findMany({
+            where: {
+                role: Roles.TEACHER as unknown as Role,
+            },
+            include: {
+                borrowedBooks: true,
+            },
+        });
+
+        if (!teacher) {
+            throw new NotFoundException('No teacher found');
+        }
+
+        return teacher;
+    }
+
+    async findAllStudents() {
+        const students = await this.prisma.user.findMany({
+            where: {
+                role: Roles.STUDENT as unknown as Role,
+            },
+            include: {
+                borrowedBooks: true,
+            },
+        });
+
+        if (!students) {
+            throw new NotFoundException('No Students found');
+        }
+
+        return students;
+    }
+
+    async getOneUser(userId: number) {
+        const findOneUser = await this.prisma.user.findFirst({
+            where: {
+                id: userId
+            }
+        });
+
+        if(!findOneUser) {
+            throw new NotFoundException("User not found");
+        }
+
+        return findOneUser;
+    }
+
     async getCurrentUser(token: string) {
         try {
             const decoded = this.jwtService.verify(token);
             const user = await this.prisma.user.findUnique({
                 where: { email: decoded.email },
                 include: {
-                    borrowedBooks: true
-                }
+                    borrowedBooks: true,
+                },
             });
             if (user) {
                 const { password, ...result } = user;
