@@ -15,8 +15,8 @@ export class AuthorsService {
 
     async deleteMany() {
         const allAuthors = await this.prismaService.author.deleteMany();
-        if(!allAuthors) {
-            throw new NotFoundException("No Authors Found");
+        if (!allAuthors) {
+            throw new NotFoundException('No Authors Found');
         }
 
         return allAuthors;

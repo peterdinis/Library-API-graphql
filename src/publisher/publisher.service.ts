@@ -8,20 +8,20 @@ export class PublisherService {
 
     async deleteMany() {
         const allPublishers = await this.prisma.publisher.deleteMany();
-        if(!allPublishers) {
-            throw new NotFoundException("No Publishers found");
+        if (!allPublishers) {
+            throw new NotFoundException('No Publishers found');
         }
 
-        return allPublishers
+        return allPublishers;
     }
 
     async allPublishers() {
-        const publishers =await this.prisma.publisher.findMany();
-        if(!publishers) {
-            throw new NotFoundException("No publishers found");
+        const publishers = await this.prisma.publisher.findMany();
+        if (!publishers) {
+            throw new NotFoundException('No publishers found');
         }
 
-        return publishers
+        return publishers;
     }
 
     async createPublisher(

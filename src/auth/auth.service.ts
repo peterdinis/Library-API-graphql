@@ -63,15 +63,15 @@ export class AuthService {
     async findAllTeachers() {
         const teacher = await this.prisma.user.findMany({
             where: {
-                role: Roles.TEACHER as unknown as Role
+                role: Roles.TEACHER as unknown as Role,
             },
             include: {
-                borrowedBooks: true
-            }
+                borrowedBooks: true,
+            },
         });
 
-        if(!teacher) {
-            throw new NotFoundException("No teacher found");
+        if (!teacher) {
+            throw new NotFoundException('No teacher found');
         }
 
         return teacher;
@@ -80,18 +80,32 @@ export class AuthService {
     async findAllStudents() {
         const students = await this.prisma.user.findMany({
             where: {
-                role: Roles.STUDENT as unknown as Role
+                role: Roles.STUDENT as unknown as Role,
             },
             include: {
-                borrowedBooks: true
-            }
+                borrowedBooks: true,
+            },
         });
 
-        if(!students) {
-            throw new NotFoundException("No Students found");
+        if (!students) {
+            throw new NotFoundException('No Students found');
         }
 
         return students;
+    }
+
+    async getOneUser(userId: number) {
+        const findOneUser = await this.prisma.user.findFirst({
+            where: {
+                id: userId
+            }
+        });
+
+        if(!findOneUser) {
+            throw new NotFoundException("User not found");
+        }
+
+        return findOneUser;
     }
 
     async getCurrentUser(token: string) {

@@ -8,6 +8,8 @@ import { join } from 'path';
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             sortSchema: true,
+            installSubscriptionHandlers: true,
+            debug: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         }),
     ],

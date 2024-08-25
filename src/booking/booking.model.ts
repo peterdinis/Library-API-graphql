@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class BookingModel {

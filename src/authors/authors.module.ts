@@ -6,6 +6,6 @@ import { AuthorsResolver } from './authors.resolver';
 @Module({
     imports: [PrismaModule],
     providers: [AuthorsService, AuthorsResolver],
-    exports: [AuthorsService]
+    exports: [AuthorsService],
 })
 export class AuthorsModule {}
