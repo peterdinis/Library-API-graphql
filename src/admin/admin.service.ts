@@ -1,16 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
+import { AuthorsService } from 'src/authors/authors.service';
 import { BookService } from 'src/book/book.service';
 import { BookingService } from 'src/booking/booking.service';
+import { CategoryService } from 'src/category/category.service';
+import { PublisherService } from 'src/publisher/publisher.service';
 import * as XLSX from 'xlsx';
 
 @Injectable()
 export class AdminService {
     constructor(
         private readonly bookService: BookService,
+        private readonly categoryService: CategoryService,
         private readonly authService: AuthService,
-        private readonly bookingService: BookingService
+        private readonly bookingService: BookingService,
+        private readonly publisherService: PublisherService,
+        private readonly authorsService: AuthorsService
     ) {}
+
+    async deleteAllAuthors() {
+        const allAuthors = await this.authorsService.deleteMany();
+        return allAuthors;
+    }
+
+    async deleteAllPublishers() {
+        const allPublishers = await this.publisherService.deleteMany();
+        return allPublishers;
+    }
+
+    async deleteAllCategories() {
+        const allcategories = await this.categoryService.deleteMany();
+        return allcategories;
+    }
 
     async downloadBookAsSheets() {
         const allBooksInDatabase = await this.bookService.allBooks();
@@ -86,7 +107,7 @@ export class AdminService {
             to: item.to,
             isReturned: item.isReturned,
             isExtended: item.isExtended,
-            // TODO: Display user information here if needed
+            userId: item.userId,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
