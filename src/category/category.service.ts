@@ -13,6 +13,14 @@ import { PaginationCategoryType } from './dto/pagination-category-types';
 export class CategoryService {
     constructor(private readonly prismaService: PrismaService) {}
 
+    async deleteMany() {
+        const allCategories = await this.prismaService.category.deleteMany();
+        if(!allCategories) {
+            throw new NotFoundException("No Categories found");
+        }
+        return allCategories;
+    }
+
     async create(createCategoryInput: CreateCategoryInput) {
         const newCategory = await this.prismaService.category.create({
             data: {

@@ -2,15 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { BookService } from 'src/book/book.service';
 import { BookingService } from 'src/booking/booking.service';
+import { CategoryService } from 'src/category/category.service';
 import * as XLSX from 'xlsx';
 
 @Injectable()
 export class AdminService {
     constructor(
         private readonly bookService: BookService,
+        private readonly categoryService: CategoryService,
         private readonly authService: AuthService,
         private readonly bookingService: BookingService
     ) {}
+
+    async deleteAllAuthors() {}
+
+    async deleteAllPublishers() {}
+
+    async deleteAllCategories() {
+        const allcategories = await this.categoryService.deleteMany();
+        return allcategories;
+    }
 
     async downloadBookAsSheets() {
         const allBooksInDatabase = await this.bookService.allBooks();

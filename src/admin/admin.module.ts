@@ -5,11 +5,17 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { BookingModule } from 'src/booking/booking.module';
 import { AdminResolver } from './admin.resolver';
+import { CategoryModule } from 'src/category/category.module';
+import { PublisherModule } from 'src/publisher/publisher.module';
+import { AuthorsModule } from 'src/authors/authors.module';
 
 @Module({
     imports: [
         PrismaModule,
         BookModule,
+        CategoryModule,
+        PublisherModule,
+        AuthorsModule,
         AuthModule,
         BookingModule
     ],
