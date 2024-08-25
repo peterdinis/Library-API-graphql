@@ -86,7 +86,7 @@ export class AdminService {
             to: item.to,
             isReturned: item.isReturned,
             isExtended: item.isExtended,
-            // TODO: Display user information here if needed
+            userId: item.userId,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
