@@ -14,16 +14,16 @@ export class AdminService {
 
     async downloadBookAsSheets() {
         const allBooksInDatabase = await this.bookService.allBooks();
-        const worksheetData = allBooksInDatabase.map((book) => {
-            name: book.name;
-            description: book.description;
-            createdYear: book.createdYear;
-            pages: book.pages;
-            isAvaiable: book.isAvaible;
-            isBorrowed: book.isBorrowed;
-            isReturned: book.isReturned;
-            serialNumber: book.serialNumber;
-        });
+        const worksheetData = allBooksInDatabase.map((book) => ({
+            name: book.name,
+            description: book.description,
+            createdYear: book.createdYear,
+            pages: book.pages,
+            isAvaiable: book.isAvaible,
+            isBorrowed: book.isBorrowed,
+            isReturned: book.isReturned,
+            serialNumber: book.serialNumber,
+        }));
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Books');
@@ -38,14 +38,12 @@ export class AdminService {
 
     async downloadStudentsAsSheets() {
         const allStudents = await this.authService.findAllStudents();
-        const worksheetData = allStudents.map((student) => {
-            name: student.name;
-            lastName: student.lastName;
-            email: student.email;
-            borrowedBooks: student.borrowedBooks.map((item) => {
-                bookName: item.bookName;
-            });
-        });
+        const worksheetData = allStudents.map((student) => ({
+            name: student.name,
+            lastName: student.lastName,
+            email: student.email,
+            borrowedBooks: student.borrowedBooks.map((item) => item.bookName).join(', '), // Joins book names with commas
+        }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
@@ -61,14 +59,12 @@ export class AdminService {
 
     async downloadTeacherAsSheets() {
         const allTeachers = await this.authService.findAllTeachers();
-        const worksheetData = allTeachers.map((teacher) => {
-            name: teacher.name;
-            lastName: teacher.lastName;
-            email: teacher.email;
-            borrowedBooks: teacher.borrowedBooks.map((item) => {
-                bookName: item.bookName;
-            });
-        });
+        const worksheetData = allTeachers.map((teacher) => ({
+            name: teacher.name,
+            lastName: teacher.lastName,
+            email: teacher.email,
+            borrowedBooks: teacher.borrowedBooks.map((item) => item.bookName).join(', '), // Joins book names with commas
+        }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
@@ -84,14 +80,14 @@ export class AdminService {
 
     async downloadBookingAsSheets() {
         const allBookings = await this.bookingService.getAllBookings();
-        const worksheetData = allBookings.map((item) => {
-            bookName: item.bookName;
-            from: item.from;
-            to: item.to;
-            isReturned: item.isReturned;
-            // TODO: user display here somehow
-            isExtended: item.isExtended
-        })
+        const worksheetData = allBookings.map((item) => ({
+            bookName: item.bookName,
+            from: item.from,
+            to: item.to,
+            isReturned: item.isReturned,
+            isExtended: item.isExtended,
+            // TODO: Display user information here if needed
+        }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
