@@ -1,33 +1,55 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { AuthorsService } from 'src/authors/authors.service';
+import { Injectable} from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
 import { BookService } from 'src/book/book.service';
-import { CategoryService } from 'src/category/category.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { PublisherService } from 'src/publisher/publisher.service';
+import * as XLSX from 'xlsx';
 
 @Injectable()
 export class AdminService {
     constructor(
-        private readonly prismaService: PrismaService,
         private readonly bookService: BookService,
-        private readonly publisherService: PublisherService,
-        private readonly authorService: AuthorsService,
-        private readonly categoryService: CategoryService
+        private readonly authService: AuthService
     ) {}
 
-    async adminBooks() {
-        return this.bookService.allBooks();
+    async downloadBookAsSheets() {
+        const allBooksInDatabase = await this.bookService.allBooks();
+        const worksheetData = allBooksInDatabase.map((book) => {
+            name: book.name;
+            description: book.description;
+            createdYear: book.createdYear;
+            pages: book.pages;
+            isAvaiable: book.isAvaible;
+            isBorrowed: book.isBorrowed;
+            isReturned: book.isReturned;
+            serialNumber: book.serialNumber;
+        });
+        const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Books');
+
+        const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+        return buffer;
     }
 
-    async adminCategories() {
-        return this.categoryService.findAllCategories();
+    async downloadStudentsAsSheets() {
+        const allStudents = await this.authService.findAllStudents();
+        const worksheetData = allStudents.map((student) => {
+            name: student.name;
+            lastName: student.lastName;
+            email: student.email;
+            // TODO: borrowed books
+        })
+
+        const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+
+        const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+        return buffer;
     }
 
-    async adminAuthors() {
-        return this.authorService.findAllAuthors();
-    }
-    
-    async adminPublishers() {
-        return this.publisherService.allPublishers();
-    }
+    async downloadTeacherAsSheets() {}
+
+    async downloadBookingAsSheets() {}
 }

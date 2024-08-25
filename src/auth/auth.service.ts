@@ -8,6 +8,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
+import { Roles, STUDENT } from 'src/utils/applicationRoles';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -56,6 +58,40 @@ export class AuthService {
                 password: hashedPassword,
             },
         });
+    }
+
+    async findAllTeachers() {
+        const teacher = await this.prisma.user.findMany({
+            where: {
+                role: Roles.TEACHER as unknown as Role
+            },
+            include: {
+                borrowedBooks: true
+            }
+        });
+
+        if(!teacher) {
+            throw new NotFoundException("No teacher found");
+        }
+
+        return teacher;
+    }
+
+    async findAllStudents() {
+        const students = await this.prisma.user.findMany({
+            where: {
+                role: Roles.STUDENT as unknown as Role
+            },
+            include: {
+                borrowedBooks: true
+            }
+        });
+
+        if(!students) {
+            throw new NotFoundException("No Students found");
+        }
+
+        return students;
     }
 
     async getCurrentUser(token: string) {
