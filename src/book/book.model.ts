@@ -18,7 +18,7 @@ export class BookModel {
     image: string;
 
     @Field()
-    createdYear: string;
+    createdYear: Date;
 
     @Field(() => Int)
     pages: number;

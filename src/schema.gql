@@ -5,20 +5,20 @@
 type AuthorModel {
   birthYear: String!
   books: [BookModel!]!
-  createdAt: DateTime!
+  createdAt: Date!
   deathYear: String!
   description: String
   id: Int!
   litPeriod: String!
   name: String!
-  updatedAt: DateTime!
+  updatedAt: Date!
 }
 
 type BookModel {
   author: AuthorModel
   authorName: String!
   category: CategoryModel
-  createdYear: String!
+  createdYear: Date!
   description: String!
   id: Int!
   image: String!
@@ -34,13 +34,13 @@ type BookModel {
 
 type BookingModel {
   bookName: String!
-  extendedDate: DateTime!
-  from: DateTime!
+  extendedDate: Date!
+  from: Date!
   id: Int!
   isExtended: Boolean!
   isReturned: Boolean!
-  returnedDate: DateTime!
-  to: DateTime!
+  returnedDate: Date!
+  to: Date!
   userId: Int!
 }
 
@@ -51,10 +51,10 @@ type CategoryModel {
 }
 
 input CreateAuthorInput {
-  birthYear: DateTime!
-  deathYear: DateTime!
+  birthYear: Date!
+  deathYear: Date!
   description: String
-  litPeriod: DateTime!
+  litPeriod: Date!
   name: String!
 }
 
@@ -102,10 +102,8 @@ input CreatePublisherInput {
   name: String!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+"""Date custom scalar type"""
+scalar Date
 
 input ExtendedBookingType {
   extendedDate: String!
@@ -161,8 +159,8 @@ input PaginationCategoryType {
 
 type PublisherModel {
   books: BookModel!
-  createdYear: String!
-  deletedYear: String!
+  createdYear: Date!
+  deletedYear: Date!
   description: String!
   id: Int!
   image: String!
@@ -214,10 +212,10 @@ type Subscription {
 }
 
 input UpdateAuthorType {
-  birthYear: DateTime!
-  deathYear: DateTime!
+  birthYear: Date!
+  deathYear: Date!
   description: String
-  litPeriod: DateTime!
+  litPeriod: Date!
   name: String!
 }
 
@@ -248,7 +246,7 @@ input UpdateCategoryInput {
 }
 
 input UpdatePublisherInput {
-  deletedYear: DateTime
+  deletedYear: Date
   description: String
   image: String
   name: String
