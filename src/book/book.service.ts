@@ -26,6 +26,11 @@ export class BookService {
             where: {
                 name,
             },
+            include: {
+                category: true,
+                publisher: true,
+                author: true
+            }
         });
 
         if (!oneBook) {
