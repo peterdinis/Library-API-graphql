@@ -97,12 +97,12 @@ export class AuthService {
     async getOneUser(userId: number) {
         const findOneUser = await this.prisma.user.findFirst({
             where: {
-                id: userId
-            }
+                id: userId,
+            },
         });
 
-        if(!findOneUser) {
-            throw new NotFoundException("User not found");
+        if (!findOneUser) {
+            throw new NotFoundException('User not found');
         }
 
         return findOneUser;
