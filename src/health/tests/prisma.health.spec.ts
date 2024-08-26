@@ -10,7 +10,7 @@ describe('PrismaHealthIndicator (e2e)', () => {
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [AppModule], // Import the AppModule or the relevant module that includes HealthController and PrismaHealthIndicator
+            imports: [AppModule],
         }).compile();
 
         app = moduleFixture.createNestApplication();
@@ -19,15 +19,10 @@ describe('PrismaHealthIndicator (e2e)', () => {
     });
 
     it('should return healthy status from PrismaHealthIndicator', async () => {
-        // Mocking or ensuring a working database connection
-        // You might want to clean or seed the database as needed for the test
-
-        // Make a GET request to the health check endpoint
         const response = await request(app.getHttpServer())
             .get('/health')
             .expect(200);
 
-        // Check if the response has the expected structure and contains the Prisma status
         expect(response.body).toHaveProperty('status');
         expect(response.body.status).toBe('ok');
         expect(response.body.info).toHaveProperty('prisma');
