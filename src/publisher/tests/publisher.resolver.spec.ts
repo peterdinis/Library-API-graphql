@@ -4,6 +4,7 @@ import { AppModule } from 'src/app/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 //@ts-ignore
 import { createTestClient } from 'apollo-server-testing';
+import { faker } from '@faker-js/faker';
 
 describe('PublisherResolver (e2e)', () => {
   let server: any;
@@ -40,20 +41,23 @@ describe('PublisherResolver (e2e)', () => {
       }
     `;
 
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
     const result = await gqlTestClient.mutate({
       mutation: CREATE_PUBLISHER_MUTATION,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
 
     expect(result.errors).toBeUndefined();
     expect(result.data.createPublisher).toHaveProperty('id');
-    expect(result.data.createPublisher.name).toBe('Test Publisher');
-    expect(result.data.createPublisher.description).toBe('Test Description');
+    expect(result.data.createPublisher.name).toBe(name);
+    expect(result.data.createPublisher.description).toBe(description);
   });
 
   it('should update a publisher', async () => {
@@ -68,12 +72,15 @@ describe('PublisherResolver (e2e)', () => {
       }
     `;
 
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
     const createResult = await gqlTestClient.mutate({
       mutation: CREATE_PUBLISHER_MUTATION,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
@@ -91,24 +98,26 @@ describe('PublisherResolver (e2e)', () => {
       }
     `;
 
+    const updatedName = faker.company.name();
+    const updatedDescription = faker.lorem.sentence();
+
     const updateResult = await gqlTestClient.mutate({
       mutation: UPDATE_PUBLISHER_MUTATION,
       variables: {
         id: publisherId,
         data: {
-          name: 'Updated Publisher',
-          description: 'Updated Description',
+          name: updatedName,
+          description: updatedDescription,
         },
       },
     });
 
     expect(updateResult.errors).toBeUndefined();
-    expect(updateResult.data.updatePublisher.name).toBe('Updated Publisher');
-    expect(updateResult.data.updatePublisher.description).toBe('Updated Description');
+    expect(updateResult.data.updatePublisher.name).toBe(updatedName);
+    expect(updateResult.data.updatePublisher.description).toBe(updatedDescription);
   });
 
   it('should delete a publisher', async () => {
-    // Create a publisher first
     const CREATE_PUBLISHER_MUTATION = `
       mutation CreatePublisher($data: CreatePublisherInput!) {
         createPublisher(data: $data) {
@@ -119,12 +128,16 @@ describe('PublisherResolver (e2e)', () => {
       }
     `;
 
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
+    // Create a publisher first
     const createResult = await gqlTestClient.mutate({
       mutation: CREATE_PUBLISHER_MUTATION,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
@@ -151,11 +164,10 @@ describe('PublisherResolver (e2e)', () => {
 
     expect(deleteResult.errors).toBeUndefined();
     expect(deleteResult.data.deletePublisher.id).toBe(publisherId);
-    expect(deleteResult.data.deletePublisher.name).toBe('Test Publisher');
+    expect(deleteResult.data.deletePublisher.name).toBe(name);
   });
 
   it('should get a publisher', async () => {
-    // Create a publisher first
     const CREATE_PUBLISHER_MUTATION = `
       mutation CreatePublisher($data: CreatePublisherInput!) {
         createPublisher(data: $data) {
@@ -166,12 +178,16 @@ describe('PublisherResolver (e2e)', () => {
       }
     `;
 
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
+    // Create a publisher first
     const createResult = await gqlTestClient.mutate({
       mutation: CREATE_PUBLISHER_MUTATION,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
@@ -198,8 +214,8 @@ describe('PublisherResolver (e2e)', () => {
 
     expect(getResult.errors).toBeUndefined();
     expect(getResult.data.getPublisher.id).toBe(publisherId);
-    expect(getResult.data.getPublisher.name).toBe('Test Publisher');
-    expect(getResult.data.getPublisher.description).toBe('Test Description');
+    expect(getResult.data.getPublisher.name).toBe(name);
+    expect(getResult.data.getPublisher.description).toBe(description);
   });
 
   it('should paginate publishers', async () => {
@@ -216,8 +232,8 @@ describe('PublisherResolver (e2e)', () => {
         `,
         variables: {
           data: {
-            name: `Publisher ${i}`,
-            description: `Description ${i}`,
+            name: faker.company.name(),
+            description: faker.lorem.sentence(),
           },
         },
       });
@@ -246,6 +262,8 @@ describe('PublisherResolver (e2e)', () => {
   });
 
   it('should search publishers', async () => {
+    const specialName = faker.company.name();
+
     // Create a publisher to search
     await gqlTestClient.mutate({
       mutation: `
@@ -258,8 +276,8 @@ describe('PublisherResolver (e2e)', () => {
       `,
       variables: {
         data: {
-          name: 'Special Publisher',
-          description: 'Special Description',
+          name: specialName,
+          description: faker.lorem.sentence(),
         },
       },
     });
@@ -277,12 +295,12 @@ describe('PublisherResolver (e2e)', () => {
     const searchResult = await gqlTestClient.query({
       query: SEARCH_PUBLISHERS_QUERY,
       variables: {
-        search: 'Special',
+        search: specialName.split(' ')[0], // Use part of the name to search
       },
     });
 
     expect(searchResult.errors).toBeUndefined();
     expect(searchResult.data.searchPublishers).toHaveLength(1);
-    expect(searchResult.data.searchPublishers[0].name).toBe('Special Publisher');
+    expect(searchResult.data.searchPublishers[0].name).toBe(specialName);
   });
 });

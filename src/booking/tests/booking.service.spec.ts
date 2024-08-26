@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { formatISO, parseISO } from 'date-fns';
+import { formatISO } from 'date-fns';
+import { faker } from '@faker-js/faker'; // Import Faker.js
 import { AuthService } from 'src/auth/auth.service';
 import { BookService } from 'src/book/book.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -34,14 +35,14 @@ describe('BookingService (e2e)', () => {
   });
 
   it('should paginate bookings', async () => {
-    // Seed data
+    // Seed data with Faker
     for (let i = 0; i < 5; i++) {
       await prismaService.booking.create({
         data: {
-          bookName: `Book ${i}`,
+          bookName: faker.commerce.productName(),
           userId: i + 1,
-          isReturned: false,
-          isExtended: false,
+          isReturned: faker.datatype.boolean(),
+          isExtended: faker.datatype.boolean(),
         },
       });
     }
@@ -56,12 +57,14 @@ describe('BookingService (e2e)', () => {
   });
 
   it('should get all bookings', async () => {
-    // Seed data
+    // Seed data with Faker
+    const bookings = [
+      { bookName: faker.commerce.productName(), userId: 1, isReturned: faker.datatype.boolean(), isExtended: faker.datatype.boolean() },
+      { bookName: faker.commerce.productName(), userId: 2, isReturned: faker.datatype.boolean(), isExtended: faker.datatype.boolean() },
+    ];
+
     await prismaService.booking.createMany({
-      data: [
-        { bookName: 'Book 1', userId: 1, isReturned: false, isExtended: false },
-        { bookName: 'Book 2', userId: 2, isReturned: false, isExtended: false },
-      ],
+      data: bookings,
     });
 
     const result = await bookingService.getAllBookings();
@@ -69,46 +72,51 @@ describe('BookingService (e2e)', () => {
   });
 
   it('should search for bookings', async () => {
-    // Seed data
+    // Seed data with Faker
+    const keyword = faker.commerce.productName().split(' ')[0]; // Use the first word of a product name as keyword
+    const bookings = [
+      { bookName: `${keyword} Book`, userId: 1, isReturned: faker.datatype.boolean(), isExtended: faker.datatype.boolean() },
+      { bookName: faker.commerce.productName(), userId: 2, isReturned: faker.datatype.boolean(), isExtended: faker.datatype.boolean() },
+    ];
+
     await prismaService.booking.createMany({
-      data: [
-        { bookName: 'Special Book', userId: 1, isReturned: false, isExtended: false },
-        { bookName: 'Regular Book', userId: 2, isReturned: false, isExtended: false },
-      ],
+      data: bookings,
     });
 
-    const keyword = 'Special';
     const result = await bookingService.searchForBookings(keyword);
     expect(result.length).toBe(1);
-    expect(result[0].bookName).toBe('Special Book');
+    expect(result[0].bookName).toContain(keyword);
   });
 
   it('should get one booking', async () => {
-    // Seed data
+    // Seed data with Faker
+    const bookName = faker.commerce.productName();
     const createdBooking = await prismaService.booking.create({
       data: {
-        bookName: 'Unique Book',
+        bookName,
         userId: 1,
-        isReturned: false,
-        isExtended: false,
+        isReturned: faker.datatype.boolean(),
+        isExtended: faker.datatype.boolean(),
       },
     });
 
     const result = await bookingService.getOneBooking(createdBooking.id);
-    expect(result.bookName).toBe('Unique Book');
+    expect(result.bookName).toBe(bookName);
   });
 
   it('should create a new booking', async () => {
-    // Seed data
+    // Seed data with Faker
+    const bookName = faker.commerce.productName();
     await prismaService.book.create({
       data: {
-        name: 'Test Book',
-        author: 'Test Author',
+        name: bookName,
+        author: 'ABBB'
       },
     });
 
-    const findOneUser = await authService.findOneUserById(1); // Mock this
-    const findOneBook = await bookService.findOneBookByName('Test Book'); // Mock this
+    // Mock these functions
+    const findOneUser = await authService.findOneUserById(1); // Adjust as necessary
+    const findOneBook = await bookService.findOneBookByName(bookName); // Adjust as necessary
 
     const bookingDto = {
       userId: findOneUser.id,
@@ -117,14 +125,14 @@ describe('BookingService (e2e)', () => {
 
     const result = await bookingService.createNewBooking(bookingDto);
     expect(result).toHaveProperty('id');
-    expect(result.bookName).toBe('Test Book');
+    expect(result.bookName).toBe(bookName);
   });
 
   it('should return a booking', async () => {
-    // Seed data
+    // Seed data with Faker
     const createdBooking = await prismaService.booking.create({
       data: {
-        bookName: 'Test Book',
+        bookName: faker.commerce.productName(),
         userId: 1,
         isReturned: false,
         isExtended: false,
@@ -142,10 +150,10 @@ describe('BookingService (e2e)', () => {
   });
 
   it('should extend a booking', async () => {
-    // Seed data
+    // Seed data with Faker
     const createdBooking = await prismaService.booking.create({
       data: {
-        bookName: 'Test Book',
+        bookName: faker.commerce.productName(),
         userId: 1,
         isReturned: false,
         isExtended: false,

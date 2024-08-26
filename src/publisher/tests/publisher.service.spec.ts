@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { AppModule } from 'src/app/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PublisherService } from 'src/publisher/publisher.service';
+import { faker } from '@faker-js/faker';
 
 describe('PublisherService (e2e)', () => {
   let app: ApolloServer;
@@ -28,6 +29,9 @@ describe('PublisherService (e2e)', () => {
   });
 
   it('should create a publisher', async () => {
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
     const result = await app.executeOperation({
       query: `
         mutation CreatePublisher($data: PublisherCreateInput!) {
@@ -40,18 +44,21 @@ describe('PublisherService (e2e)', () => {
       `,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
 
     expect(result.errors).toBeUndefined();
     expect(result.data.createPublisher).toHaveProperty('id');
-    expect(result.data.createPublisher.name).toBe('Test Publisher');
+    expect(result.data.createPublisher.name).toBe(name);
   });
 
   it('should update a publisher', async () => {
+    const createName = faker.company.name();
+    const createDescription = faker.lorem.sentence();
+
     const createResult = await app.executeOperation({
       query: `
         mutation CreatePublisher($data: PublisherCreateInput!) {
@@ -64,14 +71,16 @@ describe('PublisherService (e2e)', () => {
       `,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name: createName,
+          description: createDescription,
         },
       },
     });
 
     const publisherId = createResult.data.createPublisher.id;
-    
+    const updateName = faker.company.name();
+    const updateDescription = faker.lorem.sentence();
+
     const updateResult = await app.executeOperation({
       query: `
         mutation UpdatePublisher($id: Int!, $data: PublisherUpdateInput!) {
@@ -85,17 +94,20 @@ describe('PublisherService (e2e)', () => {
       variables: {
         id: publisherId,
         data: {
-          name: 'Updated Publisher',
-          description: 'Updated Description',
+          name: updateName,
+          description: updateDescription,
         },
       },
     });
 
     expect(updateResult.errors).toBeUndefined();
-    expect(updateResult.data.updatePublisher.name).toBe('Updated Publisher');
+    expect(updateResult.data.updatePublisher.name).toBe(updateName);
   });
 
   it('should delete a publisher', async () => {
+    const name = faker.company.name();
+    const description = faker.lorem.sentence();
+
     // First, create a publisher
     const createResult = await app.executeOperation({
       query: `
@@ -109,8 +121,8 @@ describe('PublisherService (e2e)', () => {
       `,
       variables: {
         data: {
-          name: 'Test Publisher',
-          description: 'Test Description',
+          name,
+          description,
         },
       },
     });
@@ -151,8 +163,8 @@ describe('PublisherService (e2e)', () => {
         `,
         variables: {
           data: {
-            name: `Publisher ${i}`,
-            description: `Description ${i}`,
+            name: faker.company.name(),
+            description: faker.lorem.sentence(),
           },
         },
       });
@@ -179,6 +191,8 @@ describe('PublisherService (e2e)', () => {
   });
 
   it('should search publishers', async () => {
+    const specialName = faker.company.name();
+
     // Create a publisher to search
     await app.executeOperation({
       query: `
@@ -191,8 +205,8 @@ describe('PublisherService (e2e)', () => {
       `,
       variables: {
         data: {
-          name: 'Special Publisher',
-          description: 'Special Description',
+          name: specialName,
+          description: faker.lorem.sentence(),
         },
       },
     });
@@ -208,12 +222,12 @@ describe('PublisherService (e2e)', () => {
         }
       `,
       variables: {
-        search: 'Special',
+        search: specialName,
       },
     });
 
     expect(searchResult.errors).toBeUndefined();
     expect(searchResult.data.searchPublishers).toHaveLength(1);
-    expect(searchResult.data.searchPublishers[0].name).toBe('Special Publisher');
+    expect(searchResult.data.searchPublishers[0].name).toBe(specialName);
   });
 });
