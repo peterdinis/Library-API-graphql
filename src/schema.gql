@@ -15,18 +15,21 @@ type AuthorModel {
 }
 
 type BookModel {
+  author: AuthorModel
   authorName: String!
+  category: CategoryModel
   createdYear: String!
   description: String!
-  id: Float!
+  id: Int!
   image: String!
   isAvaiable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!
-  pages: Float!
+  pages: Int!
+  publisher: PublisherModel
   serialNumber: String!
-  stockNumber: Float!
+  stockNumber: Int!
 }
 
 type BookingModel {
@@ -173,7 +176,7 @@ type Query {
   category(id: Int!): CategoryModel!
   getAllBookings: [BookingModel!]!
   getAllBooks: [BookModel!]!
-  getOneBook(id: Float!): BookModel!
+  getOneBook(id: Int!): BookModel!
   getOneBooking(id: Int!): BookingModel!
   getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
@@ -201,7 +204,7 @@ input RegisterUserType {
 input ReturnBookingType {
   id: Int!
   isReturned: Boolean!
-  returnedDAte: String!
+  returnedDate: String!
 }
 
 type Subscription {

@@ -9,7 +9,7 @@ import { join } from 'path';
             driver: ApolloDriver,
             sortSchema: true,
             buildSchemaOptions: {
-                dateScalarMode: "timestamp"
+                dateScalarMode: "isoDate"
             },
             installSubscriptionHandlers: true,
             debug: true,

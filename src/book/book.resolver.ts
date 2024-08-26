@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { BookService } from './book.service';
 import { BookModel } from './book.model';
 import { CreateBookInput } from './dto/create-book-type';
@@ -15,7 +15,7 @@ export class BookResolver {
     }
 
     @Query(() => BookModel)
-    async getOneBook(@Args('id') id: number) {
+    async getOneBook(@Args('id', { type: () => Int }) id: number) {
         return this.bookService.getOneBook(id);
     }
 

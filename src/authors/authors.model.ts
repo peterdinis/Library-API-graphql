@@ -1,6 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BookModel } from 'src/book/book.model';
-import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class AuthorModel {
