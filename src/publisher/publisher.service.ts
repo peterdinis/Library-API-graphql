@@ -51,6 +51,9 @@ export class PublisherService {
     async getPublisher(id: number): Promise<Publisher> {
         return this.prisma.publisher.findUnique({
             where: { id },
+            include: {
+                books: true,
+            }
         });
     }
 
