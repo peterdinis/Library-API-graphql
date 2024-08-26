@@ -8,6 +8,9 @@ import { join } from 'path';
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             sortSchema: true,
+            buildSchemaOptions: {
+                dateScalarMode: "timestamp"
+            },
             installSubscriptionHandlers: true,
             debug: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
