@@ -1,7 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Book } from '@prisma/client';
 import { BookModel } from 'src/book/book.model';
-import { DateTimeScalar } from 'src/utils/DateScalar';
 
 @ObjectType()
 export class PublisherModel {

@@ -24,5 +24,5 @@ export class ReturnBookingType {
     @IsDate()
     @IsDateString()
     @IsNotEmpty()
-    returnedDate: string;
+    returnedDate: string
 }

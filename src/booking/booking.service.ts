@@ -118,7 +118,7 @@ export class BookingService {
             where: { id: returnDto.id },
             data: {
                 isReturned: returnDto.isReturned,
-                returnedDate: parseISO(returnDto.returnedDAte),
+                returnedDate: parseISO(returnDto.returnedDate),
                 updatedAt: formatISO(new Date()),
             },
         });
