@@ -5,13 +5,13 @@
 type AuthorModel {
   birthYear: String!
   books: [BookModel!]!
-  createdAt: Timestamp!
+  createdAt: DateTime!
   deathYear: String!
   description: String
   id: Int!
   litPeriod: String!
   name: String!
-  updatedAt: Timestamp!
+  updatedAt: DateTime!
 }
 
 type BookModel {
@@ -34,13 +34,13 @@ type BookModel {
 
 type BookingModel {
   bookName: String!
-  extendedDate: Timestamp!
-  from: Timestamp!
+  extendedDate: DateTime!
+  from: DateTime!
   id: Int!
   isExtended: Boolean!
   isReturned: Boolean!
-  returnedDate: Timestamp!
-  to: Timestamp!
+  returnedDate: DateTime!
+  to: DateTime!
   userId: Int!
 }
 
@@ -51,10 +51,10 @@ type CategoryModel {
 }
 
 input CreateAuthorInput {
-  birthYear: Timestamp!
-  deathYear: Timestamp!
+  birthYear: DateTime!
+  deathYear: DateTime!
   description: String
-  litPeriod: Timestamp!
+  litPeriod: DateTime!
   name: String!
 }
 
@@ -101,6 +101,11 @@ input CreatePublisherInput {
   image: String!
   name: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input ExtendedBookingType {
   extendedDate: String!
@@ -208,16 +213,11 @@ type Subscription {
   bookingReturned: BookingModel!
 }
 
-"""
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
-"""
-scalar Timestamp
-
 input UpdateAuthorType {
-  birthYear: Timestamp!
-  deathYear: Timestamp!
+  birthYear: DateTime!
+  deathYear: DateTime!
   description: String
-  litPeriod: Timestamp!
+  litPeriod: DateTime!
   name: String!
 }
 
@@ -248,7 +248,7 @@ input UpdateCategoryInput {
 }
 
 input UpdatePublisherInput {
-  deletedYear: Timestamp
+  deletedYear: DateTime
   description: String
   image: String
   name: String
