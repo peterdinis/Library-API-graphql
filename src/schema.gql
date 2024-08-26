@@ -15,18 +15,21 @@ type AuthorModel {
 }
 
 type BookModel {
+  author: AuthorModel
   authorName: String!
+  category: CategoryModel
   createdYear: String!
   description: String!
-  id: Float!
+  id: Int!
   image: String!
   isAvaiable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!
-  pages: Float!
+  pages: Int!
+  publisher: PublisherModel
   serialNumber: String!
-  stockNumber: Float!
+  stockNumber: Int!
 }
 
 type BookingModel {

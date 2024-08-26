@@ -1,8 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { AuthorModel } from 'src/authors/authors.model';
+import { CategoryModel } from 'src/category/category.model';
+import { PublisherModel } from 'src/publisher/publisher.model';
 
 @ObjectType()
 export class BookModel {
-    @Field(() => Number)
+    @Field(() => Int)
     id: number;
 
     @Field()
@@ -17,7 +20,7 @@ export class BookModel {
     @Field()
     createdYear: string;
 
-    @Field(() => Number)
+    @Field(() => Int)
     pages: number;
 
     @Field()
@@ -32,9 +35,18 @@ export class BookModel {
     @Field(() => Boolean)
     isReturned: boolean;
 
-    @Field(() => Number)
+    @Field(() => Int)
     stockNumber: number;
 
     @Field()
     serialNumber: string;
+
+    @Field(() => CategoryModel, { nullable: true })
+    category?: CategoryModel;
+
+    @Field(() => AuthorModel, { nullable: true })
+    author?: AuthorModel;
+
+    @Field(() => PublisherModel, { nullable: true })
+    publisher?: PublisherModel;
 }
