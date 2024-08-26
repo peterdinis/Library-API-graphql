@@ -168,7 +168,7 @@ type Query {
   category(id: Int!): CategoryModel!
   getAllBookings: [BookingModel!]!
   getAllBooks: [BookModel!]!
-  getOneBook(id: Float!): BookModel!
+  getOneBook(id: Int!): BookModel!
   getOneBooking(id: Int!): BookingModel!
   getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
