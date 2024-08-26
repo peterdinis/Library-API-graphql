@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Example current date
-  const currentDate = new Date();
+  const currentDate = format(new Date(), 'yyyy-MM-dd')
 
   // Create Categories
   const category1 = await prisma.category.create({
