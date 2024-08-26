@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { formatISO } from 'date-fns';
 import { faker } from '@faker-js/faker'; // Import Faker.js
 import { AuthService } from 'src/auth/auth.service';
@@ -110,7 +109,17 @@ describe('BookingService (e2e)', () => {
     await prismaService.book.create({
       data: {
         name: bookName,
-        author: 'ABBB'
+        description: faker.lorem.sentence(),
+        image: faker.image.imageUrl(),
+        createdYear: new Date(),
+        pages: faker.datatype.number({ min: 50, max: 500 }),
+        authorName: 'AAAA',
+        isAvaible: true,
+        stockNumber: faker.datatype.number({ min: 1, max: 100 }),
+        serialNumber: faker.datatype.uuid(),
+        categoryId: 1, // Ensure this category exists
+        authorId: 1, // Ensure this author exists
+        publisherId: 1 // Ensure this publisher exists
       },
     });
 
@@ -121,6 +130,12 @@ describe('BookingService (e2e)', () => {
     const bookingDto = {
       userId: findOneUser.id,
       bookName: findOneBook.name,
+      isExtended: false,
+      isReturned: true,
+      from: formatISO(new Date()),
+      to: formatISO(new Date()),
+      returnedDate: formatISO(new Date()),
+      extendedDate: formatISO(new Date())
     };
 
     const result = await bookingService.createNewBooking(bookingDto);
@@ -142,7 +157,7 @@ describe('BookingService (e2e)', () => {
     const returnDto = {
       id: createdBooking.id,
       isReturned: true,
-      returnedDAte: formatISO(new Date()),
+      returnedDate: formatISO(new Date()),
     };
 
     const result = await bookingService.returnBooking(returnDto);
