@@ -66,7 +66,6 @@ describe('HealthController', () => {
                 .get('/health')
                 .expect(200);
 
-            // Check if the response has the correct structure and status
             expect(response.body).toHaveProperty('status');
             expect(response.body.status).toBe('ok');
             expect(response.body).toHaveProperty('info');

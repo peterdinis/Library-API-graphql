@@ -52,7 +52,6 @@ describe('PublisherService (e2e)', () => {
   });
 
   it('should update a publisher', async () => {
-    // First, create a publisher
     const createResult = await app.executeOperation({
       query: `
         mutation CreatePublisher($data: PublisherCreateInput!) {
@@ -72,8 +71,7 @@ describe('PublisherService (e2e)', () => {
     });
 
     const publisherId = createResult.data.createPublisher.id;
-
-    // Then, update the publisher
+    
     const updateResult = await app.executeOperation({
       query: `
         mutation UpdatePublisher($id: Int!, $data: PublisherUpdateInput!) {
