@@ -20,8 +20,8 @@ export class PublisherModel {
     books: Book[];
 
     @Field()
-    createdYear: string;
+    createdYear: Date;
 
     @Field()
-    deletedYear?: string;
+    deletedYear?: Date;
 }
