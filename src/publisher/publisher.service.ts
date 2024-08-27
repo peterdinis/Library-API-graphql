@@ -53,7 +53,7 @@ export class PublisherService {
             where: { id },
             include: {
                 books: true,
-            }
+            },
         });
     }
 

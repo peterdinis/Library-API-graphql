@@ -29,8 +29,8 @@ export class BookService {
             include: {
                 category: true,
                 publisher: true,
-                author: true
-            }
+                author: true,
+            },
         });
 
         if (!oneBook) {

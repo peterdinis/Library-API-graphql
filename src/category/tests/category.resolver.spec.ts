@@ -6,31 +6,31 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { faker } from '@faker-js/faker';
 
 describe('CategoryResolver (e2e)', () => {
-  let app: INestApplication;
-  let prismaService: PrismaService;
+    let app: INestApplication;
+    let prismaService: PrismaService;
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    beforeAll(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [AppModule],
+        }).compile();
 
-    app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
-    await app.init();
-  });
+        app = moduleFixture.createNestApplication();
+        prismaService = moduleFixture.get<PrismaService>(PrismaService);
+        await app.init();
+    });
 
-  beforeEach(async () => {
-    await prismaService.category.deleteMany(); // Clean up categories before each test
-  });
+    beforeEach(async () => {
+        await prismaService.category.deleteMany(); // Clean up categories before each test
+    });
 
-  afterAll(async () => {
-    await app.close();
-  });
+    afterAll(async () => {
+        await app.close();
+    });
 
-  it('should create a new category', async () => {
-    const categoryName = faker.commerce.department();
+    it('should create a new category', async () => {
+        const categoryName = faker.commerce.department();
 
-    const mutation = `
+        const mutation = `
       mutation {
         createCategory(createCategoryInput: { name: "${categoryName}" }) {
           id
@@ -39,29 +39,32 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query: mutation })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query: mutation })
+            .expect(200);
 
-    expect(response.body.data.createCategory).toMatchObject({
-      name: categoryName,
+        expect(response.body.data.createCategory).toMatchObject({
+            name: categoryName,
+        });
+
+        const categoryInDb = await prismaService.category.findUnique({
+            where: { id: response.body.data.createCategory.id },
+        });
+        expect(categoryInDb).not.toBeNull();
     });
 
-    const categoryInDb = await prismaService.category.findUnique({
-      where: { id: response.body.data.createCategory.id },
-    });
-    expect(categoryInDb).not.toBeNull();
-  });
+    it('should fetch all categories', async () => {
+        const categoryNames = [
+            faker.commerce.department(),
+            faker.commerce.department(),
+        ];
 
-  it('should fetch all categories', async () => {
-    const categoryNames = [faker.commerce.department(), faker.commerce.department()];
+        await prismaService.category.createMany({
+            data: categoryNames.map((name) => ({ name })),
+        });
 
-    await prismaService.category.createMany({
-      data: categoryNames.map((name) => ({ name })),
-    });
-
-    const query = `
+        const query = `
       query {
         categories {
           id
@@ -70,30 +73,30 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query })
+            .expect(200);
 
-    expect(response.body.data.categories).toHaveLength(2);
-    expect(response.body.data.categories[0]).toMatchObject({
-      name: categoryNames[0],
-    });
-    expect(response.body.data.categories[1]).toMatchObject({
-      name: categoryNames[1],
-    });
-  });
-
-  it('should fetch a category by ID', async () => {
-    const categoryName = faker.commerce.department();
-
-    const category = await prismaService.category.create({
-      data: {
-        name: categoryName,
-      },
+        expect(response.body.data.categories).toHaveLength(2);
+        expect(response.body.data.categories[0]).toMatchObject({
+            name: categoryNames[0],
+        });
+        expect(response.body.data.categories[1]).toMatchObject({
+            name: categoryNames[1],
+        });
     });
 
-    const query = `
+    it('should fetch a category by ID', async () => {
+        const categoryName = faker.commerce.department();
+
+        const category = await prismaService.category.create({
+            data: {
+                name: categoryName,
+            },
+        });
+
+        const query = `
       query {
         category(id: ${category.id}) {
           id
@@ -102,27 +105,27 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query })
+            .expect(200);
 
-    expect(response.body.data.category).toMatchObject({
-      name: categoryName,
-    });
-  });
-
-  it('should update a category', async () => {
-    const oldCategoryName = faker.commerce.department();
-    const newCategoryName = faker.commerce.department();
-
-    const category = await prismaService.category.create({
-      data: {
-        name: oldCategoryName,
-      },
+        expect(response.body.data.category).toMatchObject({
+            name: categoryName,
+        });
     });
 
-    const mutation = `
+    it('should update a category', async () => {
+        const oldCategoryName = faker.commerce.department();
+        const newCategoryName = faker.commerce.department();
+
+        const category = await prismaService.category.create({
+            data: {
+                name: oldCategoryName,
+            },
+        });
+
+        const mutation = `
       mutation {
         updateCategory(id: ${category.id}, updateCategoryInput: { name: "${newCategoryName}" }) {
           id
@@ -131,31 +134,31 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query: mutation })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query: mutation })
+            .expect(200);
 
-    expect(response.body.data.updateCategory).toMatchObject({
-      name: newCategoryName,
+        expect(response.body.data.updateCategory).toMatchObject({
+            name: newCategoryName,
+        });
+
+        const updatedCategoryInDb = await prismaService.category.findUnique({
+            where: { id: category.id },
+        });
+        expect(updatedCategoryInDb.name).toBe(newCategoryName);
     });
 
-    const updatedCategoryInDb = await prismaService.category.findUnique({
-      where: { id: category.id },
-    });
-    expect(updatedCategoryInDb.name).toBe(newCategoryName);
-  });
+    it('should delete a category', async () => {
+        const categoryName = faker.commerce.department();
 
-  it('should delete a category', async () => {
-    const categoryName = faker.commerce.department();
+        const category = await prismaService.category.create({
+            data: {
+                name: categoryName,
+            },
+        });
 
-    const category = await prismaService.category.create({
-      data: {
-        name: categoryName,
-      },
-    });
-
-    const mutation = `
+        const mutation = `
       mutation {
         removeCategory(id: ${category.id}) {
           id
@@ -163,26 +166,29 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query: mutation })
-      .expect(200);
+        await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query: mutation })
+            .expect(200);
 
-    const deletedCategoryInDb = await prismaService.category.findUnique({
-      where: { id: category.id },
-    });
-    expect(deletedCategoryInDb).toBeNull();
-  });
-
-  it('should search categories by keyword', async () => {
-    const searchableNames = [faker.commerce.department(), faker.commerce.department()];
-    const keyword = searchableNames[0].split(' ')[0]; // Use the first word as a keyword
-
-    await prismaService.category.createMany({
-      data: searchableNames.map((name) => ({ name })),
+        const deletedCategoryInDb = await prismaService.category.findUnique({
+            where: { id: category.id },
+        });
+        expect(deletedCategoryInDb).toBeNull();
     });
 
-    const query = `
+    it('should search categories by keyword', async () => {
+        const searchableNames = [
+            faker.commerce.department(),
+            faker.commerce.department(),
+        ];
+        const keyword = searchableNames[0].split(' ')[0]; // Use the first word as a keyword
+
+        await prismaService.category.createMany({
+            data: searchableNames.map((name) => ({ name })),
+        });
+
+        const query = `
       query {
         searchCategories(keyword: "${keyword}") {
           id
@@ -191,23 +197,25 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query })
+            .expect(200);
 
-    expect(response.body.data.searchCategories.length).toBeGreaterThan(0);
-    expect(response.body.data.searchCategories[0].name).toContain(keyword);
-  });
-
-  it('should paginate categories', async () => {
-    const categoryNames = Array.from({ length: 5 }, () => faker.commerce.department());
-
-    await prismaService.category.createMany({
-      data: categoryNames.map((name) => ({ name })),
+        expect(response.body.data.searchCategories.length).toBeGreaterThan(0);
+        expect(response.body.data.searchCategories[0].name).toContain(keyword);
     });
 
-    const query = `
+    it('should paginate categories', async () => {
+        const categoryNames = Array.from({ length: 5 }, () =>
+            faker.commerce.department(),
+        );
+
+        await prismaService.category.createMany({
+            data: categoryNames.map((name) => ({ name })),
+        });
+
+        const query = `
       query {
         paginationCategories(paginationDto: { skip: 2, take: 2 }) {
           id
@@ -216,13 +224,17 @@ describe('CategoryResolver (e2e)', () => {
       }
     `;
 
-    const response = await request(app.getHttpServer())
-      .post('/graphql')
-      .send({ query })
-      .expect(200);
+        const response = await request(app.getHttpServer())
+            .post('/graphql')
+            .send({ query })
+            .expect(200);
 
-    expect(response.body.data.paginationCategories).toHaveLength(2);
-    expect(response.body.data.paginationCategories[0].name).toBe(categoryNames[2]);
-    expect(response.body.data.paginationCategories[1].name).toBe(categoryNames[3]);
-  });
+        expect(response.body.data.paginationCategories).toHaveLength(2);
+        expect(response.body.data.paginationCategories[0].name).toBe(
+            categoryNames[2],
+        );
+        expect(response.body.data.paginationCategories[1].name).toBe(
+            categoryNames[3],
+        );
+    });
 });

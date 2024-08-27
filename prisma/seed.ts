@@ -11,12 +11,14 @@ async function main() {
   const category1 = await prisma.category.create({
     data: {
       name: 'Fiction',
+      description: "AAA"
     },
   });
 
   const category2 = await prisma.category.create({
     data: {
       name: 'Science',
+      description: "ABB"
     },
   });
 
