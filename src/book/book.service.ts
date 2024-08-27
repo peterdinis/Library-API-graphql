@@ -74,6 +74,30 @@ export class BookService {
             );
         }
 
+        const findAuthorForBook = await this.prismaService.author.findUnique({
+            where: {
+                id: newBookDto.authorId
+            }
+        });
+
+        if(!findAuthorForBook) {
+            throw new NotFoundException(
+                `Author with ID ${newBookDto.authorId} not found`,
+            );
+        }
+
+        const findPublisherForBook = await this.prismaService.publisher.findUnique({
+            where: {
+                id: newBookDto.publisherId
+            }
+        });
+
+        if(!findPublisherForBook) {
+            throw new NotFoundException(
+                `Publisher with ID ${newBookDto.publisherId} not found`,
+            );
+        }
+
         // Create the book
         const newBook = await this.prismaService.book.create({
             data: {
