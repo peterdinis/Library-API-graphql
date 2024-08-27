@@ -15,7 +15,7 @@ export class PublisherService {
         return allPublishers;
     }
 
-    async allPublishers() {
+    async getAllPublishers() {
         const publishers = await this.prisma.publisher.findMany();
         if (!publishers) {
             throw new NotFoundException('No publishers found');
