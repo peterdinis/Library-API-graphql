@@ -45,6 +45,7 @@ type BookingModel {
 }
 
 type CategoryModel {
+  books: BookModel
   description: String!
   id: Int!
   name: String!
