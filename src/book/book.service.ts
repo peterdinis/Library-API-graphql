@@ -8,6 +8,9 @@ import {
 import { CreateBookInput } from './dto/create-book-type';
 import { UpdateBookInput } from './dto/update-book-type';
 import { PaginationBookType } from './dto/pagination-book-type';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Injectable()
 export class BookService {
@@ -109,6 +112,8 @@ export class BookService {
         if (!newBook) {
             throw new BadRequestException('Could not create book');
         }
+
+        pubSub.publish('bookAdded', { bookAdded: newBook });
 
         return newBook;
     }
