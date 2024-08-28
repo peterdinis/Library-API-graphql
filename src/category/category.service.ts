@@ -1,13 +1,16 @@
 import {
-    BadRequestException,
-    ForbiddenException,
     Injectable,
     NotFoundException,
+    BadRequestException,
+    ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PubSub } from 'graphql-subscriptions';
 import { CreateCategoryInput } from './dto/create-category-type';
 import { UpdateCategoryInput } from './dto/update-category-type';
 import { PaginationCategoryType } from './dto/pagination-category-types';
+
+const pubSub = new PubSub();
 
 @Injectable()
 export class CategoryService {
@@ -31,6 +34,8 @@ export class CategoryService {
         if (!newCategory) {
             throw new BadRequestException('Failed to create category');
         }
+
+        pubSub.publish('categoryAdded', { categoryAdded: newCategory }); // Publish the event
 
         return newCategory;
     }

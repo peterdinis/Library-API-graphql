@@ -1,13 +1,12 @@
-import {
-    BadRequestException,
-    ForbiddenException,
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Prisma, Author } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PubSub } from 'graphql-subscriptions';
 import { CreateAuthorInput } from './dto/create-author-type';
-import { UpdateAuthorType } from './dto/update-author-type';
 import { PaginationAuthorType } from './dto/pagination-author-type';
+import { UpdateAuthorType } from './dto/update-author-type';
+
+const pubSub = new PubSub();
 
 @Injectable()
 export class AuthorsService {
@@ -18,21 +17,20 @@ export class AuthorsService {
         if (!allAuthors) {
             throw new NotFoundException('No Authors Found');
         }
-
         return allAuthors;
     }
 
-    async create(createAuhtorInput: CreateAuthorInput) {
+    async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
         const newAuthor = await this.prismaService.author.create({
             data: {
-                ...createAuhtorInput,
+                ...createAuthorInput,
             },
         });
 
         if (!newAuthor) {
             throw new BadRequestException('Failed to create author');
         }
-
+        pubSub.publish('authorAdded', { authorAdded: newAuthor }); // Publish event
         return newAuthor;
     }
 
@@ -45,7 +43,6 @@ export class AuthorsService {
         if (!allAuthors) {
             throw new NotFoundException('No authors found');
         }
-
         return allAuthors;
     }
 
@@ -66,14 +63,13 @@ export class AuthorsService {
         return findOneAuthor;
     }
 
-    async update(id: number, updateAuthorInput: UpdateAuthorType) {
+    async update(id: number, updateAuthorInput: UpdateAuthorType): Promise<Author> {
         const oneAuthor = await this.findOne(id);
 
-        const updateAuthor = await this.prismaService.category.update({
+        const updateAuthor = await this.prismaService.author.update({
             where: {
                 id: oneAuthor.id,
             },
-
             data: updateAuthorInput,
         });
 
@@ -84,7 +80,7 @@ export class AuthorsService {
         return updateAuthor;
     }
 
-    async remove(id: number) {
+    async remove(id: number): Promise<Author> {
         const oneAuthor = await this.findOne(id);
         return this.prismaService.author.delete({
             where: { id: oneAuthor.id },
@@ -100,7 +96,7 @@ export class AuthorsService {
 
         if (!foundAuthors || foundAuthors.length === 0) {
             throw new NotFoundException(
-                `No categories found for keyword "${keyword}"`,
+                `No authors found for keyword "${keyword}"`,
             );
         }
 
@@ -108,15 +104,15 @@ export class AuthorsService {
     }
 
     async paginationCategories(paginationDto: PaginationAuthorType) {
-        const allCategoriesInApp = await this.prismaService.category.findMany({
+        const allAuthors = await this.prismaService.author.findMany({
             skip: paginationDto.skip,
             take: paginationDto.take,
         });
 
-        if (!allCategoriesInApp || allCategoriesInApp.length === 0) {
-            throw new NotFoundException('No categories found');
+        if (!allAuthors || allAuthors.length === 0) {
+            throw new NotFoundException('No authors found');
         }
 
-        return allCategoriesInApp;
+        return allAuthors;
     }
 }

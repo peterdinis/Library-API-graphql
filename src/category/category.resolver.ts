@@ -1,29 +1,39 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Int,
+    Subscription,
+} from '@nestjs/graphql';
 import { CategoryService } from './category.service';
+import { CategoryModel } from './category.model';
 import { CreateCategoryInput } from './dto/create-category-type';
 import { UpdateCategoryInput } from './dto/update-category-type';
-import { CategoryModel } from './category.model';
 import { PaginationCategoryType } from './dto/pagination-category-types';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => CategoryModel)
 export class CategoryResolver {
     constructor(private readonly categoryService: CategoryService) {}
+
+    @Query(() => [CategoryModel])
+    async findAllCategories() {
+        return this.categoryService.findAllCategories();
+    }
+
+    @Query(() => CategoryModel)
+    async findOneCategory(@Args('id', { type: () => Int }) id: number) {
+        return this.categoryService.findOne(id);
+    }
 
     @Mutation(() => CategoryModel)
     async createCategory(
         @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
     ) {
         return this.categoryService.create(createCategoryInput);
-    }
-
-    @Query(() => [CategoryModel], { name: 'categories' })
-    async findAllCategories() {
-        return this.categoryService.findAllCategories();
-    }
-
-    @Query(() => CategoryModel, { name: 'category' })
-    async findOne(@Args('id', { type: () => Int }) id: number) {
-        return this.categoryService.findOne(id);
     }
 
     @Mutation(() => CategoryModel)
@@ -39,17 +49,22 @@ export class CategoryResolver {
         return this.categoryService.remove(id);
     }
 
-    @Query(() => [CategoryModel], { name: 'searchCategories' })
-    async searchCategories(
-        @Args('keyword', { type: () => String }) keyword: string,
-    ) {
-        return this.categoryService.searchCategories(keyword);
-    }
-
-    @Query(() => [CategoryModel], { name: 'paginationCategories' })
+    @Query(() => [CategoryModel])
     async paginationCategories(
         @Args('paginationDto') paginationDto: PaginationCategoryType,
     ) {
         return this.categoryService.paginationCategories(paginationDto);
+    }
+
+    @Query(() => [CategoryModel])
+    async searchCategories(@Args('keyword') keyword: string) {
+        return this.categoryService.searchCategories(keyword);
+    }
+
+    @Subscription(() => CategoryModel, {
+        resolve: (payload) => payload.categoryAdded,
+    })
+    categoryAdded() {
+        return pubSub.asyncIterator('categoryAdded');
     }
 }

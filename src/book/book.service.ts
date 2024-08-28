@@ -8,6 +8,9 @@ import {
 import { CreateBookInput } from './dto/create-book-type';
 import { UpdateBookInput } from './dto/update-book-type';
 import { PaginationBookType } from './dto/pagination-book-type';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Injectable()
 export class BookService {
@@ -76,23 +79,24 @@ export class BookService {
 
         const findAuthorForBook = await this.prismaService.author.findUnique({
             where: {
-                id: newBookDto.authorId
-            }
+                id: newBookDto.authorId,
+            },
         });
 
-        if(!findAuthorForBook) {
+        if (!findAuthorForBook) {
             throw new NotFoundException(
                 `Author with ID ${newBookDto.authorId} not found`,
             );
         }
 
-        const findPublisherForBook = await this.prismaService.publisher.findUnique({
-            where: {
-                id: newBookDto.publisherId
-            }
-        });
+        const findPublisherForBook =
+            await this.prismaService.publisher.findUnique({
+                where: {
+                    id: newBookDto.publisherId,
+                },
+            });
 
-        if(!findPublisherForBook) {
+        if (!findPublisherForBook) {
             throw new NotFoundException(
                 `Publisher with ID ${newBookDto.publisherId} not found`,
             );
@@ -109,6 +113,8 @@ export class BookService {
         if (!newBook) {
             throw new BadRequestException('Could not create book');
         }
+
+        pubSub.publish('bookAdded', { bookAdded: newBook });
 
         return newBook;
     }
