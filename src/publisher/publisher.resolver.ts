@@ -1,8 +1,18 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Subscription,
+    Int,
+} from '@nestjs/graphql';
 import { PublisherService } from './publisher.service';
 import { CreatePublisherInput } from './dto/create-publisher-type';
 import { UpdatePublisherInput } from './dto/update-publisher-type';
 import { PublisherModel } from './publisher.model';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => PublisherModel)
 export class PublisherResolver {
@@ -10,8 +20,8 @@ export class PublisherResolver {
 
     @Query(() => [PublisherModel])
     async paginatedPublishers(
-        @Args('skip', { type: () => Number, nullable: true }) skip?: number,
-        @Args('take', { type: () => Number, nullable: true }) take?: number,
+        @Args('skip', { type: () => Int, nullable: true }) skip?: number,
+        @Args('take', { type: () => Int, nullable: true }) take?: number,
     ) {
         return this.publisherService.paginatePublishers(skip, take);
     }
@@ -29,7 +39,7 @@ export class PublisherResolver {
     }
 
     @Query(() => PublisherModel)
-    async getPublisher(@Args('id', { type: () => Number }) id: number) {
+    async getPublisher(@Args('id', { type: () => Int }) id: number) {
         return this.publisherService.getPublisher(id);
     }
 
@@ -40,14 +50,21 @@ export class PublisherResolver {
 
     @Mutation(() => PublisherModel)
     async updatePublisher(
-        @Args('id', { type: () => Number }) id: number,
+        @Args('id', { type: () => Int }) id: number,
         @Args('data') data: UpdatePublisherInput,
     ) {
         return this.publisherService.updatePublisher(id, data);
     }
 
     @Mutation(() => PublisherModel)
-    async deletePublisher(@Args('id', { type: () => Number }) id: number) {
+    async deletePublisher(@Args('id', { type: () => Int }) id: number) {
         return this.publisherService.deletePublisher(id);
+    }
+
+    @Subscription(() => PublisherModel, {
+        resolve: (payload) => payload.publisherAdded,
+    })
+    publisherAdded() {
+        return pubSub.asyncIterator('publisherAdded');
     }
 }

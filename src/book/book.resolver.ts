@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Int,
+    Subscription,
+} from '@nestjs/graphql';
 import { BookService } from './book.service';
 import { BookModel } from './book.model';
 import { CreateBookInput } from './dto/create-book-type';

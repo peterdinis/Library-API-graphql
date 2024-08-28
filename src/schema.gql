@@ -123,8 +123,8 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
   createNewBooking(bookingDto: CreateBookingType!): BookingModel!
   createPublisher(data: CreatePublisherInput!): PublisherModel!
-  deleteBook(id: Float!): BookModel!
-  deletePublisher(id: Float!): PublisherModel!
+  deleteBook(id: Int!): BookModel!
+  deletePublisher(id: Int!): PublisherModel!
   extendedBooking(extendDto: ExtendedBookingType!): BookingModel!
   login(loginUserDto: LoginUserType!): UserModel!
   register(registerUserDto: RegisterUserType!): UserModel!
@@ -132,9 +132,9 @@ type Mutation {
   removeCategory(id: Int!): CategoryModel!
   returnBooking(returnDto: ReturnBookingType!): BookingModel!
   updateAuthor(id: Int!, updateAuthorInput: UpdateAuthorType!): AuthorModel!
-  updateBook(id: Float!, updateBookInput: UpdateBookInput!): BookModel!
+  updateBook(id: Int!, updateBookInput: UpdateBookInput!): BookModel!
   updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): CategoryModel!
-  updatePublisher(data: UpdatePublisherInput!, id: Float!): PublisherModel!
+  updatePublisher(data: UpdatePublisherInput!, id: Int!): PublisherModel!
 }
 
 input PaginationAuthorType {
@@ -179,9 +179,9 @@ type Query {
   getOneBooking(id: Int!): BookingModel!
   getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
-  getPublisher(id: Float!): PublisherModel!
+  getPublisher(id: Int!): PublisherModel!
   me: UserModel!
-  paginatedPublishers(skip: Float, take: Float): [PublisherModel!]!
+  paginatedPublishers(skip: Int, take: Int): [PublisherModel!]!
   paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
   paginationBooking(paginationDto: PaginationBookingType!): [BookingModel!]!
   paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!
@@ -207,10 +207,12 @@ input ReturnBookingType {
 }
 
 type Subscription {
+  bookAdded: BookModel!
   bookingCreated: BookingModel!
   bookingExtended: BookingModel!
   bookingReturned: BookingModel!
   categoryAdded: CategoryModel!
+  publisherAdded: PublisherModel!
 }
 
 input UpdateAuthorType {

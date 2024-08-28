@@ -6,10 +6,14 @@ import { PubSub } from 'graphql-subscriptions';
 
 @Module({
     imports: [PrismaModule],
-    providers: [CategoryService, CategoryResolver, {
-        provide: 'PUB_SUB',
-        useValue: new PubSub(),
-    }],
+    providers: [
+        CategoryService,
+        CategoryResolver,
+        {
+            provide: 'PUB_SUB',
+            useValue: new PubSub(),
+        },
+    ],
     exports: [CategoryService],
 })
 export class CategoryModule {}

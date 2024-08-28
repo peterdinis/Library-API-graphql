@@ -7,10 +7,15 @@ import { PubSub } from 'graphql-subscriptions';
 
 @Module({
     imports: [PrismaModule],
-    providers: [BookService, DateScalar, BookResolver, {
-        provide: 'PUB_SUB',
-        useValue: new PubSub(),
-    },],
+    providers: [
+        BookService,
+        DateScalar,
+        BookResolver,
+        {
+            provide: 'PUB_SUB',
+            useValue: new PubSub(),
+        },
+    ],
     exports: [BookService],
 })
 export class BookModule {}

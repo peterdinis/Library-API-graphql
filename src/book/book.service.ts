@@ -79,23 +79,24 @@ export class BookService {
 
         const findAuthorForBook = await this.prismaService.author.findUnique({
             where: {
-                id: newBookDto.authorId
-            }
+                id: newBookDto.authorId,
+            },
         });
 
-        if(!findAuthorForBook) {
+        if (!findAuthorForBook) {
             throw new NotFoundException(
                 `Author with ID ${newBookDto.authorId} not found`,
             );
         }
 
-        const findPublisherForBook = await this.prismaService.publisher.findUnique({
-            where: {
-                id: newBookDto.publisherId
-            }
-        });
+        const findPublisherForBook =
+            await this.prismaService.publisher.findUnique({
+                where: {
+                    id: newBookDto.publisherId,
+                },
+            });
 
-        if(!findPublisherForBook) {
+        if (!findPublisherForBook) {
             throw new NotFoundException(
                 `Publisher with ID ${newBookDto.publisherId} not found`,
             );

@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Int,
+    Subscription,
+} from '@nestjs/graphql';
 import { CategoryService } from './category.service';
 import { CategoryModel } from './category.model';
 import { CreateCategoryInput } from './dto/create-category-type';
