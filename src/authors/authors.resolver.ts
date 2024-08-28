@@ -1,9 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription, Int } from '@nestjs/graphql';
 import { AuthorsService } from './authors.service';
 import { AuthorModel } from './authors.model';
 import { CreateAuthorInput } from './dto/create-author-type';
 import { PaginationAuthorType } from './dto/pagination-author-type';
 import { UpdateAuthorType } from './dto/update-author-type';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => AuthorModel)
 export class AuthorsResolver {
@@ -52,5 +55,12 @@ export class AuthorsResolver {
         @Args('paginationDto') paginationDto: PaginationAuthorType,
     ) {
         return this.authorsService.paginationCategories(paginationDto);
+    }
+
+    @Subscription(() => AuthorModel, {
+        resolve: (payload) => payload.authorAdded,
+    })
+    authorAdded() {
+        return pubSub.asyncIterator('authorAdded');
     }
 }
