@@ -207,6 +207,7 @@ input ReturnBookingType {
 }
 
 type Subscription {
+  authorAdded: AuthorModel!
   bookAdded: BookModel!
   bookingCreated: BookingModel!
   bookingExtended: BookingModel!
