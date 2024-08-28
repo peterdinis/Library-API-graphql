@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { ApolloServerTestingModule, ApolloServerTestingClient } from 'apollo-server-testing';
+import {
+    ApolloServerTestingModule,
+    ApolloServerTestingClient,
+} from 'apollo-server-testing';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { BookingResolver } from './booking.resolver';
@@ -14,37 +17,44 @@ import { BookingModel } from './booking.model';
 import { faker } from '@faker-js/faker'; // Import Faker.js
 
 describe('BookingResolver (e2e)', () => {
-  let app: INestApplication;
-  let client: ApolloServerTestingClient;
-  let pubSub: PubSub;
+    let app: INestApplication;
+    let client: ApolloServerTestingClient;
+    let pubSub: PubSub;
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        GraphQLModule.forRoot({
-          autoSchemaFile: true,
-          subscriptions: { 'graphql-ws': true },
-        }),
-        ApolloServerTestingModule,
-      ],
-      providers: [BookingResolver, BookingService, PrismaService, {
-        provide: 'PUB_SUB',
-        useValue: new PubSub(),
-      }],
-    }).compile();
+    beforeAll(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [
+                GraphQLModule.forRoot({
+                    autoSchemaFile: true,
+                    subscriptions: { 'graphql-ws': true },
+                }),
+                ApolloServerTestingModule,
+            ],
+            providers: [
+                BookingResolver,
+                BookingService,
+                PrismaService,
+                {
+                    provide: 'PUB_SUB',
+                    useValue: new PubSub(),
+                },
+            ],
+        }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+        app = moduleFixture.createNestApplication();
+        await app.init();
 
-    client = moduleFixture.get<ApolloServerTestingClient>(ApolloServerTestingClient);
-    pubSub = moduleFixture.get<PubSub>('PUB_SUB');
-  });
+        client = moduleFixture.get<ApolloServerTestingClient>(
+            ApolloServerTestingClient,
+        );
+        pubSub = moduleFixture.get<PubSub>('PUB_SUB');
+    });
 
-  it('should return all bookings', async () => {
-    // Seed data with Faker
-    const bookName = faker.commerce.productName();
-    await client.mutate({
-      mutation: `
+    it('should return all bookings', async () => {
+        // Seed data with Faker
+        const bookName = faker.commerce.productName();
+        await client.mutate({
+            mutation: `
         mutation {
           createNewBooking(bookingDto: { bookName: "${bookName}", userId: 1 }) {
             id
@@ -52,24 +62,26 @@ describe('BookingResolver (e2e)', () => {
           }
         }
       `,
+        });
+
+        const result = await client.query({
+            query: `query { getAllBookings { id bookName } }`,
+        });
+        expect(result.data.getAllBookings).toHaveLength(1);
+        expect(result.data.getAllBookings[0].bookName).toBe(bookName);
     });
 
-    const result = await client.query({ query: `query { getAllBookings { id bookName } }` });
-    expect(result.data.getAllBookings).toHaveLength(1);
-    expect(result.data.getAllBookings[0].bookName).toBe(bookName);
-  });
+    it('should create a new booking', async () => {
+        const bookName = faker.commerce.productName();
+        const variables = {
+            bookingDto: {
+                bookName: bookName,
+                userId: faker.datatype.number({ min: 1, max: 100 }),
+            },
+        };
 
-  it('should create a new booking', async () => {
-    const bookName = faker.commerce.productName();
-    const variables = {
-      bookingDto: {
-        bookName: bookName,
-        userId: faker.datatype.number({ min: 1, max: 100 }),
-      },
-    };
-
-    const result = await client.mutate({
-      mutation: `
+        const result = await client.mutate({
+            mutation: `
         mutation($bookingDto: CreateBookingInput!) {
           createNewBooking(bookingDto: $bookingDto) {
             id
@@ -77,16 +89,16 @@ describe('BookingResolver (e2e)', () => {
           }
         }
       `,
-      variables,
+            variables,
+        });
+        expect(result.data.createNewBooking.bookName).toBe(bookName);
     });
-    expect(result.data.createNewBooking.bookName).toBe(bookName);
-  });
 
-  it('should return a booking', async () => {
-    // Seed a booking
-    const bookName = faker.commerce.productName();
-    const createBookingResult = await client.mutate({
-      mutation: `
+    it('should return a booking', async () => {
+        // Seed a booking
+        const bookName = faker.commerce.productName();
+        const createBookingResult = await client.mutate({
+            mutation: `
         mutation {
           createNewBooking(bookingDto: { bookName: "${bookName}", userId: 2 }) {
             id
@@ -94,11 +106,11 @@ describe('BookingResolver (e2e)', () => {
           }
         }
       `,
-    });
+        });
 
-    const bookingId = createBookingResult.data.createNewBooking.id;
+        const bookingId = createBookingResult.data.createNewBooking.id;
 
-    const RETURN_BOOKING_MUTATION = `
+        const RETURN_BOOKING_MUTATION = `
       mutation($returnDto: ReturnBookingInput!) {
         returnBooking(returnDto: $returnDto) {
           id
@@ -107,23 +119,26 @@ describe('BookingResolver (e2e)', () => {
       }
     `;
 
-    const variables = {
-      returnDto: {
-        id: bookingId,
-        isReturned: true,
-        returnedDate: faker.date.recent().toISOString(),
-      },
-    };
+        const variables = {
+            returnDto: {
+                id: bookingId,
+                isReturned: true,
+                returnedDate: faker.date.recent().toISOString(),
+            },
+        };
 
-    const result = await client.mutate({ mutation: RETURN_BOOKING_MUTATION, variables });
-    expect(result.data.returnBooking.isReturned).toBe(true);
-  });
+        const result = await client.mutate({
+            mutation: RETURN_BOOKING_MUTATION,
+            variables,
+        });
+        expect(result.data.returnBooking.isReturned).toBe(true);
+    });
 
-  it('should extend a booking', async () => {
-    // Seed a booking
-    const bookName = faker.commerce.productName();
-    const createBookingResult = await client.mutate({
-      mutation: `
+    it('should extend a booking', async () => {
+        // Seed a booking
+        const bookName = faker.commerce.productName();
+        const createBookingResult = await client.mutate({
+            mutation: `
         mutation {
           createNewBooking(bookingDto: { bookName: "${bookName}", userId: 3 }) {
             id
@@ -131,11 +146,11 @@ describe('BookingResolver (e2e)', () => {
           }
         }
       `,
-    });
+        });
 
-    const bookingId = createBookingResult.data.createNewBooking.id;
+        const bookingId = createBookingResult.data.createNewBooking.id;
 
-    const EXTEND_BOOKING_MUTATION = `
+        const EXTEND_BOOKING_MUTATION = `
       mutation($extendDto: ExtendedBookingInput!) {
         extendedBooking(extendDto: $extendDto) {
           id
@@ -145,22 +160,25 @@ describe('BookingResolver (e2e)', () => {
       }
     `;
 
-    const variables = {
-      extendDto: {
-        id: bookingId,
-        isExtended: true,
-        extendedDate: faker.date.future().toISOString(),
-      },
-    };
+        const variables = {
+            extendDto: {
+                id: bookingId,
+                isExtended: true,
+                extendedDate: faker.date.future().toISOString(),
+            },
+        };
 
-    const result = await client.mutate({ mutation: EXTEND_BOOKING_MUTATION, variables });
-    expect(result.data.extendedBooking.isExtended).toBe(true);
-  });
+        const result = await client.mutate({
+            mutation: EXTEND_BOOKING_MUTATION,
+            variables,
+        });
+        expect(result.data.extendedBooking.isExtended).toBe(true);
+    });
 
-  it('should support bookingCreated subscription', done => {
-    const bookName = faker.commerce.productName();
+    it('should support bookingCreated subscription', (done) => {
+        const bookName = faker.commerce.productName();
 
-    const CREATE_BOOKING_MUTATION = `
+        const CREATE_BOOKING_MUTATION = `
       mutation {
         createNewBooking(bookingDto: { bookName: "${bookName}", userId: 4 }) {
           id
@@ -169,22 +187,24 @@ describe('BookingResolver (e2e)', () => {
       }
     `;
 
-    client.subscribe({
-      query: `subscription { bookingCreated { id bookName message } }`,
-    }).subscribe({
-      next(data) {
-        expect(data.bookingCreated.bookName).toBe(bookName);
-        done();
-      },
-      error(err) {
-        done.fail(err);
-      },
+        client
+            .subscribe({
+                query: `subscription { bookingCreated { id bookName message } }`,
+            })
+            .subscribe({
+                next(data) {
+                    expect(data.bookingCreated.bookName).toBe(bookName);
+                    done();
+                },
+                error(err) {
+                    done.fail(err);
+                },
+            });
+
+        client.mutate({ mutation: CREATE_BOOKING_MUTATION });
     });
 
-    client.mutate({ mutation: CREATE_BOOKING_MUTATION });
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
+    afterAll(async () => {
+        await app.close();
+    });
 });

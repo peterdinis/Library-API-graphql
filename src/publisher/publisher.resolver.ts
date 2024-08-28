@@ -9,11 +9,16 @@ export class PublisherResolver {
     constructor(private readonly publisherService: PublisherService) {}
 
     @Query(() => [PublisherModel])
-    async getPublishers(
+    async paginatedPublishers(
         @Args('skip', { type: () => Number, nullable: true }) skip?: number,
         @Args('take', { type: () => Number, nullable: true }) take?: number,
     ) {
         return this.publisherService.paginatePublishers(skip, take);
+    }
+
+    @Query(() => [PublisherModel])
+    async allPublishers() {
+        return this.publisherService.getAllPublishers();
     }
 
     @Query(() => [PublisherModel])

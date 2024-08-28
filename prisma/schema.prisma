@@ -57,6 +57,7 @@ model Book {
 model Category {
   id        Int      @id @default(autoincrement())
   name      String
+  description String  @default("AAAA")
   books     Book[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

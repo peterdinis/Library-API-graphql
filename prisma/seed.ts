@@ -1,141 +1,99 @@
-import { PrismaClient, Role } from '@prisma/client';
-import { subYears, format, addDays } from 'date-fns';
+import { PrismaClient } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Example current date
-  const currentDate = format(new Date(), 'yyyy-MM-dd')
-
   // Create Categories
-  const category1 = await prisma.category.create({
-    data: {
-      name: 'Fiction',
-    },
+  const categoryPromises = Array.from({ length: 2 }).map(() => {
+    return prisma.category.create({
+      data: {
+        name: faker.commerce.department(),
+        description: faker.lorem.sentence(),
+      },
+    });
   });
-
-  const category2 = await prisma.category.create({
-    data: {
-      name: 'Science',
-    },
-  });
-
-  // Create Authors
-  const author1 = await prisma.author.create({
-    data: {
-      name: 'George Orwell',
-      description: 'English novelist and essayist.',
-      litPeriod: format(new Date('1945-01-01T00:00:00Z'), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-      birthYear: format(subYears(currentDate, 121), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 121 years ago
-      deathYear: format(subYears(currentDate, 73), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 73 years ago
-    },
-  });
-
-  const author2 = await prisma.author.create({
-    data: {
-      name: 'Isaac Newton',
-      description: 'English mathematician, physicist, and astronomer.',
-      litPeriod: format(new Date('1687-01-01T00:00:00Z'), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-      birthYear: format(subYears(currentDate, 381), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 381 years ago
-      deathYear: format(subYears(currentDate, 297), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 297 years ago
-    },
-  });
+  const categories = await Promise.all(categoryPromises);
 
   // Create Publishers
-  const publisher1 = await prisma.publisher.create({
-    data: {
-      name: 'Secker & Warburg',
-      description: 'British publishing house.',
-      image: 'https://picsum.photos/200/300?random=1',
-      createdYear: format(subYears(currentDate, 89), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 89 years ago
-    },
+  const publisherPromises = Array.from({ length: 5 }).map(() => {
+    return prisma.publisher.create({
+      data: {
+        name: faker.company.name(),
+        description: faker.lorem.sentences(3),
+        image: faker.image.business(), // URL of a random business-related image
+        createdYear: faker.date.past(100), // Date within the last 100 years
+        deletedYear: faker.datatype.boolean() ? faker.date.past(50) : null, // Randomly decide if a deleted year exists
+      },
+    });
   });
+  const publishers = await Promise.all(publisherPromises);
 
-  const publisher2 = await prisma.publisher.create({
-    data: {
-      name: 'Royal Society',
-      description: 'A fellowship of many of the world\'s most eminent scientists.',
-      image: 'https://picsum.photos/200/300?random=2',
-      createdYear: format(subYears(currentDate, 364), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 364 years ago
-    },
+  // Create Authors
+  const authorPromises = Array.from({ length: 5 }).map(() => {
+    const birthYear = faker.date.past(500);
+    const deathYear = faker.datatype.boolean() ? faker.date.between(birthYear, new Date()) : null;
+
+    return prisma.author.create({
+      data: {
+        name: faker.name.fullName(),
+        description: faker.lorem.paragraph(),
+        litPeriod: faker.date.past(200),
+        birthYear,
+        deathYear,
+      },
+    });
   });
+  const authors = await Promise.all(authorPromises);
 
   // Create Books
-  const book1 = await prisma.book.create({
-    data: {
-      name: '1984',
-      description: 'A dystopian social science fiction novel.',
-      image: 'https://picsum.photos/200/300?random=3',
-      pages: 328,
-      authorName: 'George Orwell',
-      isAvaible: true,
-      stockNumber: 10,
-      serialNumber: '11-22-334',
-      categoryId: category1.id,
-      authorId: author1.id,
-      publisherId: publisher1.id,
-    },
+  const bookPromises = Array.from({ length: 10 }).map(() => {
+    return prisma.book.create({
+      data: {
+        name: faker.commerce.productName(),
+        description: faker.lorem.sentences(2),
+        image: faker.image.abstract(), // URL of a random abstract image
+        pages: faker.datatype.number({ min: 100, max: 1000 }),
+        authorName: faker.name.fullName(),
+        isAvaible: faker.datatype.boolean(),
+        stockNumber: faker.datatype.number({ min: 1, max: 100 }),
+        serialNumber: faker.datatype.uuid(),
+        categoryId: 1,
+        authorId: 1,
+        publisherId: 1
+      },
+    });
   });
-
-  const book2 = await prisma.book.create({
-    data: {
-      name: 'Philosophiæ Naturalis Principia Mathematica',
-      description: 'A work in three books by Isaac Newton.',
-      image: 'https://picsum.photos/200/300?random=4',
-      pages: 512,
-      authorName: 'Isaac Newton',
-      isAvaible: true,
-      stockNumber: 5,
-      serialNumber: '11-22-335',
-      categoryId: category2.id,
-      authorId: author2.id,
-      publisherId: publisher2.id,
-    },
-  });
+  const books = await Promise.all(bookPromises);
 
   // Create Users
-  const user1 = await prisma.user.create({
-    data: {
-      name: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      password: 'password123',
-      role: Role.STUDENT,
-    },
+  const userPromises = Array.from({ length: 5 }).map(() => {
+    return prisma.user.create({
+      data: {
+        name: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        role: "ADMIN",
+      },
+    });
   });
-
-  const user2 = await prisma.user.create({
-    data: {
-      name: 'Jane',
-      lastName: 'Smith',
-      email: 'jane.smith@example.com',
-      password: 'password123',
-      role: Role.TEACHER,
-    },
-  });
+  const users = await Promise.all(userPromises);
 
   // Create Bookings
-  await prisma.booking.create({
-    data: {
-      bookName: '1984',
-      from: format(currentDate, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-      to: format(addDays(currentDate, 14), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 2 weeks later
-      isExtended: false,
-      isReturned: false,
-      userId: user1.id,
-    },
+  const bookingPromises = books.map((book) => {
+    return prisma.booking.create({
+      data: {
+        bookName: book.name,
+        from: faker.date.recent(),
+        to: faker.date.future(),
+        isExtended: faker.datatype.boolean(),
+        isReturned: faker.datatype.boolean(),
+        userId: 1
+      },
+    });
   });
-
-  await prisma.booking.create({
-    data: {
-      bookName: 'Philosophiæ Naturalis Principia Mathematica',
-      from: format(currentDate, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-      to: format(addDays(currentDate, 14), "yyyy-MM-dd'T'HH:mm:ss'Z'"), // 2 weeks later
-      isExtended: false,
-      isReturned: false,
-      userId: user2.id,
-    },
-  });
+  await Promise.all(bookingPromises);
 }
 
 main()

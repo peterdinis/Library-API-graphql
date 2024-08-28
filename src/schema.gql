@@ -168,6 +168,7 @@ type PublisherModel {
 }
 
 type Query {
+  allPublishers: [PublisherModel!]!
   author(id: Int!): AuthorModel!
   authors: [AuthorModel!]!
   categories: [CategoryModel!]!
@@ -179,8 +180,8 @@ type Query {
   getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
   getPublisher(id: Float!): PublisherModel!
-  getPublishers(skip: Float, take: Float): [PublisherModel!]!
   me: UserModel!
+  paginatedPublishers(skip: Float, take: Float): [PublisherModel!]!
   paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
   paginationBooking(paginationDto: PaginationBookingType!): [BookingModel!]!
   paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!

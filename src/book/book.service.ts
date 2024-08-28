@@ -29,8 +29,8 @@ export class BookService {
             include: {
                 category: true,
                 publisher: true,
-                author: true
-            }
+                author: true,
+            },
         });
 
         if (!oneBook) {
@@ -71,6 +71,30 @@ export class BookService {
         if (!findCategoryForBook) {
             throw new NotFoundException(
                 `Category with ID ${newBookDto.categoryId} not found`,
+            );
+        }
+
+        const findAuthorForBook = await this.prismaService.author.findUnique({
+            where: {
+                id: newBookDto.authorId
+            }
+        });
+
+        if(!findAuthorForBook) {
+            throw new NotFoundException(
+                `Author with ID ${newBookDto.authorId} not found`,
+            );
+        }
+
+        const findPublisherForBook = await this.prismaService.publisher.findUnique({
+            where: {
+                id: newBookDto.publisherId
+            }
+        });
+
+        if(!findPublisherForBook) {
+            throw new NotFoundException(
+                `Publisher with ID ${newBookDto.publisherId} not found`,
             );
         }
 
