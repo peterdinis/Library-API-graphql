@@ -22,7 +22,7 @@ type BookModel {
   description: String!
   id: Int!
   image: String!
-  isAvaiable: Boolean!
+  isAvaible: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!

@@ -11,8 +11,6 @@ import { AuthModule } from 'src/auth/auth.module';
 import { BookingModule } from 'src/booking/booking.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
 
 @Module({
     imports: [
@@ -20,12 +18,6 @@ import { APP_GUARD } from '@nestjs/core';
             envFilePath: '.env',
             isGlobal: true,
         }),
-        ThrottlerModule.forRoot([
-            {
-                ttl: 60000,
-                limit: 10,
-            },
-        ]),
         PrismaModule,
         BookModule,
         CategoryModule,
@@ -38,10 +30,6 @@ import { APP_GUARD } from '@nestjs/core';
     ],
     providers: [
         AppService,
-        {
-            provide: APP_GUARD,
-            useClass: ThrottlerGuard,
-        },
     ],
     controllers: [AppController],
 })
