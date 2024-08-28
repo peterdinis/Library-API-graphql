@@ -171,8 +171,8 @@ type Query {
   allPublishers: [PublisherModel!]!
   author(id: Int!): AuthorModel!
   authors: [AuthorModel!]!
-  categories: [CategoryModel!]!
-  category(id: Int!): CategoryModel!
+  findAllCategories: [CategoryModel!]!
+  findOneCategory(id: Int!): CategoryModel!
   getAllBookings: [BookingModel!]!
   getAllBooks: [BookModel!]!
   getOneBook(id: Int!): BookModel!
@@ -210,6 +210,7 @@ type Subscription {
   bookingCreated: BookingModel!
   bookingExtended: BookingModel!
   bookingReturned: BookingModel!
+  categoryAdded: CategoryModel!
 }
 
 input UpdateAuthorType {

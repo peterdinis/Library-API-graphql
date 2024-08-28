@@ -1,9 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
 import { BookService } from './book.service';
 import { BookModel } from './book.model';
 import { CreateBookInput } from './dto/create-book-type';
 import { UpdateBookInput } from './dto/update-book-type';
 import { PaginationBookType } from './dto/pagination-book-type';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => BookModel)
 export class BookResolver {
@@ -28,14 +31,14 @@ export class BookResolver {
 
     @Mutation(() => BookModel)
     async updateBook(
-        @Args('id') id: number,
+        @Args('id', { type: () => Int }) id: number,
         @Args('updateBookInput') updateBookInput: UpdateBookInput,
     ) {
         return this.bookService.updateBook(id, updateBookInput);
     }
 
     @Mutation(() => BookModel)
-    async deleteBook(@Args('id') id: number) {
+    async deleteBook(@Args('id', { type: () => Int }) id: number) {
         return this.bookService.deleteBook(id);
     }
 
@@ -49,5 +52,12 @@ export class BookResolver {
     @Query(() => [BookModel])
     async searchBooks(@Args('keyword') keyword: string) {
         return this.bookService.searchBooks(keyword);
+    }
+
+    @Subscription(() => BookModel, {
+        resolve: (payload) => payload.bookAdded,
+    })
+    bookAdded() {
+        return pubSub.asyncIterator('bookAdded');
     }
 }
