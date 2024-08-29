@@ -55,7 +55,7 @@ async function main() {
         image: faker.image.abstract(), // URL of a random abstract image
         pages: faker.datatype.number({ min: 100, max: 1000 }),
         authorName: faker.name.fullName(),
-        isAvaible: faker.datatype.boolean(),
+        isAvaiable: faker.datatype.boolean(),
         stockNumber: faker.datatype.number({ min: 1, max: 100 }),
         serialNumber: faker.datatype.uuid(),
         categoryId: 1,

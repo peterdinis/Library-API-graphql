@@ -39,7 +39,7 @@ model Book {
   createdYear  DateTime  @default(now())
   pages        Int
   authorName   String
-  isAvaible    Boolean   @default(true)
+  isAvaiable   Boolean   @default(true)
   isBorrowed   Boolean   @default(false)
   isReturned   Boolean   @default(false)
   stockNumber  Int       @default(1)
@@ -55,12 +55,12 @@ model Book {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String
-  description String  @default("AAAA")
-  books     Book[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String   @default("AAAA")
+  books       Book[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 model Author {

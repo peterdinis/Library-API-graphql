@@ -40,7 +40,7 @@ export class AdminService {
             description: book.description,
             createdYear: book.createdYear,
             pages: book.pages,
-            isAvaiable: book.isAvaible,
+            isAvaiable: book.isAvaiable,
             isBorrowed: book.isBorrowed,
             isReturned: book.isReturned,
             serialNumber: book.serialNumber,

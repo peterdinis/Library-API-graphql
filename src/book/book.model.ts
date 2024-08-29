@@ -27,7 +27,7 @@ export class BookModel {
     authorName: string;
 
     @Field(() => Boolean)
-    isAvaible: boolean;
+    isAvaiable: boolean;
 
     @Field(() => Boolean)
     isBorrowed: boolean;
