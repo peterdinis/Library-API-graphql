@@ -115,6 +115,9 @@ export class CategoryService {
         const allCategoriesInApp = await this.prismaService.category.findMany({
             skip: paginationDto.skip,
             take: paginationDto.take,
+            include: {
+                books: true
+            }
         });
 
         if (!allCategoriesInApp || allCategoriesInApp.length === 0) {
