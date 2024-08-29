@@ -73,7 +73,7 @@ describe('BookResolver (e2e)', () => {
                     image: 'http://example.com/image1.jpg',
                     pages: 300,
                     authorName: 'Author 1',
-                    isAvaible: true,
+                    isAvaiable: true,
                     isBorrowed: false,
                     isReturned: false,
                     stockNumber: 10,
@@ -89,7 +89,7 @@ describe('BookResolver (e2e)', () => {
                     image: 'http://example.com/image2.jpg',
                     pages: 250,
                     authorName: 'Author 2',
-                    isAvaible: false,
+                    isAvaiable: false,
                     isBorrowed: true,
                     isReturned: false,
                     stockNumber: 5,
@@ -132,7 +132,7 @@ describe('BookResolver (e2e)', () => {
                 image: 'http://example.com/book_by_id.jpg',
                 pages: 100,
                 authorName: 'Author by ID',
-                isAvaible: true,
+                isAvaiable: true,
                 isBorrowed: false,
                 isReturned: false,
                 stockNumber: 1,
@@ -173,7 +173,7 @@ describe('BookResolver (e2e)', () => {
           image: "http://example.com/new_book.jpg"
           pages: 150
           authorName: "New Author"
-          isAvaible: true
+          isAvaiable: true
           isBorrowed: false
           isReturned: false
           stockNumber: 20
@@ -209,7 +209,7 @@ describe('BookResolver (e2e)', () => {
                 image: 'http://example.com/old_book.jpg',
                 pages: 200,
                 authorName: 'Old Author',
-                isAvaible: true,
+                isAvaiable: true,
                 isBorrowed: false,
                 isReturned: false,
                 stockNumber: 15,
@@ -228,7 +228,7 @@ describe('BookResolver (e2e)', () => {
           image: "http://example.com/updated_book.jpg"
           pages: 250
           authorName: "Updated Author"
-          isAvaible: false
+          isAvaiable: false
           isBorrowed: true
           isReturned: true
           stockNumber: 25
@@ -236,7 +236,7 @@ describe('BookResolver (e2e)', () => {
         }) {
           name
           description
-          isAvaible
+          isAvaiable
         }
       }
     `;
@@ -249,7 +249,7 @@ describe('BookResolver (e2e)', () => {
         expect(response.body.data.updateBook).toMatchObject({
             name: 'Updated Book',
             description: 'Updated description',
-            isAvaible: false,
+            isAvaiable: false,
         });
     });
 
@@ -262,7 +262,7 @@ describe('BookResolver (e2e)', () => {
                 image: 'http://example.com/delete_book.jpg',
                 pages: 400,
                 authorName: 'Author to Delete',
-                isAvaible: true,
+                isAvaiable: true,
                 isBorrowed: false,
                 isReturned: false,
                 stockNumber: 30,
@@ -314,7 +314,7 @@ describe('BookResolver (e2e)', () => {
                     image: 'http://example.com/searchable_book_one.jpg',
                     pages: 320,
                     authorName: 'Author Searchable',
-                    isAvaible: true,
+                    isAvaiable: true,
                     isBorrowed: false,
                     isReturned: false,
                     stockNumber: 12,
@@ -330,7 +330,7 @@ describe('BookResolver (e2e)', () => {
                     image: 'http://example.com/searchable_book_two.jpg',
                     pages: 220,
                     authorName: 'Author Searchable',
-                    isAvaible: true,
+                    isAvaiable: true,
                     isBorrowed: false,
                     isReturned: false,
                     stockNumber: 8,

@@ -134,7 +134,7 @@ describe('BookingService (e2e)', () => {
                 createdYear: new Date(),
                 pages: faker.datatype.number({ min: 50, max: 500 }),
                 authorName: 'AAAA',
-                isAvaible: true,
+                isAvaiable: true,
                 stockNumber: faker.datatype.number({ min: 1, max: 100 }),
                 serialNumber: faker.datatype.uuid(),
                 categoryId: 1, // Ensure this category exists
