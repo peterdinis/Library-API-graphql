@@ -54,7 +54,7 @@ export class AuthorsResolver {
     async paginationAuthors(
         @Args('paginationDto') paginationDto: PaginationAuthorType,
     ) {
-        return this.authorsService.paginationCategories(paginationDto);
+        return this.authorsService.paginationAuthors(paginationDto);
     }
 
     @Subscription(() => AuthorModel, {
