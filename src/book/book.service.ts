@@ -17,7 +17,13 @@ export class BookService {
     constructor(private readonly prismaService: PrismaService) {}
 
     async allBooks() {
-        const allBooksInApp = await this.prismaService.book.findMany();
+        const allBooksInApp = await this.prismaService.book.findMany({
+            include: {
+                category: true,
+                publisher: true,
+                author: true
+            }
+        });
         if (!allBooksInApp) {
             throw new NotFoundException('No books found');
         }
@@ -173,6 +179,11 @@ export class BookService {
         const allBooksInApp = await this.prismaService.book.findMany({
             skip: paginationDto.skip,
             take: paginationDto.take,
+            include: {
+                category: true,
+                publisher: true,
+                author: true
+            }
         });
 
         if (!allBooksInApp || allBooksInApp.length === 0) {
