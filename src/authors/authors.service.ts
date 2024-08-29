@@ -103,10 +103,13 @@ export class AuthorsService {
         return foundAuthors;
     }
 
-    async paginationCategories(paginationDto: PaginationAuthorType) {
+    async paginationAuthors(paginationDto: PaginationAuthorType) {
         const allAuthors = await this.prismaService.author.findMany({
             skip: paginationDto.skip,
             take: paginationDto.take,
+            include: {
+                books: true
+            }
         });
 
         if (!allAuthors || allAuthors.length === 0) {
