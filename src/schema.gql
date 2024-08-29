@@ -63,7 +63,6 @@ input CreateBookInput {
   authorId: Int!
   authorName: String!
   categoryId: Int!
-  createdAt: String!
   createdYear: String!
   description: String!
   image: String!
@@ -75,7 +74,6 @@ input CreateBookInput {
   publisherId: Int!
   serialNumber: String!
   stockNumber: Int!
-  updatedAt: String!
 }
 
 input CreateBookingType {
@@ -90,10 +88,8 @@ input CreateBookingType {
 }
 
 input CreateCategoryInput {
-  createdAt: String!
   description: String!
   name: String!
-  updatedAt: String!
 }
 
 input CreatePublisherInput {
@@ -229,7 +225,6 @@ input UpdateBookInput {
   authorId: Int
   authorName: String
   categoryId: Int
-  createdAt: String
   createdYear: String
   description: String
   image: String
@@ -241,14 +236,11 @@ input UpdateBookInput {
   publisherId: Int
   serialNumber: String
   stockNumber: Int
-  updatedAt: String
 }
 
 input UpdateCategoryInput {
-  createdAt: String
   description: String
   name: String
-  updatedAt: String
 }
 
 input UpdatePublisherInput {

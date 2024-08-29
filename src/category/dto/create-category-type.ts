@@ -12,17 +12,4 @@ export class CreateCategoryInput {
     @IsString()
     @IsNotEmpty()
     description: string;
-
-    @Field()
-    @IsDate()
-    @IsNotEmpty()
-    @IsDateString()
-    createdAt: string;
-
-    @Field()
-    @IsDate()
-    @IsNotEmpty()
-    @IsDateString()
-    updatedAt: string;
-    createdYear;
 }
