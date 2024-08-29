@@ -67,6 +67,7 @@ model Author {
   id          Int       @id @default(autoincrement())
   name        String
   description String
+  authorImage String    @default("https://picsum.photos/200/300")
   litPeriod   DateTime  @default(now())
   birthYear   DateTime  @default(now())
   deathYear   DateTime? @default(now())

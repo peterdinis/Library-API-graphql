@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 type AuthorModel {
+  authorImage: String!
   birthYear: String!
   books: [BookModel!]!
   createdAt: Date!
@@ -52,6 +53,7 @@ type CategoryModel {
 }
 
 input CreateAuthorInput {
+  authorImage: String!
   birthYear: Date!
   deathYear: Date!
   description: String
@@ -214,6 +216,7 @@ type Subscription {
 }
 
 input UpdateAuthorType {
+  authorImage: String!
   birthYear: Date!
   deathYear: Date!
   description: String

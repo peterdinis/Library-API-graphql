@@ -20,6 +20,11 @@ export class CreateAuthorInput {
     litPeriod: Date;
 
     @Field()
+    @IsString()
+    @IsNotEmpty()
+    authorImage: string;
+
+    @Field()
     @IsDate()
     @IsNotEmpty()
     @IsDateString()
