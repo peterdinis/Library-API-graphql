@@ -83,14 +83,4 @@ export class CreateBookInput {
     @IsNotEmpty()
     @IsPositive()
     publisherId: number;
-
-    @Field()
-    @IsDateString()
-    @IsNotEmpty()
-    createdAt: string;
-
-    @Field()
-    @IsDateString()
-    @IsNotEmpty()
-    updatedAt: string;
 }

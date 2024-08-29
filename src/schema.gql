@@ -22,7 +22,7 @@ type BookModel {
   description: String!
   id: Int!
   image: String!
-  isAvaiable: Boolean!
+  isAvaible: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!
@@ -45,6 +45,7 @@ type BookingModel {
 }
 
 type CategoryModel {
+  books: BookModel
   description: String!
   id: Int!
   name: String!
@@ -62,7 +63,6 @@ input CreateBookInput {
   authorId: Int!
   authorName: String!
   categoryId: Int!
-  createdAt: String!
   createdYear: String!
   description: String!
   image: String!
@@ -74,7 +74,6 @@ input CreateBookInput {
   publisherId: Int!
   serialNumber: String!
   stockNumber: Int!
-  updatedAt: String!
 }
 
 input CreateBookingType {
@@ -89,10 +88,8 @@ input CreateBookingType {
 }
 
 input CreateCategoryInput {
-  createdAt: String!
   description: String!
   name: String!
-  updatedAt: String!
 }
 
 input CreatePublisherInput {
@@ -228,7 +225,6 @@ input UpdateBookInput {
   authorId: Int
   authorName: String
   categoryId: Int
-  createdAt: String
   createdYear: String
   description: String
   image: String
@@ -240,14 +236,11 @@ input UpdateBookInput {
   publisherId: Int
   serialNumber: String
   stockNumber: Int
-  updatedAt: String
 }
 
 input UpdateCategoryInput {
-  createdAt: String
   description: String
   name: String
-  updatedAt: String
 }
 
 input UpdatePublisherInput {

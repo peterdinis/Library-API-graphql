@@ -28,7 +28,9 @@ import { AppController } from './app.controller';
         AuthModule,
         BookingModule,
     ],
-    providers: [AppService],
+    providers: [
+        AppService,
+    ],
     controllers: [AppController],
 })
 export class AppModule {}
