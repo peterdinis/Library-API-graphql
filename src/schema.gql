@@ -4,13 +4,13 @@
 
 type AuthorModel {
   authorImage: String!
-  birthYear: String!
+  birthYear: Date!
   books: [BookModel!]!
   createdAt: Date!
-  deathYear: String!
+  deathYear: Date!
   description: String
   id: Int!
-  litPeriod: String!
+  litPeriod: Date!
   name: String!
   updatedAt: Date!
 }

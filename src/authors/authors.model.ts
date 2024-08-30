@@ -13,16 +13,16 @@ export class AuthorModel {
     description?: string;
 
     @Field()
-    litPeriod: string;
+    litPeriod: Date;
 
     @Field()
     authorImage: string;
 
     @Field()
-    birthYear: string;
+    birthYear: Date;
 
     @Field()
-    deathYear?: string;
+    deathYear?: Date
 
     @Field(() => [BookModel])
     books: BookModel[];
