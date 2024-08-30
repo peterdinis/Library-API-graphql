@@ -22,6 +22,11 @@ export class CreateAuthorInput {
     @Field()
     @IsString()
     @IsNotEmpty()
+    litPeriodName: string;
+
+    @Field()
+    @IsString()
+    @IsNotEmpty()
     authorImage: string;
 
     @Field()

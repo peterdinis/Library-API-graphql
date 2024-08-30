@@ -11,6 +11,7 @@ type AuthorModel {
   description: String
   id: Int!
   litPeriod: Date!
+  litPeriodName: String!
   name: String!
   updatedAt: Date!
 }
@@ -58,6 +59,7 @@ input CreateAuthorInput {
   deathYear: Date!
   description: String
   litPeriod: Date!
+  litPeriodName: String!
   name: String!
 }
 
@@ -221,6 +223,7 @@ input UpdateAuthorType {
   deathYear: Date!
   description: String
   litPeriod: Date!
+  litPeriodName: String!
   name: String!
 }
 

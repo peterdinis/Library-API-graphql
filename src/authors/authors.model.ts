@@ -16,6 +16,9 @@ export class AuthorModel {
     litPeriod: Date;
 
     @Field()
+    litPeriodName: string;
+
+    @Field()
     authorImage: string;
 
     @Field()
