@@ -97,7 +97,8 @@ input CreateCategoryInput {
 }
 
 input CreatePublisherInput {
-  createdYear: String!
+  createdYear: Date!
+  deletedYear: Date!
   description: String!
   image: String!
   name: String!

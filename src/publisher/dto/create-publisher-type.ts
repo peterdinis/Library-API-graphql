@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString, IsDate, IsNotEmpty, IsDateString } from 'class-validator';
+import { IsString, IsDate, IsNotEmpty, IsDateString, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreatePublisherInput {
@@ -22,5 +22,10 @@ export class CreatePublisherInput {
     @IsDate()
     @IsNotEmpty()
     @IsDateString()
-    createdYear: string;
+    createdYear: Date;
+
+    @Field()
+    @IsDate()
+    @IsOptional()
+    deletedYear?: Date;
 }
