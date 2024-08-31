@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+    Injectable,
+    NotFoundException,
+    BadRequestException,
+    ForbiddenException,
+} from '@nestjs/common';
 import { Prisma, Author } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PubSub } from 'graphql-subscriptions';
@@ -63,7 +68,10 @@ export class AuthorsService {
         return findOneAuthor;
     }
 
-    async update(id: number, updateAuthorInput: UpdateAuthorType): Promise<Author> {
+    async update(
+        id: number,
+        updateAuthorInput: UpdateAuthorType,
+    ): Promise<Author> {
         const oneAuthor = await this.findOne(id);
 
         const updateAuthor = await this.prismaService.author.update({
@@ -108,8 +116,8 @@ export class AuthorsService {
             skip: paginationDto.skip,
             take: paginationDto.take,
             include: {
-                books: true
-            }
+                books: true,
+            },
         });
 
         if (!allAuthors || allAuthors.length === 0) {

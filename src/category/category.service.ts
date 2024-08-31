@@ -116,8 +116,8 @@ export class CategoryService {
             skip: paginationDto.skip,
             take: paginationDto.take,
             include: {
-                books: true
-            }
+                books: true,
+            },
         });
 
         if (!allCategoriesInApp || allCategoriesInApp.length === 0) {

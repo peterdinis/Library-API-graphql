@@ -24,8 +24,8 @@ export class PublisherService {
     async getAllPublishers() {
         const publishers = await this.prisma.publisher.findMany({
             include: {
-                books: true
-            }
+                books: true,
+            },
         });
         if (!publishers) {
             throw new NotFoundException('No publishers found');
@@ -79,8 +79,8 @@ export class PublisherService {
             skip,
             take,
             include: {
-                books: true
-            }
+                books: true,
+            },
         });
     }
 

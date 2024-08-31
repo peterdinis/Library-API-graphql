@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Subscription, Int } from '@nestjs/graphql';
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Args,
+    Subscription,
+    Int,
+} from '@nestjs/graphql';
 import { AuthorsService } from './authors.service';
 import { AuthorModel } from './authors.model';
 import { CreateAuthorInput } from './dto/create-author-type';

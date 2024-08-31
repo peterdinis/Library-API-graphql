@@ -21,8 +21,8 @@ export class BookService {
             include: {
                 category: true,
                 publisher: true,
-                author: true
-            }
+                author: true,
+            },
         });
         if (!allBooksInApp) {
             throw new NotFoundException('No books found');
@@ -182,8 +182,8 @@ export class BookService {
             include: {
                 category: true,
                 publisher: true,
-                author: true
-            }
+                author: true,
+            },
         });
 
         if (!allBooksInApp || allBooksInApp.length === 0) {

@@ -7,7 +7,7 @@ import { createTestClient } from 'apollo-server-testing';
 import { faker } from '@faker-js/faker';
 
 describe('PublisherResolver (e2e)', () => {
-   let server: ApolloServer;
+    let server: ApolloServer;
     let gqlTestClient: ReturnType<typeof createTestClient>;
 
     beforeAll(async () => {

@@ -25,7 +25,7 @@ export class AuthorModel {
     birthYear: Date;
 
     @Field()
-    deathYear?: Date
+    deathYear?: Date;
 
     @Field(() => [BookModel])
     books: BookModel[];

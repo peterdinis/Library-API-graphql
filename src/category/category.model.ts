@@ -13,6 +13,6 @@ export class CategoryModel {
     @Field()
     description: string;
 
-    @Field(() => BookModel, {nullable: true})
-    books: Book[]
+    @Field(() => BookModel, { nullable: true })
+    books: Book[];
 }
