@@ -9,7 +9,8 @@ import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
 import { Roles, STUDENT } from 'src/utils/applicationRoles';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
+import { UserType } from './types/authTypes';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,7 @@ export class AuthService {
         return null;
     }
 
-    async login(user: any) {
+    async login(user: UserType) {
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
             access_token: this.jwtService.sign(payload),
