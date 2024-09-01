@@ -13,6 +13,7 @@ import { join } from 'path';
             },
             installSubscriptionHandlers: true,
             debug: true,
+            playground: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         }),
     ],
