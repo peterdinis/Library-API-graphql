@@ -1,7 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import {
     IsString,
-    IsDate,
     IsNotEmpty,
     IsNumber,
     IsPositive,
@@ -27,10 +26,9 @@ export class CreateBookInput {
     image: string;
 
     @Field()
-    @IsDate()
+    @IsDateString({ strict: true })
     @IsNotEmpty()
-    @IsDateString()
-    createdYear: Date;
+    createdYear: string;  // Change to string to correctly handle date parsing
 
     @Field(() => Int)
     @IsNumber()
@@ -45,7 +43,7 @@ export class CreateBookInput {
 
     @Field(() => Boolean)
     @IsBoolean()
-    isAvaiable: boolean;
+    isAvailable: boolean;  // Fixed typo in the field name
 
     @Field(() => Boolean)
     @IsBoolean()
@@ -57,8 +55,8 @@ export class CreateBookInput {
 
     @Field(() => Int)
     @IsNumber()
-    @IsNotEmpty()
     @IsPositive()
+    @IsNotEmpty()
     stockNumber: number;
 
     @Field()
@@ -74,13 +72,13 @@ export class CreateBookInput {
 
     @Field(() => Int)
     @IsNumber()
-    @IsNotEmpty()
     @IsPositive()
+    @IsNotEmpty()
     categoryId: number;
 
     @Field(() => Int)
     @IsNumber()
-    @IsNotEmpty()
     @IsPositive()
+    @IsNotEmpty()
     publisherId: number;
 }
