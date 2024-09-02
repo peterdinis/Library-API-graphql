@@ -30,7 +30,7 @@ export class CreateBookInput {
     @IsDate()
     @IsNotEmpty()
     @IsDateString()
-    createdYear: string;
+    createdYear: Date;
 
     @Field(() => Int)
     @IsNumber()
