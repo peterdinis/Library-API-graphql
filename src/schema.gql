@@ -70,7 +70,7 @@ input CreateBookInput {
   createdYear: String!
   description: String!
   image: String!
-  isAvaiable: Boolean!
+  isAvailable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!
@@ -235,7 +235,7 @@ input UpdateBookInput {
   createdYear: String
   description: String
   image: String
-  isAvaiable: Boolean
+  isAvailable: Boolean
   isBorrowed: Boolean
   isReturned: Boolean
   name: String

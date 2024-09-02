@@ -4,12 +4,13 @@ import {
     BadRequestException,
     ForbiddenException,
 } from '@nestjs/common';
-import { Prisma, Author } from '@prisma/client';
+import { Author } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PubSub } from 'graphql-subscriptions';
 import { CreateAuthorInput } from './dto/create-author-type';
 import { PaginationAuthorType } from './dto/pagination-author-type';
 import { UpdateAuthorType } from './dto/update-author-type';
+import { isBefore} from 'date-fns';
 
 const pubSub = new PubSub();
 
@@ -26,15 +27,28 @@ export class AuthorsService {
     }
 
     async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
+        const { birthYear, deathYear } = createAuthorInput;
+    
+        // Check if the deathYear is earlier than the birthYear
+        if (deathYear && birthYear) {
+            if (isBefore(deathYear, birthYear)) {
+                throw new BadRequestException(
+                    'Death date cannot be earlier than birth date.',
+                );
+            }
+        }
+    
+        // Create the new author
         const newAuthor = await this.prismaService.author.create({
             data: {
                 ...createAuthorInput,
             },
         });
-
+    
         if (!newAuthor) {
             throw new BadRequestException('Failed to create author');
         }
+    
         pubSub.publish('authorAdded', { authorAdded: newAuthor }); // Publish event
         return newAuthor;
     }
@@ -72,19 +86,33 @@ export class AuthorsService {
         id: number,
         updateAuthorInput: UpdateAuthorType,
     ): Promise<Author> {
+        // Fetch the existing author
         const oneAuthor = await this.findOne(id);
-
+    
+        // Check if the update includes both birthYear and deathYear
+        const { birthYear, deathYear } = updateAuthorInput;
+    
+        if (deathYear && birthYear) {
+            if (isBefore(deathYear, birthYear)) {
+                throw new BadRequestException(
+                    'Death date cannot be earlier than birth date.',
+                );
+            }
+        }
+    
+        // Update the author in the database
         const updateAuthor = await this.prismaService.author.update({
             where: {
                 id: oneAuthor.id,
             },
             data: updateAuthorInput,
         });
-
+    
+        // Check if the update was successful
         if (!updateAuthor) {
             throw new ForbiddenException('Failed to update author');
         }
-
+    
         return updateAuthor;
     }
 
