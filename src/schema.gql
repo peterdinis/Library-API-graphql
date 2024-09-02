@@ -55,8 +55,8 @@ type CategoryModel {
 
 input CreateAuthorInput {
   authorImage: String!
-  birthYear: Date!
-  deathYear: Date!
+  birthYear: String!
+  deathYear: String
   description: String
   litPeriod: Date!
   litPeriodName: String!
@@ -220,8 +220,8 @@ type Subscription {
 
 input UpdateAuthorType {
   authorImage: String!
-  birthYear: Date!
-  deathYear: Date!
+  birthYear: String!
+  deathYear: String
   description: String
   litPeriod: Date!
   litPeriodName: String!

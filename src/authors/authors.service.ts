@@ -29,16 +29,10 @@ export class AuthorsService {
     async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
         const { birthYear, deathYear } = createAuthorInput;
     
-        // Check if the deathYear is earlier than the birthYear
-        if (deathYear && birthYear) {
-            if (isBefore(deathYear, birthYear)) {
-                throw new BadRequestException(
-                    'Death date cannot be earlier than birth date.',
-                );
-            }
+        if (deathYear && birthYear && isBefore(deathYear, birthYear)) {
+            throw new BadRequestException('Death date cannot be earlier than birth date.');
         }
     
-        // Create the new author
         const newAuthor = await this.prismaService.author.create({
             data: {
                 ...createAuthorInput,
@@ -49,7 +43,7 @@ export class AuthorsService {
             throw new BadRequestException('Failed to create author');
         }
     
-        pubSub.publish('authorAdded', { authorAdded: newAuthor }); // Publish event
+        pubSub.publish('authorAdded', { authorAdded: newAuthor });
         return newAuthor;
     }
 
