@@ -9,8 +9,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateBookingType } from './dto/create-booking-dto';
 import { ReturnBookingType } from './dto/return-booking-dto';
 import { ExtendedBookingType } from './dto/extended-booking-dto';
-import { formatISO, parseISO } from 'date-fns';
 import { PaginationBookingType } from './dto/pagination-booking-dto';
+import { formatISO, parse, isValid } from 'date-fns';
 
 @Injectable()
 export class BookingService {
@@ -75,12 +75,12 @@ export class BookingService {
     }
 
     async createNewBooking(bookingDto: CreateBookingType) {
-        const findOneUser = await this.authService.findOneUserById(
-            bookingDto.userId,
-        );
-        const findOneBook = await this.bookService.findOneBookByName(
-            bookingDto.bookName,
-        );
+        // Validate the date formats
+        this.validateDateFormat(bookingDto.from);
+        this.validateDateFormat(bookingDto.to);
+
+        const findOneUser = await this.authService.findOneUserById(bookingDto.userId);
+        const findOneBook = await this.bookService.findOneBookByName(bookingDto.bookName);
 
         const createBooking = await this.prismaService.booking.create({
             data: {
@@ -98,27 +98,28 @@ export class BookingService {
     }
 
     async returnBooking(returnDto: ReturnBookingType) {
+        // Validate the returnedDate format
+        if (returnDto.returnedDate) {
+            this.validateDateFormat(returnDto.returnedDate);
+        }
+
         const booking = await this.prismaService.booking.findUnique({
             where: { id: returnDto.id },
         });
 
         if (!booking) {
-            throw new NotFoundException(
-                `Booking with id ${returnDto.id} not found`,
-            );
+            throw new NotFoundException(`Booking with id ${returnDto.id} not found`);
         }
 
         if (booking.isReturned) {
-            throw new BadRequestException(
-                `Booking with id ${returnDto.id} has already been returned`,
-            );
+            throw new BadRequestException(`Booking with id ${returnDto.id} has already been returned`);
         }
 
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: returnDto.id },
             data: {
                 isReturned: returnDto.isReturned,
-                returnedDate: parseISO(returnDto.returnedDate),
+                returnedDate: returnDto.returnedDate ? parse(returnDto.returnedDate, 'yyyy-MM-dd', new Date()) : null,
                 updatedAt: formatISO(new Date()),
             },
         });
@@ -127,31 +128,40 @@ export class BookingService {
     }
 
     async extendedBooking(extendDto: ExtendedBookingType) {
+        // Validate the extendedDate format
+        if (extendDto.extendedDate) {
+            this.validateDateFormat(extendDto.extendedDate);
+        }
+
         const booking = await this.prismaService.booking.findUnique({
             where: { id: extendDto.id },
         });
 
         if (!booking) {
-            throw new NotFoundException(
-                `Booking with id ${extendDto.id} not found`,
-            );
+            throw new NotFoundException(`Booking with id ${extendDto.id} not found`);
         }
 
         if (booking.isExtended) {
-            throw new BadRequestException(
-                `Booking with id ${extendDto.id} has already been extended`,
-            );
+            throw new BadRequestException(`Booking with id ${extendDto.id} has already been extended`);
         }
 
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: extendDto.id },
             data: {
                 isExtended: extendDto.isExtended,
-                extendedDate: parseISO(extendDto.extendedDate),
+                extendedDate: extendDto.extendedDate ? parse(extendDto.extendedDate, 'yyyy-MM-dd', new Date()) : null,
                 updatedAt: formatISO(new Date()),
             },
         });
 
         return updatedBooking;
+    }
+
+    private validateDateFormat(dateString: string) {
+        const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
+
+        if (!isValid(parsedDate)) {
+            throw new BadRequestException(`Invalid date format for ${dateString}. Expected format is yyyy-MM-dd.`);
+        }
     }
 }
