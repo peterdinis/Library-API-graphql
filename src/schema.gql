@@ -67,10 +67,10 @@ input CreateBookInput {
   authorId: Int!
   authorName: String!
   categoryId: Int!
-  createdYear: Date!
+  createdYear: String!
   description: String!
   image: String!
-  isAvaiable: Boolean!
+  isAvailable: Boolean!
   isBorrowed: Boolean!
   isReturned: Boolean!
   name: String!
@@ -232,10 +232,10 @@ input UpdateBookInput {
   authorId: Int
   authorName: String
   categoryId: Int
-  createdYear: Date
+  createdYear: String
   description: String
   image: String
-  isAvaiable: Boolean
+  isAvailable: Boolean
   isBorrowed: Boolean
   isReturned: Boolean
   name: String
