@@ -28,7 +28,7 @@ export class CreateBookInput {
     @Field()
     @IsDateString({ strict: true })
     @IsNotEmpty()
-    createdYear: string;  // Change to string to correctly handle date parsing
+    createdYear: string;
 
     @Field(() => Int)
     @IsNumber()
