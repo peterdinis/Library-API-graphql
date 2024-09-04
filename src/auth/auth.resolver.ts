@@ -5,6 +5,7 @@ import { GqlAuthGuard } from './guards/gql-auth-guard';
 import { UserModel } from './auth.model';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
+import { AuthResponse } from './login.response.model';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
@@ -31,7 +32,7 @@ export class AuthResolver {
         return this.authService.getOneUser(id);
     }
 
-    @Mutation(() => UserModel)
+    @Mutation(() => AuthResponse)
     async login(@Args('loginUserDto') loginUserDto: LoginUserType) {
         const user = await this.authService.validateUser(loginUserDto);
         if (!user) {

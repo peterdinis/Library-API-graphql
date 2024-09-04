@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  access_token: String!
+}
+
 type AuthorModel {
   authorImage: String!
   birthYear: Date!
@@ -128,7 +132,7 @@ type Mutation {
   deleteBook(id: Int!): BookModel!
   deletePublisher(id: Int!): PublisherModel!
   extendedBooking(extendDto: ExtendedBookingType!): BookingModel!
-  login(loginUserDto: LoginUserType!): UserModel!
+  login(loginUserDto: LoginUserType!): AuthResponse!
   register(registerUserDto: RegisterUserType!): UserModel!
   removeAuthor(id: Int!): Boolean!
   removeCategory(id: Int!): CategoryModel!
