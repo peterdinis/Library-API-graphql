@@ -2,10 +2,10 @@ import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { GqlAuthGuard } from './guards/gql-auth-guard';
-import { UserModel } from './auth.model';
+import { UserModel } from './models/auth.model';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
-import { AuthResponse } from './login.response.model';
+import { AuthResponse } from './models/login.response.model';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
