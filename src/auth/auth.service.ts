@@ -72,7 +72,7 @@ export class AuthService {
         });
 
         if (!teacher) {
-            throw new NotFoundException('No teacher found');
+            throw new NotFoundException('No teachers found');
         }
 
         return teacher;
