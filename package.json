@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "author": "",
   "private": true,
@@ -47,8 +47,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "uuid": "^10.0.0",
-    "xlsx": "^0.18.5"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
