@@ -8,8 +8,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
-import { Roles, STUDENT } from 'src/utils/applicationRoles';
-import { Role, User } from '@prisma/client';
+import { Roles } from 'src/utils/applicationRoles';
+import { Role} from '@prisma/client';
 import { UserType } from './types/authTypes';
 
 @Injectable()
@@ -72,7 +72,7 @@ export class AuthService {
         });
 
         if (!teacher) {
-            throw new NotFoundException('No teacher found');
+            throw new NotFoundException('No teachers found');
         }
 
         return teacher;
