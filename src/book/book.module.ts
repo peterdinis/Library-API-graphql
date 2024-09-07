@@ -1,4 +1,3 @@
-import { DateScalar } from './../scalars/DateScalar';
 import { Module } from '@nestjs/common';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { BookService } from './book.service';
@@ -9,7 +8,6 @@ import { PubSub } from 'graphql-subscriptions';
     imports: [PrismaModule],
     providers: [
         BookService,
-        DateScalar,
         BookResolver,
         {
             provide: 'PUB_SUB',
