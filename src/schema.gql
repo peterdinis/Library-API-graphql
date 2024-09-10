@@ -4,23 +4,23 @@
 
 type AuthorModel {
   authorImage: String!
-  birthYear: Date!
+  birthYear: DateTime!
   books: [BookModel!]!
-  createdAt: Date!
-  deathYear: Date!
+  createdAt: DateTime!
+  deathYear: DateTime!
   description: String
   id: Int!
-  litPeriod: Date!
+  litPeriod: DateTime!
   litPeriodName: String!
   name: String!
-  updatedAt: Date!
+  updatedAt: DateTime!
 }
 
 type BookModel {
   author: AuthorModel
   authorName: String!
   category: CategoryModel
-  createdYear: Date!
+  createdYear: DateTime!
   description: String!
   id: Int!
   image: String!
@@ -36,13 +36,13 @@ type BookModel {
 
 type BookingModel {
   bookName: String!
-  extendedDate: Date!
-  from: Date!
+  extendedDate: DateTime!
+  from: DateTime!
   id: Int!
   isExtended: Boolean!
   isReturned: Boolean!
-  returnedDate: Date!
-  to: Date!
+  returnedDate: DateTime!
+  to: DateTime!
   userId: Int!
 }
 
@@ -58,7 +58,7 @@ input CreateAuthorInput {
   birthYear: String!
   deathYear: String
   description: String
-  litPeriod: Date!
+  litPeriod: DateTime!
   litPeriodName: String!
   name: String!
 }
@@ -97,15 +97,17 @@ input CreateCategoryInput {
 }
 
 input CreatePublisherInput {
-  createdYear: Date!
-  deletedYear: Date!
+  createdYear: DateTime!
+  deletedYear: DateTime!
   description: String!
   image: String!
   name: String!
 }
 
-"""Date custom scalar type"""
-scalar Date
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input ExtendedBookingType {
   extendedDate: String!
@@ -161,8 +163,8 @@ input PaginationCategoryType {
 
 type PublisherModel {
   books: BookModel!
-  createdYear: Date!
-  deletedYear: Date!
+  createdYear: DateTime!
+  deletedYear: DateTime!
   description: String!
   id: Int!
   image: String!
@@ -223,7 +225,7 @@ input UpdateAuthorType {
   birthYear: String!
   deathYear: String
   description: String
-  litPeriod: Date!
+  litPeriod: DateTime!
   litPeriodName: String!
   name: String!
 }
@@ -251,7 +253,7 @@ input UpdateCategoryInput {
 }
 
 input UpdatePublisherInput {
-  deletedYear: Date
+  deletedYear: DateTime
   description: String
   image: String
   name: String
