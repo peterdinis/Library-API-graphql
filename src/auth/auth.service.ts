@@ -9,7 +9,7 @@ import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
 import { Roles } from 'src/utils/applicationRoles';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -78,5 +78,34 @@ export class AuthService {
         }
 
         return findOneUser;
+    }
+
+    async register(input: RegisterUserType) {
+        const { email, password, ...rest } = input;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        return this.prisma.user.create({
+            data: {
+                ...rest,
+                email,
+                password: hashedPassword,
+            },
+        });
+    }
+
+    async login(input: LoginUserType) {
+        const { email, password } = input;
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email,
+            },
+        });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+        return user;
+    }
+
+    async generateJwt(user: User) {
+        return this.jwtService.signAsync({ userId: user.id });
     }
 }
