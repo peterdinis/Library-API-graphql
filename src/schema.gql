@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
 type AuthorModel {
   authorImage: String!
   birthYear: DateTime!
@@ -118,7 +123,6 @@ input ExtendedBookingType {
 input LoginUserType {
   email: String!
   password: String!
-  role: String!
 }
 
 type Mutation {
@@ -130,8 +134,8 @@ type Mutation {
   deleteBook(id: Int!): BookModel!
   deletePublisher(id: Int!): PublisherModel!
   extendedBooking(extendDto: ExtendedBookingType!): BookingModel!
-  login(loginUserDto: LoginUserType!): UserModel!
-  register(registerUserDto: RegisterUserType!): UserModel!
+  login(input: LoginUserType!): AuthPayload!
+  register(input: RegisterUserType!): AuthPayload!
   removeAuthor(id: Int!): Boolean!
   removeCategory(id: Int!): CategoryModel!
   returnBooking(returnDto: ReturnBookingType!): BookingModel!
@@ -184,11 +188,11 @@ type Query {
   getOneUser(id: Float!): UserModel!
   getPaginationBooks(paginationDto: PaginationBookType!): [BookModel!]!
   getPublisher(id: Int!): PublisherModel!
-  me: UserModel!
   paginatedPublishers(skip: Int, take: Int): [PublisherModel!]!
   paginationAuthors(paginationDto: PaginationAuthorType!): [AuthorModel!]!
   paginationBooking(paginationDto: PaginationBookingType!): [BookingModel!]!
   paginationCategories(paginationDto: PaginationCategoryType!): [CategoryModel!]!
+  profile: User!
   searchAuthors(keyword: String!): [AuthorModel!]!
   searchBooks(keyword: String!): [BookModel!]!
   searchCategories(keyword: String!): [CategoryModel!]!
@@ -257,6 +261,15 @@ input UpdatePublisherInput {
   description: String
   image: String
   name: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: Int!
+  lastName: String!
+  name: String!
+  updatedAt: DateTime!
 }
 
 type UserModel {

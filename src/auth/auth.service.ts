@@ -9,8 +9,7 @@ import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
 import { Roles } from 'src/utils/applicationRoles';
-import { Role} from '@prisma/client';
-import { UserType } from './types/authTypes';
+import { Role, User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -33,36 +32,8 @@ export class AuthService {
         return findOneUser;
     }
 
-    async validateUser(loginDto: LoginUserType) {
-        const user = await this.prisma.user.findUnique({
-            where: { email: loginDto.email },
-        });
-        if (user && bcrypt.compareSync(loginDto.password, user.password)) {
-            const { password, ...result } = user;
-            return result;
-        }
-        return null;
-    }
-
-    async login(user: UserType) {
-        const payload = { email: user.email, sub: user.id, role: user.role };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
-    }
-
-    async register(registerDto: RegisterUserType) {
-        const hashedPassword = bcrypt.hashSync(registerDto.password, 10);
-        return this.prisma.user.create({
-            data: {
-                ...registerDto,
-                password: hashedPassword,
-            },
-        });
-    }
-
     async findAllTeachers() {
-        const teacher = await this.prisma.user.findMany({
+        const teachers = await this.prisma.user.findMany({
             where: {
                 role: Roles.TEACHER as unknown as Role,
             },
@@ -71,11 +42,11 @@ export class AuthService {
             },
         });
 
-        if (!teacher) {
+        if (!teachers) {
             throw new NotFoundException('No teachers found');
         }
 
-        return teacher;
+        return teachers;
     }
 
     async findAllStudents() {
@@ -89,7 +60,7 @@ export class AuthService {
         });
 
         if (!students) {
-            throw new NotFoundException('No Students found');
+            throw new NotFoundException('No students found');
         }
 
         return students;
@@ -109,22 +80,32 @@ export class AuthService {
         return findOneUser;
     }
 
-    async getCurrentUser(token: string) {
-        try {
-            const decoded = this.jwtService.verify(token);
-            const user = await this.prisma.user.findUnique({
-                where: { email: decoded.email },
-                include: {
-                    borrowedBooks: true,
-                },
-            });
-            if (user) {
-                const { password, ...result } = user;
-                return result;
-            }
-            return null;
-        } catch (error) {
-            throw new UnauthorizedException('Invalid token');
+    async register(input: RegisterUserType) {
+        const { email, password, ...rest } = input;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        return this.prisma.user.create({
+            data: {
+                ...rest,
+                email,
+                password: hashedPassword,
+            },
+        });
+    }
+
+    async login(input: LoginUserType) {
+        const { email, password } = input;
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email,
+            },
+        });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            throw new UnauthorizedException('Invalid credentials');
         }
+        return user;
+    }
+
+    async generateJwt(user: User) {
+        return this.jwtService.signAsync({ userId: user.id });
     }
 }
