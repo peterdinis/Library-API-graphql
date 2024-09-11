@@ -1,15 +1,11 @@
-import {
-    Injectable,
-    NotFoundException,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
 import { Roles } from 'src/utils/applicationRoles';
-import { Role} from '@prisma/client';
+import { Role } from '@prisma/client';
 import { UserType } from './types/authTypes';
 
 @Injectable()
@@ -44,10 +40,14 @@ export class AuthService {
         return null;
     }
 
-    async login(user: UserType) {
-        const payload = { email: user.email, sub: user.id, role: user.role };
+    async login(user: LoginUserType) {
+        const payload = { email: user.email, role: user.role };
+        const access_token = this.jwtService.sign(payload);
+
+        // Return the user data and access token separately
         return {
-            access_token: this.jwtService.sign(payload),
+            user: { ...user, password: undefined }, // Ensure password is excluded
+            access_token,
         };
     }
 
@@ -62,7 +62,7 @@ export class AuthService {
     }
 
     async findAllTeachers() {
-        const teacher = await this.prisma.user.findMany({
+        const teachers = await this.prisma.user.findMany({
             where: {
                 role: Roles.TEACHER as unknown as Role,
             },
@@ -71,11 +71,11 @@ export class AuthService {
             },
         });
 
-        if (!teacher) {
+        if (!teachers) {
             throw new NotFoundException('No teachers found');
         }
 
-        return teacher;
+        return teachers;
     }
 
     async findAllStudents() {
@@ -89,7 +89,7 @@ export class AuthService {
         });
 
         if (!students) {
-            throw new NotFoundException('No Students found');
+            throw new NotFoundException('No students found');
         }
 
         return students;
