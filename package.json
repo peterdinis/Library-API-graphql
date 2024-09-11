@@ -35,6 +35,7 @@
     "@nestjs/swagger": "^7.4.0",
     "@nestjs/terminus": "^10.2.3",
     "@prisma/client": "^5.18.0",
+    "apollo-server-core": "^3.13.0",
     "apollo-server-express": "^3.13.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
