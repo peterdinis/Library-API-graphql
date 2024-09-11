@@ -13,24 +13,26 @@ export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
     @Mutation(() => AuthPayload)
-  async register(@Args('input') input: RegisterUserType): Promise<AuthPayload> {
-    const user = await this.authService.register(input);
-    const accessToken = await this.authService.generateJwt(user);
-    return { accessToken, user };
-  }
+    async register(
+        @Args('input') input: RegisterUserType,
+    ): Promise<AuthPayload> {
+        const user = await this.authService.register(input);
+        const accessToken = await this.authService.generateJwt(user);
+        return { accessToken, user };
+    }
 
-  @Mutation(() => AuthPayload)
-  async login(@Args('input') input: LoginUserType): Promise<AuthPayload> {
-    const user = await this.authService.login(input);
-    const accessToken = await this.authService.generateJwt(user);
-    return { accessToken, user };
-  }
+    @Mutation(() => AuthPayload)
+    async login(@Args('input') input: LoginUserType): Promise<AuthPayload> {
+        const user = await this.authService.login(input);
+        const accessToken = await this.authService.generateJwt(user);
+        return { accessToken, user };
+    }
 
-  @Query(() => AuthUser)
-  @UseGuards(JwtAuthGuard)
-  async profile(@CurrentUser() user: User): Promise<User> {
-    return this.authService.getOneUser(user.id);
-  }
+    @Query(() => AuthUser)
+    @UseGuards(JwtAuthGuard)
+    async profile(@CurrentUser() user: User): Promise<User> {
+        return this.authService.getOneUser(user.id);
+    }
 
     @Query(() => UserModel)
     async getOneUser(@Args('id') id: number) {
