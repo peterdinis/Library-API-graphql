@@ -1,20 +1,16 @@
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Query, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { GqlAuthGuard } from './guards/gql-auth-guard';
 import { UserModel } from './auth.model';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
-    @UseGuards(GqlAuthGuard)
     @Query(() => UserModel)
-    async me(
-        @Context('req') { headers }: { headers: { authorization: string } },
-    ) {
+    async me(@Context('req') { headers }: { headers: { authorization: string } }) {
         const token = headers.authorization?.replace('Bearer ', '');
         if (!token) {
             throw new UnauthorizedException('No token provided');
@@ -32,13 +28,15 @@ export class AuthResolver {
     }
 
     @Mutation(() => UserModel)
-    async login(@Args('loginUserDto') loginUserDto: LoginUserType) {
+    async login(@Args('loginUserDto') loginUserDto: LoginUserType): Promise<{ user: UserModel; access_token: string }> {
         const user = await this.authService.validateUser(loginUserDto);
         if (!user) {
             throw new UnauthorizedException('Invalid credentials');
         }
-        const { access_token } = await this.authService.login(user);
-        return access_token;
+        const { user: returnedUser, access_token } = await this.authService.login(user);
+
+        // Return the user data and access token
+        return { user: returnedUser as UserModel, access_token };
     }
 
     @Mutation(() => UserModel)
