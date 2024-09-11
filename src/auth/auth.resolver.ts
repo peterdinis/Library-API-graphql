@@ -1,11 +1,12 @@
 import { Resolver, Mutation, Query, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { RegisterUserType } from './dto/register-user.dto';
-import { UserModel } from './models/auth.model';
+import { AuthPayload, User as AuthUser, UserModel } from './models/auth.model';
 import { LoginUserType } from './dto/login-user.dto';
 import { UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { AuthPayload } from './types/authTypes';
+import { JwtAuthGuard } from './guards/gql-auth-guard';
+import { CurrentUser } from './decorators/current-user';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
@@ -25,7 +26,7 @@ export class AuthResolver {
     return { accessToken, user };
   }
 
-  @Query(() => User)
+  @Query(() => AuthUser)
   @UseGuards(JwtAuthGuard)
   async profile(@CurrentUser() user: User): Promise<User> {
     return this.authService.getOneUser(user.id);

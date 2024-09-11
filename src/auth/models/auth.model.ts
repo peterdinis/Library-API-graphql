@@ -20,3 +20,33 @@ export class UserModel {
     @Field()
     role: string;
 }
+
+@ObjectType()
+export class User {
+    @Field(() => Int)
+    id: number;
+
+    @Field()
+    name: string;
+
+    @Field()
+    lastName: string;
+
+    @Field()
+    email: string;
+
+    @Field()
+    createdAt: Date;
+
+    @Field()
+    updatedAt: Date;
+}
+
+@ObjectType()
+export class AuthPayload {
+    @Field()
+    accessToken: string;
+
+    @Field(() => User)
+    user: User;
+}
