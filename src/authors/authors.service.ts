@@ -10,7 +10,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { CreateAuthorInput } from './dto/create-author-type';
 import { PaginationAuthorType } from './dto/pagination-author-type';
 import { UpdateAuthorType } from './dto/update-author-type';
-import { isBefore} from 'date-fns';
+import { isBefore } from 'date-fns';
 
 const pubSub = new PubSub();
 
@@ -28,21 +28,23 @@ export class AuthorsService {
 
     async create(createAuthorInput: CreateAuthorInput): Promise<Author> {
         const { birthYear, deathYear } = createAuthorInput;
-    
+
         if (deathYear && birthYear && isBefore(deathYear, birthYear)) {
-            throw new BadRequestException('Death date cannot be earlier than birth date.');
+            throw new BadRequestException(
+                'Death date cannot be earlier than birth date.',
+            );
         }
-    
+
         const newAuthor = await this.prismaService.author.create({
             data: {
                 ...createAuthorInput,
             },
         });
-    
+
         if (!newAuthor) {
             throw new BadRequestException('Failed to create author');
         }
-    
+
         pubSub.publish('authorAdded', { authorAdded: newAuthor });
         return newAuthor;
     }
@@ -82,10 +84,10 @@ export class AuthorsService {
     ): Promise<Author> {
         // Fetch the existing author
         const oneAuthor = await this.findOne(id);
-    
+
         // Check if the update includes both birthYear and deathYear
         const { birthYear, deathYear } = updateAuthorInput;
-    
+
         if (deathYear && birthYear) {
             if (isBefore(deathYear, birthYear)) {
                 throw new BadRequestException(
@@ -93,7 +95,7 @@ export class AuthorsService {
                 );
             }
         }
-    
+
         // Update the author in the database
         const updateAuthor = await this.prismaService.author.update({
             where: {
@@ -101,12 +103,12 @@ export class AuthorsService {
             },
             data: updateAuthorInput,
         });
-    
+
         // Check if the update was successful
         if (!updateAuthor) {
             throw new ForbiddenException('Failed to update author');
         }
-    
+
         return updateAuthor;
     }
 

@@ -43,7 +43,7 @@ export class CreateBookInput {
 
     @Field(() => Boolean)
     @IsBoolean()
-    isAvailable: boolean;  // Fixed typo in the field name
+    isAvailable: boolean; // Fixed typo in the field name
 
     @Field(() => Boolean)
     @IsBoolean()

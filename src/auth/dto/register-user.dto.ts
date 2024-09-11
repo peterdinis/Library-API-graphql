@@ -10,18 +10,22 @@ export class RegisterUserType {
     @IsString()
     @IsNotEmpty()
     name: string;
+
     @Field()
     @IsString()
     @IsNotEmpty()
     lastName: string;
+
     @Field()
     @IsNotEmpty()
     @IsEmail()
     email: string;
+
     @Field()
     @IsString()
     @IsNotEmpty()
     password: string;
+
     @Field()
     @IsString()
     @IsNotEmpty()

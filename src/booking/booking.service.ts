@@ -79,8 +79,12 @@ export class BookingService {
         this.validateDateFormat(bookingDto.from);
         this.validateDateFormat(bookingDto.to);
 
-        const findOneUser = await this.authService.findOneUserById(bookingDto.userId);
-        const findOneBook = await this.bookService.findOneBookByName(bookingDto.bookName);
+        const findOneUser = await this.authService.findOneUserById(
+            bookingDto.userId,
+        );
+        const findOneBook = await this.bookService.findOneBookByName(
+            bookingDto.bookName,
+        );
 
         const createBooking = await this.prismaService.booking.create({
             data: {
@@ -108,18 +112,24 @@ export class BookingService {
         });
 
         if (!booking) {
-            throw new NotFoundException(`Booking with id ${returnDto.id} not found`);
+            throw new NotFoundException(
+                `Booking with id ${returnDto.id} not found`,
+            );
         }
 
         if (booking.isReturned) {
-            throw new BadRequestException(`Booking with id ${returnDto.id} has already been returned`);
+            throw new BadRequestException(
+                `Booking with id ${returnDto.id} has already been returned`,
+            );
         }
 
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: returnDto.id },
             data: {
                 isReturned: returnDto.isReturned,
-                returnedDate: returnDto.returnedDate ? parse(returnDto.returnedDate, 'yyyy-MM-dd', new Date()) : null,
+                returnedDate: returnDto.returnedDate
+                    ? parse(returnDto.returnedDate, 'yyyy-MM-dd', new Date())
+                    : null,
                 updatedAt: formatISO(new Date()),
             },
         });
@@ -138,18 +148,24 @@ export class BookingService {
         });
 
         if (!booking) {
-            throw new NotFoundException(`Booking with id ${extendDto.id} not found`);
+            throw new NotFoundException(
+                `Booking with id ${extendDto.id} not found`,
+            );
         }
 
         if (booking.isExtended) {
-            throw new BadRequestException(`Booking with id ${extendDto.id} has already been extended`);
+            throw new BadRequestException(
+                `Booking with id ${extendDto.id} has already been extended`,
+            );
         }
 
         const updatedBooking = await this.prismaService.booking.update({
             where: { id: extendDto.id },
             data: {
                 isExtended: extendDto.isExtended,
-                extendedDate: extendDto.extendedDate ? parse(extendDto.extendedDate, 'yyyy-MM-dd', new Date()) : null,
+                extendedDate: extendDto.extendedDate
+                    ? parse(extendDto.extendedDate, 'yyyy-MM-dd', new Date())
+                    : null,
                 updatedAt: formatISO(new Date()),
             },
         });
@@ -161,7 +177,9 @@ export class BookingService {
         const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
 
         if (!isValid(parsedDate)) {
-            throw new BadRequestException(`Invalid date format for ${dateString}. Expected format is yyyy-MM-dd.`);
+            throw new BadRequestException(
+                `Invalid date format for ${dateString}. Expected format is yyyy-MM-dd.`,
+            );
         }
     }
 }
