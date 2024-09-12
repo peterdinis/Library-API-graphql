@@ -29,5 +29,5 @@ export class RegisterUserType {
     @Field()
     @IsString()
     @IsNotEmpty()
-    role: Role;
+    role: string;
 }
