@@ -235,20 +235,17 @@ input UpdateAuthorType {
 }
 
 input UpdateBookInput {
-  authorId: Int
-  authorName: String
-  categoryId: Int
-  createdYear: String
-  description: String
-  image: String
-  isAvailable: Boolean
-  isBorrowed: Boolean
-  isReturned: Boolean
-  name: String
-  pages: Int
-  publisherId: Int
-  serialNumber: String
-  stockNumber: Int
+  authorId: Int!
+  authorName: String!
+  categoryId: Int!
+  createdYear: String!
+  description: String!
+  image: String!
+  name: String!
+  pages: Int!
+  publisherId: Int!
+  serialNumber: String!
+  stockNumber: Int!
 }
 
 input UpdateCategoryInput {
