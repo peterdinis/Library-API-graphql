@@ -44,17 +44,9 @@ describe('HealthController', () => {
                 },
             ],
         }).compile();
-        let httpHealthIndicator: HttpHealthIndicator;
-        let prismaHealthIndicator: PrismaHealthIndicator;
         let memoryHealthIndicator: MemoryHealthIndicator;
-        
         healthController = module.get<HealthController>(HealthController);
         healthCheckService = module.get<HealthCheckService>(HealthCheckService);
-        httpHealthIndicator =
-            module.get<HttpHealthIndicator>(HttpHealthIndicator);
-        prismaHealthIndicator = module.get<PrismaHealthIndicator>(
-            PrismaHealthIndicator,
-        );
         memoryHealthIndicator = module.get<MemoryHealthIndicator>(
             MemoryHealthIndicator,
         );
