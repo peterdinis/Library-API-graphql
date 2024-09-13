@@ -44,12 +44,8 @@ describe('HealthController', () => {
                 },
             ],
         }).compile();
-        let memoryHealthIndicator: MemoryHealthIndicator;
         healthController = module.get<HealthController>(HealthController);
         healthCheckService = module.get<HealthCheckService>(HealthCheckService);
-        memoryHealthIndicator = module.get<MemoryHealthIndicator>(
-            MemoryHealthIndicator,
-        );
     });
 
     describe('Health E2e Tests', () => {
