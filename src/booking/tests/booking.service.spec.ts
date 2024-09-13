@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { formatISO } from 'date-fns';
-import { faker } from '@faker-js/faker'; // Import Faker.js
+import { faker } from '@faker-js/faker';
 import { AuthService } from 'src/auth/auth.service';
 import { BookService } from 'src/book/book.service';
 import { PrismaService } from 'src/prisma/prisma.service';

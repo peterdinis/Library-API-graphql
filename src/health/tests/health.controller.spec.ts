@@ -12,9 +12,6 @@ import * as request from 'supertest';
 describe('HealthController', () => {
     let healthController: HealthController;
     let healthCheckService: HealthCheckService;
-    let httpHealthIndicator: HttpHealthIndicator;
-    let prismaHealthIndicator: PrismaHealthIndicator;
-    let memoryHealthIndicator: MemoryHealthIndicator;
     let app: INestApplication;
 
     beforeEach(async () => {
@@ -47,7 +44,10 @@ describe('HealthController', () => {
                 },
             ],
         }).compile();
-
+        let httpHealthIndicator: HttpHealthIndicator;
+        let prismaHealthIndicator: PrismaHealthIndicator;
+        let memoryHealthIndicator: MemoryHealthIndicator;
+        
         healthController = module.get<HealthController>(HealthController);
         healthCheckService = module.get<HealthCheckService>(HealthCheckService);
         httpHealthIndicator =

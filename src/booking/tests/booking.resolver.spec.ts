@@ -6,14 +6,6 @@ import {
 } from 'apollo-server-testing';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { BookingResolver } from './booking.resolver';
-import { BookingService } from './booking.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateBookingType } from './dto/create-booking-dto';
-import { ReturnBookingType } from './dto/return-booking-dto';
-import { ExtendedBookingType } from './dto/extended-booking-dto';
-import { PaginationBookingType } from './dto/pagination-booking-dto';
-import { BookingModel } from './booking.model';
 import { faker } from '@faker-js/faker'; // Import Faker.js
 
 describe('BookingResolver (e2e)', () => {
