@@ -8,7 +8,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginUserType } from './dto/login-user.dto';
 import { RegisterUserType } from './dto/register-user.dto';
-import { Roles } from 'src/utils/applicationRoles';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -35,7 +34,7 @@ export class AuthService {
     async findAllTeachers() {
         const teachers = await this.prisma.user.findMany({
             where: {
-                role: "TEACHER",
+                role: 'TEACHER',
             },
             include: {
                 borrowedBooks: true,
@@ -52,7 +51,7 @@ export class AuthService {
     async findAllStudents() {
         const students = await this.prisma.user.findMany({
             where: {
-                role: "STUDENT",
+                role: 'STUDENT',
             },
             include: {
                 borrowedBooks: true,

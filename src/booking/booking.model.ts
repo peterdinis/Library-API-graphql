@@ -15,10 +15,10 @@ export class BookingModel {
     to: Date;
 
     @Field(() => Boolean)
-    isExtended: Boolean;
+    isExtended: boolean;
 
     @Field(() => Boolean)
-    isReturned: Boolean;
+    isReturned: boolean;
 
     @Field(() => Int)
     userId: number;
