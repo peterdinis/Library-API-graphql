@@ -5,7 +5,6 @@ import {
     IsDateString,
     IsNotEmpty,
     IsNumber,
-    IsOptional,
     IsPositive,
 } from 'class-validator';
 

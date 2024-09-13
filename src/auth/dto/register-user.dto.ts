@@ -1,5 +1,4 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Role } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType({
@@ -29,5 +28,5 @@ export class RegisterUserType {
     @Field()
     @IsString()
     @IsNotEmpty()
-    role: Role;
+    role: string;
 }

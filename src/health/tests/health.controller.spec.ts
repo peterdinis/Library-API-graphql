@@ -12,9 +12,6 @@ import * as request from 'supertest';
 describe('HealthController', () => {
     let healthController: HealthController;
     let healthCheckService: HealthCheckService;
-    let httpHealthIndicator: HttpHealthIndicator;
-    let prismaHealthIndicator: PrismaHealthIndicator;
-    let memoryHealthIndicator: MemoryHealthIndicator;
     let app: INestApplication;
 
     beforeEach(async () => {
@@ -47,17 +44,8 @@ describe('HealthController', () => {
                 },
             ],
         }).compile();
-
         healthController = module.get<HealthController>(HealthController);
         healthCheckService = module.get<HealthCheckService>(HealthCheckService);
-        httpHealthIndicator =
-            module.get<HttpHealthIndicator>(HttpHealthIndicator);
-        prismaHealthIndicator = module.get<PrismaHealthIndicator>(
-            PrismaHealthIndicator,
-        );
-        memoryHealthIndicator = module.get<MemoryHealthIndicator>(
-            MemoryHealthIndicator,
-        );
     });
 
     describe('Health E2e Tests', () => {

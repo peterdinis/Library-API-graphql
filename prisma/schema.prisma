@@ -13,19 +13,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  STUDENT
-  ADMIN
-  TEACHER
-}
-
 model User {
   id            Int       @id @default(autoincrement())
   name          String
   lastName      String
   email         String    @unique
   password      String
-  role          Role      @default(STUDENT)
+  role          String    @default("STUDENT")
   borrowedBooks Booking[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
@@ -44,12 +38,12 @@ model Book {
   isReturned   Boolean   @default(false)
   stockNumber  Int       @default(1)
   serialNumber String    @default("11-22-333")
-  category     Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  category     Category  @relation(fields: [categoryId], references: [id], onDelete: NoAction)
   categoryId   Int
-  author       Author    @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  author       Author    @relation(fields: [authorId], references: [id], onDelete: NoAction)
   authorId     Int
   publisherId  Int
-  publisher    Publisher @relation(fields: [publisherId], references: [id], onDelete: Restrict)
+  publisher    Publisher @relation(fields: [publisherId], references: [id], onDelete: NoAction)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now()) @updatedAt
 }
@@ -64,17 +58,17 @@ model Category {
 }
 
 model Author {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String
-  authorImage String    @default("https://picsum.photos/200/300")
-  litPeriod   DateTime  @default(now())
-  litPeriodName String  @default("Classicism")
-  birthYear   DateTime  @default(now())
-  deathYear   DateTime? @default(now())
-  books       Book[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String
+  authorImage   String    @default("https://picsum.photos/200/300")
+  litPeriod     DateTime  @default(now())
+  litPeriodName String    @default("Classicism")
+  birthYear     DateTime  @default(now())
+  deathYear     DateTime? @default(now())
+  books         Book[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
 }
 
 model Publisher {

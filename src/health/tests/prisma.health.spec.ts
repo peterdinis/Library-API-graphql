@@ -2,19 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app/app.module';
-import { PrismaService } from 'src/prisma/prisma.service';
-
 describe('PrismaHealthIndicator (e2e)', () => {
     let app: INestApplication;
-    let prismaService: PrismaService;
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [AppModule],
         }).compile();
-
         app = moduleFixture.createNestApplication();
-        prismaService = moduleFixture.get<PrismaService>(PrismaService);
         await app.init();
     });
 
