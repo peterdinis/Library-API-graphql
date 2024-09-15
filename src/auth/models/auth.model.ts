@@ -40,6 +40,9 @@ export class User {
 
     @Field()
     updatedAt: Date;
+
+    @Field()
+    role: string;
 }
 
 @ObjectType()

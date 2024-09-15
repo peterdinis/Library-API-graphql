@@ -262,6 +262,7 @@ type User {
   id: Int!
   lastName: String!
   name: String!
+  role: String!
   updatedAt: DateTime!
 }
 
