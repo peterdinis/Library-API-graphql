@@ -35,11 +35,6 @@ export class UpdateBookInput {
     @IsNotEmpty()
     pages: number;
 
-    @Field()
-    @IsString()
-    @IsNotEmpty()
-    authorName: string;
-
     @Field(() => Int)
     @IsNumber()
     @IsPositive()
@@ -50,22 +45,4 @@ export class UpdateBookInput {
     @IsString()
     @IsNotEmpty()
     serialNumber: string;
-
-    @Field(() => Int)
-    @IsNumber()
-    @IsPositive()
-    @IsNotEmpty()
-    authorId: number;
-
-    @Field(() => Int)
-    @IsNumber()
-    @IsPositive()
-    @IsNotEmpty()
-    categoryId: number;
-
-    @Field(() => Int)
-    @IsNumber()
-    @IsPositive()
-    @IsNotEmpty()
-    publisherId: number;
 }
