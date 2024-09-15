@@ -145,25 +145,22 @@ export class BookService {
     async updateBook(id: number, updateBookDto: UpdateBookInput) {
         // Fetch the existing book
         const findOneBook = await this.getOneBook(id);
-
+    
         // If the update includes a new date, validate the format
         if (updateBookDto.createdYear) {
-            const parsedDate = parse(
-                updateBookDto.createdYear,
-                'yyyy-MM-dd',
-                new Date(),
-            );
-
+            const parsedDate = parse(updateBookDto.createdYear, 'yyyy-MM-dd', new Date());
+    
+            // Check if the parsed date is valid
             if (!isValid(parsedDate)) {
                 throw new BadRequestException(
                     `Invalid date format for createdYear. Expected format is yyyy-MM-dd.`,
                 );
             }
-
-            // Ensure the date is correctly formatted before updating
-            updateBookDto.createdYear = format(parsedDate, 'yyyy-MM-dd');
+    
+            // Format the date in ISO 8601 format for Prisma
+            updateBookDto.createdYear = format(parsedDate, 'yyyy-MM-dd\'T\'HH:mm:ss.SSSxxx');
         }
-
+    
         // Update the book in the database
         const updateOneBook = await this.prismaService.book.update({
             where: {
@@ -173,12 +170,12 @@ export class BookService {
                 ...updateBookDto,
             },
         });
-
+    
         // Check if the update was successful
         if (!updateOneBook) {
             throw new ForbiddenException('Failed to update book');
         }
-
+    
         return updateOneBook;
     }
 
