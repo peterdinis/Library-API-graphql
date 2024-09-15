@@ -1,10 +1,7 @@
-import {
-    Injectable,
-    ExecutionContext,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -13,8 +10,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization?.split(' ')[1];
+        const ctx = GqlExecutionContext.create(context);
+        const request = ctx.getContext().req;
+        const token = request?.headers?.authorization?.split(' ')[1];
+        
         if (!token) throw new UnauthorizedException('No token provided');
 
         try {
